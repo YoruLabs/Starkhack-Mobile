@@ -13,6 +13,9 @@ export type OnboardingStack = {
 
 export type ProfileStack = {
   Profile: undefined;
+  ResetPassword: {
+    email: string
+  }
 };
 
 export type AllScreens =

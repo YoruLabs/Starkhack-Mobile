@@ -21,6 +21,10 @@ const ProfileNavigator = (): React.ReactElement => {
         name="Profile"
         getComponent={getScreenBuilder('Profile')}
       />
+      <Stack.Screen
+        name="ResetPassword"
+        getComponent={getScreenBuilder('ResetPassword')}
+      />
     </Stack.Navigator>
   )
 }

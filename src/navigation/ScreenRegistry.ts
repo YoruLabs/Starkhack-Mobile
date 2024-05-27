@@ -73,6 +73,8 @@ function getScreen(screenName: Screen): ScreenType {
       return require('./ProfileNavigator').default
     case 'Profile':
       return require('../screens/profile/Profile').default
+    case 'ResetPassword':
+      return require('../screens/profile/ResetPassword').default
     // -------------------- Fallback --------------------
     default:
       return require('../screens/onboarding/Signup').default
