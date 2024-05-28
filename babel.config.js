@@ -9,7 +9,7 @@ const alias = {
   '@state': './src/state',
   '@utils': './src/utils',
   '@services': './src/services',
-  '@types': './src/types',
+  'types': './src/types',
 }
 
 module.exports = function(api) {

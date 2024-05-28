@@ -1,10 +1,11 @@
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
-import { AppState, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { AppState, StatusBar, StyleSheet } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { MainNavigator } from './navigation/MainNavigator'
 import { AppColors } from './utils/Colors'
 import { ReactElement, useCallback, useRef } from 'react'
-import { focusManager } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, focusManager } from '@tanstack/react-query'
+import { NetworkProvider } from '@config/Network'
 
 let appState = AppState.currentState
 AppState.addEventListener('change', (newAppState) => {
@@ -37,16 +38,21 @@ function App(): ReactElement {
     currentScreenName.current = navigationContainer.current?.getCurrentRoute()?.name
   }, [])
 
+  const queryClient = new QueryClient()
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={AppColors.white} />
-
-      <NavigationContainer
-        ref={navigationContainer}
-        onReady={onReady}
-        onStateChange={onStateChange}>
-        <MainNavigator />
-      </NavigationContainer>
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer
+          ref={navigationContainer}
+          onReady={onReady}
+          onStateChange={onStateChange}>
+          <NetworkProvider>
+            <MainNavigator />
+          </NetworkProvider>
+        </NavigationContainer>
+      </QueryClientProvider>
     </GestureHandlerRootView>
   )
 }
