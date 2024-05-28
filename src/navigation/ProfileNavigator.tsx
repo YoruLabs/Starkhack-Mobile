@@ -17,10 +17,7 @@ const ProfileNavigator = (): React.ReactElement => {
     <Stack.Navigator
       initialRouteName={getInitialScreen()}
       screenOptions={stackScreenOptions}>
-      <Stack.Screen
-        name="Profile"
-        getComponent={getScreenBuilder('Profile')}
-      />
+      <Stack.Screen name="Profile" getComponent={getScreenBuilder('Profile')} />
       <Stack.Screen
         name="ResetPassword"
         getComponent={getScreenBuilder('ResetPassword')}

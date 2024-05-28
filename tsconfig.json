@@ -1,6 +1,44 @@
 {
-  "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
-  }
+    "allowJs": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": false,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-native",
+    "lib": ["esnext"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noStrictGenericChecks": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "esnext",
+    "baseUrl": "./src",
+    "paths": {
+      "@api/*": ["api/*"],
+      "@assets/*": ["assets/*"],
+      "@components/*": ["components/*"],
+      "@config/*": ["config/*"],
+      "@hooks/*": ["hooks/*"],
+      "@navigation/*": ["navigation/*"],
+      "@screens/*": ["screens/*"],
+      "@state/*": ["state/*"],
+      "@utils/*": ["utils/*"],
+      "@services/*": ["services/*"],
+      "@types/*": ["types/*"]
+    }
+  },
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.d.ts"],
+  "exclude": ["node_modules", "./src/assets/icons/*"],
+  "extends": "expo/tsconfig.base"
 }

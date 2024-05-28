@@ -17,10 +17,7 @@ const OnboardingNavigator = (): React.ReactElement => {
     <Stack.Navigator
       initialRouteName={getInitialScreen()}
       screenOptions={stackScreenOptions}>
-      <Stack.Screen
-        name="Welcome"
-        getComponent={getScreenBuilder('Welcome')}
-      />
+      <Stack.Screen name="Welcome" getComponent={getScreenBuilder('Welcome')} />
       <Stack.Screen name="Signup" getComponent={getScreenBuilder('Signup')} />
     </Stack.Navigator>
   )

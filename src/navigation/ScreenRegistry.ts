@@ -62,21 +62,21 @@ function getScreen(screenName: Screen): ScreenType {
   switch (screenName) {
     // -------------------- Onboarding Stack --------------------
     case 'OnboardingStack':
-      return require('./OnboardingNavigator').default
+      return require('@navigation/OnboardingNavigator').default
     case 'Welcome':
-    return require('../screens/onboarding/Welcome').default
+      return require('@screens/onboarding/Welcome').default
     case 'Signup':
-      return require('../screens/onboarding/Signup').default
-    
+      return require('@screens/onboarding/Signup').default
+
     // -------------------- Profile --------------------
     case 'ProfileStack':
-      return require('./ProfileNavigator').default
+      return require('@navigation/ProfileNavigator').default
     case 'Profile':
-      return require('../screens/profile/Profile').default
+      return require('@screens/profile/Profile').default
     case 'ResetPassword':
-      return require('../screens/profile/ResetPassword').default
+      return require('@screens/profile/ResetPassword').default
     // -------------------- Fallback --------------------
     default:
-      return require('../screens/onboarding/Signup').default
+      return require('@screens/onboarding/Signup').default
   }
 }

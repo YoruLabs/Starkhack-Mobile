@@ -1,35 +1,32 @@
-import type { NavigatorScreenParams } from "@react-navigation/native";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { NavigatorScreenParams } from '@react-navigation/native'
+import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 export type MainStack = {
-  OnboardingStack: NavigatorScreenParams<OnboardingStack>;
-  ProfileStack: NavigatorScreenParams<ProfileStack>;
-};
+  OnboardingStack: NavigatorScreenParams<OnboardingStack>
+  ProfileStack: NavigatorScreenParams<ProfileStack>
+}
 
 export type OnboardingStack = {
-  Welcome: undefined;
-  Signup: undefined;
-};
+  Welcome: undefined
+  Signup: undefined
+}
 
 export type ProfileStack = {
-  Profile: undefined;
+  Profile: undefined
   ResetPassword: {
     email: string
   }
-};
+}
 
-export type AllScreens =
-  | keyof MainStack
-  | keyof OnboardingStack
-  | keyof ProfileStack
+export type AllScreens = keyof MainStack | keyof OnboardingStack | keyof ProfileStack
 
 export type ScreenProps<ScreenName extends AllScreens> =
   ScreenName extends keyof MainStack
     ? NativeStackScreenProps<MainStack, ScreenName>
     : ScreenName extends keyof OnboardingStack
-    ? NativeStackScreenProps<OnboardingStack, ScreenName>
-    : ScreenName extends keyof ProfileStack
-    ? NativeStackScreenProps<ProfileStack, ScreenName>
-    : never;
+      ? NativeStackScreenProps<OnboardingStack, ScreenName>
+      : ScreenName extends keyof ProfileStack
+        ? NativeStackScreenProps<ProfileStack, ScreenName>
+        : never
 
-export type Screen = AllScreens;
+export type Screen = AllScreens
