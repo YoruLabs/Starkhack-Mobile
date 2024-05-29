@@ -6,6 +6,8 @@ import { AppColors } from './utils/Colors'
 import { ReactElement, useCallback, useRef } from 'react'
 import { QueryClient, QueryClientProvider, focusManager } from '@tanstack/react-query'
 import { NetworkProvider } from '@config/Network'
+import { ToastProvider } from '@components/Toast'
+import { Provider as JotaiProvider } from 'jotai'
 
 let appState = AppState.currentState
 AppState.addEventListener('change', (newAppState) => {
@@ -44,14 +46,18 @@ function App(): ReactElement {
     <GestureHandlerRootView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={AppColors.white} />
       <QueryClientProvider client={queryClient}>
-        <NavigationContainer
-          ref={navigationContainer}
-          onReady={onReady}
-          onStateChange={onStateChange}>
-          <NetworkProvider>
-            <MainNavigator />
-          </NetworkProvider>
-        </NavigationContainer>
+        <JotaiProvider>
+          <ToastProvider>
+            <NavigationContainer
+              ref={navigationContainer}
+              onReady={onReady}
+              onStateChange={onStateChange}>
+              <NetworkProvider>
+                <MainNavigator />
+              </NetworkProvider>
+            </NavigationContainer>
+          </ToastProvider>
+        </JotaiProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>
   )

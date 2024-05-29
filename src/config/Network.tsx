@@ -11,8 +11,6 @@ import React, {
   useEffect,
 } from 'react'
 
-import './offlineRequests'
-
 export interface NetworkContext {
   isOnline: boolean
   isOnlineOrNotifyUser: () => boolean

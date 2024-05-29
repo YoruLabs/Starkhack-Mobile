@@ -16,7 +16,7 @@ module.exports = {
   },
   ignorePatterns: ['scripts', 'assets', 'src/assets/icons/*.tsx'],
   plugins: ['@typescript-eslint'],
-  extends: ['expo', 'plugin:@typescript-eslint/recommended', '@react-native-community'],
+  extends: ['plugin:@typescript-eslint/recommended', '@react-native-community'],
   rules: {
     // eslint
     semi: 'off',
@@ -121,6 +121,10 @@ module.exports = {
           {
             element: 'Image',
             message: 'use <FastImage> instead.',
+          },
+          {
+            element: 'Text',
+            message: 'use a custom themed <AppText> instead.',
           },
         ],
       },
