@@ -26,7 +26,7 @@ module.exports = {
     'require-await': 'warn',
     'no-return-await': 'warn',
     'no-await-in-loop': 'warn',
-    'no-console': 'error',
+    // 'no-console': 'error',
     'comma-dangle': 'off', // prettier already detects this
     'no-restricted-syntax': [
       'error',
@@ -76,7 +76,7 @@ module.exports = {
     // react native plugin
     'react-native/no-unused-styles': 'warn',
     'react-native/split-platform-components': 'off',
-    'react-native/no-inline-styles': 'warn',
+    'react-native/no-inline-styles': 'off',
     'react-native/no-color-literals': 'off',
     'react-native/no-raw-text': 'off',
     'react-native/no-single-element-style-arrays': 'warn',

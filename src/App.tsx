@@ -1,5 +1,5 @@
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
-import { AppState, StatusBar, StyleSheet } from 'react-native'
+import React, { AppState, StatusBar, StyleSheet } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { MainNavigator } from './navigation/MainNavigator'
 import { AppColors } from './utils/Colors'

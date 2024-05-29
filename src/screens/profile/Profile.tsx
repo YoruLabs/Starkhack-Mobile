@@ -1,10 +1,11 @@
-import { ReactElement } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { AppText } from '@components/text/AppText'
+import React, { ReactElement } from 'react'
+import { StyleSheet, View } from 'react-native'
 
 export default function ProfileScreen(): ReactElement {
   return (
     <View style={styles.container}>
-      <Text>Profile</Text>
+      <AppText>Profile</AppText>
     </View>
   )
 }

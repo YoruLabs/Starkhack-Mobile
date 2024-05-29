@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React, { useMemo } from 'react'
 import { useStyle } from 'react-native-style-utilities'
 import { Text, TextProps } from 'react-native'

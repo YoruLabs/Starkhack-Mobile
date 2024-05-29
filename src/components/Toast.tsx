@@ -17,6 +17,7 @@ import Icons from '@expo/vector-icons/Ionicons'
 
 import { AppText } from './text/AppText'
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
+import { isEmpty } from '@utils/util'
 
 type ToastProviderProps = ViewProps
 const MAX_TOASTS = 3
@@ -127,7 +128,7 @@ export function ToastProvider(props: ToastProviderProps): React.ReactElement {
         colorStyles.toast[toast.type ?? 'default'],
         { zIndex: index },
       ]}>
-      {toast.icon && <Icons name={toast.icon} color="#f0f0f0" size={14} />}
+      {!isEmpty(toast.icon) && <Icons name={toast.icon} color="#f0f0f0" size={14} />}
       <AppText style={styles.toastMessage} color={AppColors.primary} size="small">
         {toast.message}
       </AppText>

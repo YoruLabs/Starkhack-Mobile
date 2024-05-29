@@ -1,6 +1,7 @@
-import { ReactElement } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { ReactElement } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { ScreenProps } from '../../navigation/Router'
+import { AppText } from '@components/text/AppText'
 
 export default function ResetPasswordScreen({
   navigation,
@@ -11,7 +12,7 @@ export default function ResetPasswordScreen({
 
   return (
     <View style={styles.container}>
-      <Text>Reset Password</Text>
+      <AppText>Reset Password</AppText>
     </View>
   )
 }

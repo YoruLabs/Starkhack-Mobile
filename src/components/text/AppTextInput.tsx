@@ -29,7 +29,6 @@ export function AppTextInput({
   customTextStyles,
   PrefixIcon,
   onPress,
-  useBottomSheetTextInput = false,
   ...props
 }: AppTextInputProps): React.ReactElement {
   const colorsStyles = useColorStyles()
