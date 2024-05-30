@@ -1,12 +1,12 @@
 import { authenticateUser } from '@api/user'
+import { AppText } from '@components/text/AppText'
 import { useMutation } from '@tanstack/react-query'
-import { ReactElement } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { ReactElement } from 'react'
+import { StyleSheet, View } from 'react-native'
 
 export default function SignupScreen(): ReactElement {
-
-  const {mutate: signupUser, isPending}  = useMutation({
-    mutationFn: authenticateUser
+  const { mutate: signupUser, isPending } = useMutation({
+    mutationFn: authenticateUser,
   })
 
   const onSubmit = (): void => {
@@ -15,7 +15,7 @@ export default function SignupScreen(): ReactElement {
 
   return (
     <View style={styles.container}>
-      <Text>Signup</Text>
+      <AppText>Signup</AppText>
     </View>
   )
 }

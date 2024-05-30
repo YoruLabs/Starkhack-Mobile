@@ -1,10 +1,11 @@
-import { ReactElement } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { AppText } from '@components/text/AppText'
+import React, { ReactElement } from 'react'
+import { StyleSheet, View } from 'react-native'
 
 export default function WelcomeScreen(): ReactElement {
   return (
     <View style={styles.container}>
-      <Text>Hello from Zap</Text>
+      <AppText size="small">Welcome to Zap!</AppText>
     </View>
   )
 }

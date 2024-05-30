@@ -24,9 +24,9 @@ export type ScreenProps<ScreenName extends AllScreens> =
   ScreenName extends keyof MainStack
     ? NativeStackScreenProps<MainStack, ScreenName>
     : ScreenName extends keyof OnboardingStack
-      ? NativeStackScreenProps<OnboardingStack, ScreenName>
-      : ScreenName extends keyof ProfileStack
-        ? NativeStackScreenProps<ProfileStack, ScreenName>
-        : never
+    ? NativeStackScreenProps<OnboardingStack, ScreenName>
+    : ScreenName extends keyof ProfileStack
+    ? NativeStackScreenProps<ProfileStack, ScreenName>
+    : never
 
 export type Screen = AllScreens

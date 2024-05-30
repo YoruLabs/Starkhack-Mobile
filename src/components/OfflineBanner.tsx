@@ -3,14 +3,14 @@ import { SAFE_TOP } from '@utils/Constants'
 import React, { ReactElement } from 'react'
 import { StatusBar, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icons from '@expo/vector-icons/Ionicons'
 import { AppText } from './text/AppText'
 
 const OfflineBanner = (): ReactElement | null => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={AppColors.warning} barStyle="light-content" />
-      <Icon
+      <Icons
         name="cloud-offline-outline"
         color={AppColors.white}
         size={16}

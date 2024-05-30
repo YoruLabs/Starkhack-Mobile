@@ -13,9 +13,11 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated'
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icons from '@expo/vector-icons/Ionicons'
 
 import { AppText } from './text/AppText'
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
+import { isEmpty } from '@utils/util'
 
 type ToastProviderProps = ViewProps
 const MAX_TOASTS = 3
@@ -61,7 +63,11 @@ export function ToastProvider(props: ToastProviderProps): React.ReactElement {
   const colorStyles = useColorStyles()
 
   const addToast = useCallback((toast: Toast): void => {
-    hapticFeedback(toast.type === 'error' ? 'notificationError' : 'impactLight')
+    hapticFeedback(
+      toast.type === 'error'
+        ? HapticFeedbackTypes.notificationError
+        : HapticFeedbackTypes.impactLight,
+    )
     const id = ++toastId
     const newToast: ToastInternal = { ...toast, id: id }
     // insert toast
@@ -109,7 +115,7 @@ export function ToastProvider(props: ToastProviderProps): React.ReactElement {
     }
   }, [])
 
-  Logger.log('🔄', `Re-rendering ToastProvider.tsx with ${toasts.length} toasts...`)
+  console.log('🔄', `Re-rendering ToastProvider.tsx with ${toasts.length} toasts...`)
 
   const ToastContent = toasts.map((toast, index) => (
     <Animated.View
@@ -122,7 +128,7 @@ export function ToastProvider(props: ToastProviderProps): React.ReactElement {
         colorStyles.toast[toast.type ?? 'default'],
         { zIndex: index },
       ]}>
-      {toast.icon && <Icon name={toast.icon} color="#f0f0f0" size={14} />}
+      {!isEmpty(toast.icon) && <Icons name={toast.icon} color="#f0f0f0" size={14} />}
       <AppText style={styles.toastMessage} color={AppColors.primary} size="small">
         {toast.message}
       </AppText>
