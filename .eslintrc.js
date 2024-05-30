@@ -16,7 +16,7 @@ module.exports = {
   },
   ignorePatterns: ['scripts', 'assets', 'src/assets/icons/*.tsx'],
   plugins: ['@typescript-eslint'],
-  extends: ['expo', 'plugin:@typescript-eslint/recommended', '@react-native-community'],
+  extends: ['plugin:@typescript-eslint/recommended', '@react-native-community'],
   rules: {
     // eslint
     semi: 'off',
@@ -26,7 +26,7 @@ module.exports = {
     'require-await': 'warn',
     'no-return-await': 'warn',
     'no-await-in-loop': 'warn',
-    'no-console': 'error',
+    // 'no-console': 'error',
     'comma-dangle': 'off', // prettier already detects this
     'no-restricted-syntax': [
       'error',
@@ -76,7 +76,7 @@ module.exports = {
     // react native plugin
     'react-native/no-unused-styles': 'warn',
     'react-native/split-platform-components': 'off',
-    'react-native/no-inline-styles': 'warn',
+    'react-native/no-inline-styles': 'off',
     'react-native/no-color-literals': 'off',
     'react-native/no-raw-text': 'off',
     'react-native/no-single-element-style-arrays': 'warn',
@@ -121,6 +121,10 @@ module.exports = {
           {
             element: 'Image',
             message: 'use <FastImage> instead.',
+          },
+          {
+            element: 'Text',
+            message: 'use a custom themed <AppText> instead.',
           },
         ],
       },

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { isEmpty } from '@utils/util'
 import axios from 'axios'
 import { COM_ZAP_API } from './api-urls'
@@ -22,7 +25,7 @@ ZapAPI.interceptors.response.use((res) => {
   if (res.data) {
     const requestUrl: string = res.request?._url
     if (requestUrl.includes('auth')) {
-      saveAuthToken(res.headers)
+      setAuthToken(res.headers)
       return res.data.data
     } else {
       // If response DOESN'T come inside a data object
@@ -55,8 +58,7 @@ if (__DEV__) {
   })
 }
 
-export function saveAuthToken(headers: any): void {
-  // TODO: Save authentication token locally
+export function setAuthToken(headers: any): void {
   console.log('👤', 'Set token as Authorization header')
   ZapAPI.defaults.headers.common['access-token'] = headers.accessToken
 }
