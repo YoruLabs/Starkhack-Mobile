@@ -119,10 +119,6 @@ module.exports = {
             message: 'use <FlatList> or <FastList> instead.',
           },
           {
-            element: 'Image',
-            message: 'use <FastImage> instead.',
-          },
-          {
             element: 'Text',
             message: 'use a custom themed <AppText> instead.',
           },
