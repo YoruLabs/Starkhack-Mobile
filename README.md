@@ -1,48 +1,76 @@
 # Zap App
 
-This guide will help you get started with setting up and running the project on your local machine. 
+This guide will help you get started with setting up and running the project on your local machine.
+
+</br>
 
 ## Getting Started
 
 To get started, please ensure that you have Node and Yarn installed on your machine. 
 
+</br>
+
 1. Clone the repository to your local machine:
-```bash
+
+```
+// Make sure to update [your-username] with your github username
+
 git clone https://[your-username]@github.com/Zap-Dev-Lab/Zap-Mobile
 ```
+</br>
+
 2. Navigate to the project directory:
-```bash
+```
 cd Zap-Mobile
 ```
+</br>
+
 3. Install the project dependencies:
-```bash
+```
 yarn install
 ```
+</br>
+
 4. Run app on iOS
-```bash
+```
 yarn ios
 ```
-7. Run app on android
-```bash
+</br>
+
+5. Run app on android
+```
 yarn android
 ```
+</br>
 
 ----
 
+</br>
+
 ## Useful commands
 
-1. run eslint
+1. Run eslint to view project warnings and errors
 ```
 yarn lint
 ```
 
+----
+
+</br>
+
 ## Navigation
 
-All the screens of the app stays in screens folder. As per the functionality of the Screen, add it to the respective sub-folder. For instance, Signup screen goes inside onboarding folder. For each sub-folder inside screens we create a Navigator inside navigation folder. Look at an existing Navigator in order to create one.
-Inside navigation/Router.tsx, we add the respective screen along with the props it requires.
-We also need to add the screen to getScreen() function inside navigation/ScreenRegistry.ts file in order for it to be using by its respective Navigator.
+All the screens of the app stays in _screens_ folder. As per the functionality of the Screen, add it to the respective sub-folder. For instance, _Login screen_ goes inside _onboarding_ folder. For each sub-folder inside _screens_ we create a _Navigator_ inside _navigation_ folder. Look at an existing Navigator in order to create one.
+<br/>
+Inside _navigation/Router.tsx_, we add the respective screen along with the props it requires.
+<br/>
+We also need to add our screen to _getScreen()_ function inside _navigation/ScreenRegistry.ts_ file in order for it to be used by its respective Navigator.
+
+</br>
 
 ### Steps to create a new screen called Login
+
+</br>
 
 1. Create the screen named Login.tsx inside screens/onboarding
 
@@ -59,6 +87,7 @@ export default function LoginScreen(): ReactElement {
   )
 }
 ```
+</br>
 
 2. Add the Screen to navigation/Router.tsx. If the OnboardingStack doesn't exist, create one. Else add Login to it. In case you are creating one, don't forget to add it to AllScreens and ScreenProps types as well.
 
@@ -71,6 +100,7 @@ export type OnboardingStack = {
   }
 }
 ```
+</br>
 
 3. Add the Screen to getScreen() function inside navigation/ScreenRegistry.ts
 ```
@@ -88,7 +118,7 @@ function getScreen(screenName: Screen): ScreenType {
   }
 }
 ```
-
+</br>
 
 4. Finally, inside navigation folder, if the OnboardingNavigator doesn't exist, create it. Else, add LoginScreen to it.
 
@@ -123,6 +153,7 @@ const OnboardingNavigator = (): React.ReactElement => {
 
 export default OnboardingNavigator
 ```
+</br>
 
 5. To access screen prop or navigate to another screen, do as follows -
 
@@ -146,10 +177,16 @@ export default function LoginScreen({
 }
 ```
 
+----
+
+</br>
+
 ## Making API calls
 
 ### Query
 Query functions get automatically called whenever its screen comes into focus
+
+</br>
 
 1. Create Query
 
@@ -163,6 +200,8 @@ const { data, isLoading, isFetching } = useQuery({
 
 ### Mutation
 
+</br>
+
 1. Create mutation
 
 ```
@@ -171,6 +210,8 @@ const { mutate: mutateLogin, isPending } = useMutation({
     mutationFn: login, // The function login() gets defined inside api folder
 })
 ```
+
+</br>
 
 2. Call mutation inside onSubmit() function (say)
 
