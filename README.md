@@ -46,7 +46,7 @@ We also need to add the screen to getScreen() function inside navigation/ScreenR
 
 1. Create the screen named Login.tsx inside screens/onboarding
 
-```
+```javascript
 import { AppText } from '@components/text/AppText'
 import React, { ReactElement } from 'react'
 import { View } from 'react-native'
@@ -62,7 +62,7 @@ export default function LoginScreen(): ReactElement {
 
 2. Add the Screen to navigation/Router.tsx. If the OnboardingStack doesn't exist, create one. Else add Login to it. In case you are creating one, don't forget to add it to AllScreens and ScreenProps types as well.
 
-```
+```javascript
 export type OnboardingStack = {
   Welcome: undefined
   Signup: undefined
@@ -73,7 +73,7 @@ export type OnboardingStack = {
 ```
 
 3. Add the Screen to getScreen() function inside navigation/ScreenRegistry.ts
-```
+```javascript
 function getScreen(screenName: Screen): ScreenType {
   switch (screenName) {
     // -------------------- Onboarding Stack --------------------
@@ -92,7 +92,7 @@ function getScreen(screenName: Screen): ScreenType {
 
 4. Finally, inside navigation folder, if the OnboardingNavigator doesn't exist, create it. Else, add LoginScreen to it.
 
-```
+```javascript
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import type { OnboardingStack } from './Router'
@@ -126,7 +126,7 @@ export default OnboardingNavigator
 
 5. To access screen prop or navigate to another screen, do as follows -
 
-```
+```javascript
 export default function LoginScreen({
   navigation,
   route,
@@ -153,7 +153,7 @@ Query functions get automatically called whenever its screen comes into focus
 
 1. Create Query
 
-```
+```javascript
 const { data, isLoading, isFetching } = useQuery({
   queryKey: ['transaction_list'],
   queryFn: () => getTransactionList(order), // The function getTransactionList() gets defined inside api folder
@@ -165,7 +165,7 @@ const { data, isLoading, isFetching } = useQuery({
 
 1. Create mutation
 
-```
+```javascript
 const { mutate: mutateLogin, isPending } = useMutation({
     mutationKey: ['login'],
     mutationFn: login, // The function login() gets defined inside api folder
@@ -174,7 +174,7 @@ const { mutate: mutateLogin, isPending } = useMutation({
 
 2. Call mutation inside onSubmit() function (say)
 
-```
+```javascript
 const onSubmit = (): void => {
 
   const loginArgs: LoginArgs = { // Create LoginArgs type inside types/user.ts
