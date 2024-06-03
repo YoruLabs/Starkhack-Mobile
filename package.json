@@ -5,18 +5,20 @@
   "scripts": {
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "lint:ts": "tsc --noEmit",
+    "prebuild": "npx expo prebuild",
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "@react-native-community/netinfo": "11.3.1",
+    "@react-native-google-signin/google-signin": "^12.1.1",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
     "@tanstack/react-query": "^5.39.0",
     "axios": "^1.7.2",
     "expo": "~51.0.8",
+    "expo-image": "~1.12.9",
     "expo-status-bar": "~1.12.1",
     "jotai": "^2.8.2",
     "react": "18.2.0",
