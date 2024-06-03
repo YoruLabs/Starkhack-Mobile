@@ -12,6 +12,7 @@ import GoogleIcon from '@assets/icons/google'
 import { login } from '@state/Atoms'
 import { useSetAtom } from 'jotai'
 import { useNavigation } from '@react-navigation/native'
+import Strings from '@utils/Strings'
 
 export default function WelcomeScreen(): ReactElement {
   const loginUser = useSetAtom(login)
@@ -59,11 +60,11 @@ export default function WelcomeScreen(): ReactElement {
         <AppImage source={LOGO_ICON} width={120} height={120} />
         <Spacer vertical={48} />
         <AppText size="extra-large" type="bold">
-          Welcome to Zap!
+          {Strings.WELCOME}
         </AppText>
         <View style={styles.buttonContainer}>
           <AppButton
-            label="Sign in with Google"
+            label={Strings.SIGN_IN_WITH_GOOGLE}
             labelWeight="bold"
             labelSize="normal"
             leftIcon={<GoogleIcon />}

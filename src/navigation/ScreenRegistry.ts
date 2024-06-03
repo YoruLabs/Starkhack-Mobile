@@ -59,7 +59,6 @@ export function getScreenBuilder(screen: Screen): ScreenBuilderType {
 }
 
 function getScreen(screenName: Screen): ScreenType {
-  console.log('screenName: ', screenName)
   switch (screenName) {
     // -------------------- Onboarding Stack --------------------
     case 'OnboardingStack':
