@@ -24,6 +24,8 @@ export const MainNavigator = (): ReactElement => {
     }
   }
 
+  console.log('isLoggedIn: ', isLoggedIn)
+
   return (
     <Stack.Navigator
       initialRouteName={getInitialScreen()}
