@@ -1,20 +1,100 @@
+import { LOGO_ICON } from '@assets/icons'
+import AppButton from '@components/AppButton'
+import { AppImage } from '@components/AppImage'
+import { Spacer } from '@components/Spacer'
 import { AppText } from '@components/text/AppText'
-import React, { ReactElement } from 'react'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { AppColors } from '@utils/Colors'
+import React, { ReactElement, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import GoogleIcon from '@assets/icons/google'
+import { login } from '@state/Atoms'
+import { useSetAtom } from 'jotai'
+import { useNavigation } from '@react-navigation/native'
+import Strings from '@utils/Strings'
 
 export default function WelcomeScreen(): ReactElement {
+  const loginUser = useSetAtom(login)
+  const mainNavigation = useNavigation()
+
+  useEffect(() => {
+    GoogleSignin.configure()
+  }, [])
+
+  const signIn = async (): Promise<void> => {
+    try {
+      GoogleSignin.hasPlayServices()
+      const currentUser = await GoogleSignin.signIn()
+      console.log('UserInfo - ', currentUser)
+
+      const token = currentUser.idToken ?? undefined
+      const user = {
+        id: currentUser.user.id,
+        name: currentUser.user.name ?? undefined,
+        email: currentUser.user.email,
+        photo: currentUser.user.photo ?? undefined,
+      }
+
+      loginUser(user, token)
+
+      // Navigate to Home inside HomeStack
+      mainNavigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'HomeStack',
+            params: {},
+          },
+        ],
+      })
+    } catch (e) {
+      console.log('Error - ', e)
+    }
+  }
+
   return (
-    <View style={styles.container}>
-      <AppText size="small">Welcome to Zap!</AppText>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <Spacer vertical={100} />
+        <AppImage source={LOGO_ICON} width={120} height={120} />
+        <Spacer vertical={48} />
+        <AppText size="extra-large" type="bold">
+          {Strings.WELCOME}
+        </AppText>
+        <View style={styles.buttonContainer}>
+          <AppButton
+            label={Strings.SIGN_IN_WITH_GOOGLE}
+            labelWeight="bold"
+            labelSize="normal"
+            leftIcon={<GoogleIcon />}
+            backgroundColor={AppColors.black}
+            borderRadius={24}
+            labelColor={AppColors.white}
+            onPress={signIn}
+          />
+        </View>
+      </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: AppColors.greyBackground,
     flex: 1,
-    backgroundColor: '#fff',
+  },
+  content: {
+    flex: 1,
+    marginHorizontal: 16,
+    paddingTop: 12,
     alignItems: 'center',
-    justifyContent: 'center',
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 20,
+    width: '92%',
+    height: 48,
+    borderColor: AppColors.border,
   },
 })

@@ -2,6 +2,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import React, { ReactElement } from 'react'
 import { MainStack } from './Router'
 import { getScreenBuilder } from './ScreenRegistry'
+import { useAtomValue } from 'jotai'
+import { Atoms } from '@state/Atoms'
 
 const Stack = createNativeStackNavigator<MainStack>()
 
@@ -12,17 +14,17 @@ const stackScreenOptions = {
 }
 
 export const MainNavigator = (): ReactElement => {
-  // TODO: Manage Login here
-  // const isLoggedIn = useAtomValue(Atoms.LoggedIn)
-  const isLoggedIn = false
+  const isLoggedIn = useAtomValue(Atoms.LoggedIn)
 
   const getInitialScreen = (): keyof MainStack => {
     if (isLoggedIn) {
-      return 'ProfileStack'
+      return 'HomeStack'
     } else {
       return 'OnboardingStack'
     }
   }
+
+  console.log('isLoggedIn: ', isLoggedIn)
 
   return (
     <Stack.Navigator
@@ -37,6 +39,7 @@ export const MainNavigator = (): ReactElement => {
           name="ProfileStack"
           getComponent={getScreenBuilder('ProfileStack')}
         />
+        <Stack.Screen name="HomeStack" getComponent={getScreenBuilder('HomeStack')} />
       </Stack.Group>
     </Stack.Navigator>
   )
