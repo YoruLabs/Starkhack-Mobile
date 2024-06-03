@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "17528040277",
+    "project_id": "zap-mobile-71630",
+    "storage_bucket": "zap-mobile-71630.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17528040277:android:d1a3d03c282e429cc5dddc",
+        "android_client_info": {
+          "package_name": "com.zapapp.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "17528040277-o1gp45hhu3tg7uoihe23nl2tp8c1dkj1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zapapp.android",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "17528040277-99u31cdsqvoct6bbmfuvarb18ocfuhg2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGXN18NUBUojmHLEfqF3pGJq3bYr13KmY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "17528040277-99u31cdsqvoct6bbmfuvarb18ocfuhg2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "17528040277-32fpni81mm63hta5kr5qev9eism0asqm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.zapapp.ios"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
