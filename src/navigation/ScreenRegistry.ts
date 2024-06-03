@@ -59,6 +59,7 @@ export function getScreenBuilder(screen: Screen): ScreenBuilderType {
 }
 
 function getScreen(screenName: Screen): ScreenType {
+  console.log('screenName: ', screenName)
   switch (screenName) {
     // -------------------- Onboarding Stack --------------------
     case 'OnboardingStack':
@@ -73,10 +74,13 @@ function getScreen(screenName: Screen): ScreenType {
       return require('@navigation/ProfileNavigator').default
     case 'Profile':
       return require('@screens/profile/Profile').default
-    case 'ResetPassword':
-      return require('@screens/profile/ResetPassword').default
+    // -------------------- Home --------------------
+    case 'HomeStack':
+      return require('@navigation/HomeNavigator').default
+    case 'Home':
+      return require('@screens/home/Home').default
     // -------------------- Fallback --------------------
     default:
-      return require('@screens/onboarding/Signup').default
+      return require('@screens/onboarding/Welcome').default
   }
 }

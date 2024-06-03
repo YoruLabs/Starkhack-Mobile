@@ -16,13 +16,13 @@ export const Atoms = {
   AuthToken: atomWithStorage<string>('authToken', '', storageForString),
 }
 
-// TODO: Update this
-export const login = atom(null, (_get, set, data: any) => {
-  set(Atoms.AuthToken, data.accessToken)
-  if (!isEmpty(data.accessToken)) {
-    set(Atoms.LoggedIn, true)
-    set(Atoms.User, data.user)
+export const login = atom(null, (_get, set, user: User, token?: string) => {
+  if (!isEmpty(token)) {
+    set(Atoms.AuthToken, token)
   }
+
+  set(Atoms.LoggedIn, true)
+  set(Atoms.User, user)
 })
 
 export const logout = atom(null, (_get, set) => {

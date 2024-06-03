@@ -10,7 +10,7 @@ const stackScreenOptions = {
 }
 
 const getInitialScreen = (): keyof OnboardingStack => {
-  return 'Signup'
+  return 'Welcome'
 }
 
 const OnboardingNavigator = (): React.ReactElement => {
