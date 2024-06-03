@@ -26,7 +26,6 @@ export default function HomeScreen(): ReactElement {
         headerRight={
           <AppImage
             source={user?.photo}
-            borderRadius={18}
             width={36}
             height={36}
             onPress={navigateToProfile}
