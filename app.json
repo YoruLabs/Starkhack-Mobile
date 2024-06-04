@@ -5,11 +5,11 @@
     "displayName": "Zap",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/png/logo.png",
+    "icon": "./src/assets/png/logo.png",
     "userInterfaceStyle": "light",
     "plugins": ["@react-native-google-signin/google-signin"],
     "splash": {
-      "image": "./assets/png/logo.png",
+      "image": "./src/assets/png/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -20,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/png/logo.png",
+        "foregroundImage": "./src/assets/png/logo.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.zapapp.android",
