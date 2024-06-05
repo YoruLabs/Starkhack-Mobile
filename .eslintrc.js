@@ -112,7 +112,7 @@ module.exports = {
           },
           {
             element: 'Button',
-            message: 'use a custom themed <PressableOpacity> instead.',
+            message: 'use a custom themed <AppButton> instead.',
           },
           {
             element: 'VirtualizedList',
@@ -121,6 +121,10 @@ module.exports = {
           {
             element: 'Text',
             message: 'use a custom themed <AppText> instead.',
+          },
+          {
+            element: 'Image',
+            message: 'use a custom themed <AppImage> instead.',
           },
         ],
       },

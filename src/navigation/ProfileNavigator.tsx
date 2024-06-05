@@ -19,6 +19,7 @@ const ProfileNavigator = (): React.ReactElement => {
       initialRouteName={getInitialScreen()}
       screenOptions={stackScreenOptions}>
       <Stack.Screen name="Profile" getComponent={getScreenBuilder('Profile')} />
+      <Stack.Screen name="Experiment" getComponent={getScreenBuilder('Experiment')} />
     </Stack.Navigator>
   )
 }

@@ -73,6 +73,8 @@ function getScreen(screenName: Screen): ScreenType {
       return require('@navigation/ProfileNavigator').default
     case 'Profile':
       return require('@screens/profile/Profile').default
+    case 'Experiment':
+      return require('@screens/profile/Experiment').default
     // -------------------- Home --------------------
     case 'HomeStack':
       return require('@navigation/HomeNavigator').default
