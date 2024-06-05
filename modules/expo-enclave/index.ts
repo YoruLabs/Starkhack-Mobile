@@ -1,30 +1,30 @@
-import ExpoEnclaveModule from './src/ExpoEnclaveModule';
+import ExpoEnclaveModule from './src/ExpoEnclaveModule'
 
 export type HardwareSecurityLevel =
-  | "SOFTWARE"
-  | "TRUSTED_ENVIRONMENT"
-  | "HARDWARE_ENCLAVE";
+  | 'SOFTWARE'
+  | 'TRUSTED_ENVIRONMENT'
+  | 'HARDWARE_ENCLAVE'
 
 export type PromptCopy = {
   /**
    * Message displayed when prompting for authentication,
    * rendered on both iOS and Android devices.
    */
-  usageMessage: string;
+  usageMessage: string
 
   /**
    * Title of the auth prompt, only rendered on Android
    * devices.
    */
-  androidTitle: string;
-};
+  androidTitle: string
+}
 
 /**
  * Get key storage security level.
  * @return HardwareSecurityLevel
  */
 export async function getHardwareSecurityLevel(): Promise<HardwareSecurityLevel> {
-  return ExpoEnclaveModule.getHardwareSecurityLevel();
+  return ExpoEnclaveModule.getHardwareSecurityLevel()
 }
 
 /**
@@ -34,10 +34,8 @@ export async function getHardwareSecurityLevel(): Promise<HardwareSecurityLevel>
  * @return Hex string of DER representation of the public key, or undefined if
  * no key pair is attached to accountName.
  */
-export async function fetchPublicKey(
-  accountName: string
-): Promise<string | undefined> {
-  return ExpoEnclaveModule.fetchPublicKey(accountName);
+export async function fetchPublicKey(accountName: string): Promise<string | undefined> {
+  return ExpoEnclaveModule.fetchPublicKey(accountName)
 }
 
 /**
@@ -47,7 +45,7 @@ export async function fetchPublicKey(
  * @return Hex string of DER representation of the public key
  */
 export async function createKeyPair(accountName: string): Promise<string> {
-  return ExpoEnclaveModule.createKeyPair(accountName);
+  return ExpoEnclaveModule.createKeyPair(accountName)
 }
 
 /**
@@ -56,7 +54,7 @@ export async function createKeyPair(accountName: string): Promise<string> {
  * @param accountName The account name to remove.
  */
 export async function deleteKeyPair(accountName: string): Promise<void> {
-  return ExpoEnclaveModule.deleteKeyPair(accountName);
+  return ExpoEnclaveModule.deleteKeyPair(accountName)
 }
 
 /**
@@ -70,9 +68,9 @@ export async function deleteKeyPair(accountName: string): Promise<void> {
 export async function sign(
   accountName: string,
   hexMessage: string,
-  promptCopy: PromptCopy
+  promptCopy: PromptCopy,
 ): Promise<string> {
-  return ExpoEnclaveModule.sign(accountName, hexMessage, promptCopy);
+  return ExpoEnclaveModule.sign(accountName, hexMessage, promptCopy)
 }
 
 /**
@@ -87,7 +85,7 @@ export async function sign(
 export async function verify(
   accountName: string,
   hexSignature: string,
-  hexMessage: string
+  hexMessage: string,
 ): Promise<boolean> {
-  return ExpoEnclaveModule.verify(accountName, hexSignature, hexMessage);
+  return ExpoEnclaveModule.verify(accountName, hexSignature, hexMessage)
 }

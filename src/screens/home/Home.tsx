@@ -12,6 +12,7 @@ import { getHardwareSecurityLevel } from '../../../modules/expo-enclave'
 import AppButton from '@components/AppButton'
 import { isEmpty } from '@utils/util'
 import { Spacer } from '@components/Spacer'
+import { PressableOpacity } from 'react-native-pressable-opacity'
 
 export default function HomeScreen(): ReactElement {
   const mainNavigation = useNavigation()
@@ -26,9 +27,7 @@ export default function HomeScreen(): ReactElement {
 
   // @danilo Test function to get hardware security level
   async function getHardwareLevel(): Promise<void> {
-    const securityLevel = await getHardwareSecurityLevel()
-    setSecurityLevel(securityLevel)
-    console.log('Security - ', securityLevel)
+    setSecurityLevel(await getHardwareSecurityLevel())
   }
 
   return (
@@ -36,12 +35,24 @@ export default function HomeScreen(): ReactElement {
       <Header
         title="Zap"
         headerRight={
-          <AppImage
-            source={user?.photo}
-            width={36}
-            height={36}
-            onPress={navigateToProfile}
-          />
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View>
+              <AppButton
+                label="Experiment"
+                onPress={() =>
+                  mainNavigation.navigate('ProfileStack', { screen: 'Experiment' })
+                }
+                customStyles={{ width: 100, height: 36, marginRight: 16 }}
+              />
+            </View>
+
+            <AppImage
+              source={user?.photo}
+              width={36}
+              height={36}
+              onPress={navigateToProfile}
+            />
+          </View>
         }
       />
       <View style={styles.content}>

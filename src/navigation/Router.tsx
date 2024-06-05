@@ -15,6 +15,7 @@ export type OnboardingStack = {
 
 export type ProfileStack = {
   Profile: undefined
+  Experiment: undefined
 }
 
 export type HomeStack = {

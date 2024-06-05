@@ -64,6 +64,15 @@ export default function WelcomeScreen(): ReactElement {
         </AppText>
         <View style={styles.buttonContainer}>
           <AppButton
+            label="Experiment"
+            onPress={() =>
+              mainNavigation.navigate('ProfileStack', { screen: 'Experiment' })
+            }
+            borderRadius={24}
+            labelSize="normal"
+          />
+          <Spacer vertical={16} />
+          <AppButton
             label={Strings.SIGN_IN_WITH_GOOGLE}
             labelWeight="bold"
             labelSize="normal"
@@ -94,7 +103,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     width: '92%',
-    height: 48,
     borderColor: AppColors.border,
   },
 })
