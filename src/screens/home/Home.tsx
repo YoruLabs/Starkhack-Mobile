@@ -12,6 +12,9 @@ import IonIcons from '@expo/vector-icons/Ionicons'
 import { Spacer } from '@components/Spacer'
 import { PressableOpacity } from 'react-native-pressable-opacity'
 import { SCREEN_HEIGHT } from '@utils/Constants'
+import ViewFiller from '@components/ViewFiller'
+import { transactions } from '@types/transaction'
+import TransactionList from '@screens/components/TransactionList'
 
 export default function HomeScreen(): ReactElement {
   const mainNavigation = useNavigation()
@@ -29,9 +32,6 @@ export default function HomeScreen(): ReactElement {
     {
       icon: 'information-circle-outline',
       name: 'Details',
-      onPress: () => {
-        mainNavigation.navigate('HomeStack', { screen: 'Transactions' })
-      },
     },
     {
       icon: 'ellipsis-horizontal',
@@ -90,9 +90,7 @@ export default function HomeScreen(): ReactElement {
           </View>
           <View style={styles.optionsContainer}>
             {options.map((_, index) => (
-              <PressableOpacity
-                style={styles.optionItem}
-                onPress={options[index]?.onPress ?? undefined}>
+              <PressableOpacity style={styles.optionItem}>
                 <View style={styles.optionImage}>
                   <IonIcons
                     // @ts-ignore
@@ -108,6 +106,23 @@ export default function HomeScreen(): ReactElement {
               </PressableOpacity>
             ))}
           </View>
+        </View>
+        <View style={styles.transactionsContainer}>
+          <AppText size="large" type="medium" color={AppColors.black}>
+            Transactions
+          </AppText>
+          <ViewFiller />
+          <PressableOpacity
+            onPress={() => {
+              mainNavigation.navigate('HomeStack', { screen: 'Transactions' })
+            }}>
+            <AppText size="small" type="bold" color={AppColors.blue}>
+              View All &#8594;
+            </AppText>
+          </PressableOpacity>
+        </View>
+        <View style={{ width: '100%', flex: 1 }}>
+          <TransactionList limit={3} />
         </View>
       </View>
     </View>
@@ -160,5 +175,11 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  transactionsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    marginTop: 24,
   },
 })
