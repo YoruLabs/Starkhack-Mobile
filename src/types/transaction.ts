@@ -46,4 +46,13 @@ export const transactions: Transaction[] = [
     fromCurrencySymbol: '€',
     toCurrencySymbol: '$',
   },
+  {
+    id: '4',
+    date: new Date('2022-01-02'),
+    type: 'send',
+    toCurrency: 'USD',
+    receiverName: 'Mike Doe',
+    toAmount: 320,
+    toCurrencySymbol: '$',
+  },
 ]
