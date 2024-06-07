@@ -20,6 +20,7 @@ export type ProfileStack = {
 
 export type HomeStack = {
   Home: undefined
+  Transactions: undefined
 }
 
 export type AllScreens =

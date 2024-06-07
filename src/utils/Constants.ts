@@ -22,13 +22,7 @@ export const BORDER_RADIUS = 8
 
 export const KAV_BEHAVIOR = IS_IOS ? 'padding' : undefined
 
-// TODO
-// export const SAFE_TOP = IS_IOS ? StaticSafeAreaInsets.safeAreaInsetsTop : 0
-// export const SAFE_LEFT = StaticSafeAreaInsets.safeAreaInsetsLeft
-// export const SAFE_RIGHT = StaticSafeAreaInsets.safeAreaInsetsRight
-// export const SAFE_BOTTOM = IS_IOS ? StaticSafeAreaInsets.safeAreaInsetsBottom : 0
-
-export const SAFE_TOP = 64
-export const SAFE_LEFT = 0
-export const SAFE_RIGHT = 0
-export const SAFE_BOTTOM = 64
+export const SAFE_TOP = IS_IOS ? StaticSafeAreaInsets.safeAreaInsetsTop : 0
+export const SAFE_LEFT = StaticSafeAreaInsets.safeAreaInsetsLeft
+export const SAFE_RIGHT = StaticSafeAreaInsets.safeAreaInsetsRight
+export const SAFE_BOTTOM = IS_IOS ? StaticSafeAreaInsets.safeAreaInsetsBottom : 0
