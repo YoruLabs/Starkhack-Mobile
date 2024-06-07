@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useStyle } from 'react-native-style-utilities'
 import { Text, TextProps } from 'react-native'
-import { FontVariant, getFontName, getFontSize, getFontVariant, TextSize } from './Text'
+import { FontVariant, getFontSize, TextSize } from './Text'
 import { IPAD_EXTRA } from '@utils/Constants'
 
 interface AppTextProps extends TextProps {
@@ -19,18 +19,16 @@ export function AppText({
 }: AppTextProps): React.ReactElement {
   const colors = { background: { primaryForeground: '#000' } }
 
-  const fontName = useMemo(() => getFontName(size), [size])
-
   const customStyle = useStyle(
     () => [
       {
-        fontFamily: getFontVariant(fontName, type),
+        fontWeight: type,
         fontSize: getFontSize(size) + IPAD_EXTRA,
         color: color ?? colors.background.primaryForeground,
       },
       style,
     ],
-    [color, colors.background, fontName, size, style, type],
+    [color, colors.background, size, style, type],
   )
 
   return (

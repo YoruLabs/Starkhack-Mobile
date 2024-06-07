@@ -18,6 +18,7 @@ type Props = {
   onBackPress?: () => void
   darker?: boolean
   onPress?: () => void
+  elevation?: number
 }
 
 export default function Header({
@@ -26,6 +27,7 @@ export default function Header({
   onBackPress,
   darker = false,
   onPress,
+  elevation = 0,
 }: Props): ReactElement {
   const navigation = useNavigation()
   const { isOnline } = useNetwork()
@@ -97,7 +99,6 @@ const styles = StyleSheet.create({
   },
   headerContainerDarker: {
     flexDirection: 'row',
-
     alignItems: 'center',
     backgroundColor: AppColors.primary,
   },
