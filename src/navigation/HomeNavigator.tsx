@@ -19,6 +19,7 @@ const HomeNavigator = (): React.ReactElement => {
       initialRouteName={getInitialScreen()}
       screenOptions={stackScreenOptions}>
       <Stack.Screen name="Home" getComponent={getScreenBuilder('Home')} />
+      <Stack.Screen name="Transactions" getComponent={getScreenBuilder('Transactions')} />
     </Stack.Navigator>
   )
 }

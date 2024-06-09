@@ -20,7 +20,7 @@ export const MainNavigator = (): ReactElement => {
     if (isLoggedIn) {
       return 'HomeStack'
     } else {
-      return 'OnboardingStack'
+      return 'HomeStack'
     }
   }
 
