@@ -16,66 +16,34 @@ export const ACCOUNT_ADDRESS: string =
 
 export const ABI = [
   {
-    name: 'ICounterImpl',
     type: 'impl',
-    interface_name: 'counter::counter::ICounter',
+    name: 'SimpleStorage',
+    interface_name: 'zap_contracts::simple_contracts::simple_storage::ISimpleStorage',
   },
   {
-    name: 'counter::counter::ICounter',
     type: 'interface',
+    name: 'zap_contracts::simple_contracts::simple_storage::ISimpleStorage',
     items: [
       {
-        name: 'get_counter',
         type: 'function',
-        inputs: [],
-        outputs: [
-          {
-            type: 'core::integer::u32',
-          },
-        ],
-        state_mutability: 'view',
-      },
-      {
-        name: 'increase_counter',
-        type: 'function',
-        inputs: [],
+        name: 'set',
+        inputs: [{ name: 'x', type: 'core::integer::u128' }],
         outputs: [],
         state_mutability: 'external',
       },
-    ],
-  },
-  {
-    name: 'constructor',
-    type: 'constructor',
-    inputs: [
       {
-        name: 'input',
-        type: 'core::integer::u32',
+        type: 'function',
+        name: 'get',
+        inputs: [],
+        outputs: [{ type: 'core::integer::u128' }],
+        state_mutability: 'view',
       },
     ],
   },
   {
-    kind: 'struct',
-    name: 'counter::counter::Counter::CounterIncreased',
     type: 'event',
-    members: [
-      {
-        kind: 'key',
-        name: 'counter',
-        type: 'core::integer::u32',
-      },
-    ],
-  },
-  {
+    name: 'zap_contracts::simple_contracts::simple_storage::SimpleStorage::Event',
     kind: 'enum',
-    name: 'counter::counter::Counter::Event',
-    type: 'event',
-    variants: [
-      {
-        kind: 'nested',
-        name: 'CounterIncreased',
-        type: 'counter::counter::Counter::CounterIncreased',
-      },
-    ],
+    variants: [],
   },
 ]

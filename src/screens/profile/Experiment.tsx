@@ -13,30 +13,18 @@ import {
   verify,
 } from '../../../modules/expo-enclave'
 import { Buffer } from 'buffer'
-import { RpcProvider, Contract, Account } from 'starknet' // Import hash from starknet.js
-import { EnclaveSigner } from '@utils/p256Signer'
-import {
-  ACCOUNT_ADDRESS,
-  ABI,
-  ACCOUNT_NAME,
-  HEX_MESSAGE,
-  PROMPT_COPY,
-  TEST_ADDRESS,
-} from '@utils/SignerConstants'
+
+import { ABI, ACCOUNT_NAME, HEX_MESSAGE, PROMPT_COPY } from '@utils/SignerConstants'
 import Header from '@components/Header'
 import AppButton from '@components/AppButton'
 import { Spacer } from '@components/Spacer'
+// import { createAndSignTransaction } from './sendTransaction'
+import { Account, Contract, RpcProvider } from 'starknet'
+import { createAndSignTransaction } from './sendTransaction'
 
 export default function ExperimentScreen(): ReactElement {
   const [message, setMessage] = useState('')
   const [signature, setSignature] = useState('')
-
-  // const provider = new RpcProvider(); // Sepolia
-  const RPC_ENDPOINT = 'https://starknet-sepolia.public.blastapi.io/rpc/v0_7'
-  // 1. Connect to StarkNet
-  const provider = new RpcProvider({
-    nodeUrl: RPC_ENDPOINT,
-  })
   async function handleCreateKeyPair(): Promise<void> {
     const publicKey = await createKeyPair(ACCOUNT_NAME)
     console.log('Public Key - ', publicKey)
@@ -46,12 +34,8 @@ export default function ExperimentScreen(): ReactElement {
   async function handleFetchPublicKey(): Promise<void> {
     const publicKeyHex = await fetchPublicKey(ACCOUNT_NAME)
     console.log('Public Key (Hex) - ', publicKeyHex)
-    const { x, y } = parsePublicKey(publicKeyHex ?? '')
 
-    console.log('Public Key (x) - ', x)
-    console.log('Public Key (y) - ', y)
-
-    setMessage(`Public Key (x, y): (${x}, ${y})`)
+    setMessage(`Public Key Hex: (${publicKeyHex}`)
   }
 
   async function handleSign(): Promise<void> {
@@ -86,7 +70,7 @@ export default function ExperimentScreen(): ReactElement {
     ACCOUNT_NAME: any,
     signature: any,
     HEX_MESSAGE: any,
-  ): Promise<void> {
+  ): Promise<boolean> {
     // Here we assume the ExpoEnclaveModule.verify function is correctly implemented and available
     return await verify(ACCOUNT_NAME, signature, HEX_MESSAGE)
   }
@@ -154,73 +138,6 @@ export default function ExperimentScreen(): ReactElement {
     return { r, s }
   }
 
-  async function createAndSignTransaction(): Promise<void> {
-    try {
-      let pvt_key = '0x100'
-
-      const enclaveSigner = new EnclaveSigner(pvt_key)
-
-      // Need to fetch Account from Database
-      // 1. Create Account with EnclaveSigner
-      const account = new Account(provider, ACCOUNT_ADDRESS, enclaveSigner)
-
-      console.log('Account', account)
-
-      // 2. Get public key from EnclaveSigner
-      const publicKey = await enclaveSigner.getPubKey()
-      console.log('publicKey: ', publicKey)
-
-      // 3. Instantiate contract
-      // Connect the new contract instance :
-      const myTestContract = new Contract(ABI, TEST_ADDRESS, account)
-
-      console.log('Account Nonce', await account.getNonce())
-
-      // 4. Interaction with the contract read
-      const count = await myTestContract.get_counter()
-      console.log('Initial count =', count)
-
-      // 5. Execute contract call
-      // TODO: Get increase_counter working
-      const res = await myTestContract.increase_counter()
-      await provider.waitForTransaction(res.transaction_hash)
-
-      const count2 = await myTestContract.get_counter()
-      console.log('Final count =', count2)
-    } catch (error) {
-      console.error('Transaction error:', error)
-    }
-  }
-
-  async function createAndSignTransaction2(): Promise<void> {
-    try {
-      const testAddress =
-        '0x4946d0ed1ec6f1ed9aff9744473b84af9c28d1b8adff36e5a8c94df67631266'
-      // const provider = new RpcProvider(); // Sepolia
-      const privateKey = ''
-      const accountAddress =
-        '0x0498546e6e9d4bd039f53ef8c3813bdc5bc8b6c10efd270b407aa13e0f9f696d'
-
-      const enclaveSigner = new EnclaveSigner(privateKey)
-
-      const account = new Account(provider, accountAddress, enclaveSigner)
-
-      const myTestContract = new Contract(ABI, testAddress, account)
-      console.log(myTestContract)
-      // Interaction with the contract with call
-      const count = await myTestContract.get_counter()
-      console.log('Initial count =', count)
-
-      const res = await myTestContract.increase_counter()
-      await provider.waitForTransaction(res.transaction_hash)
-
-      const count2 = await myTestContract.get_counter()
-      console.log('Initial count =', count2)
-    } catch (error) {
-      console.error('Transaction error:', error)
-    }
-  }
-
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Experiment" />
@@ -238,10 +155,6 @@ export default function ExperimentScreen(): ReactElement {
           onPress={createAndSignTransaction}
         />
         <Spacer vertical={12} />
-        <AppButton
-          label="Check Starknet Tx Signature2"
-          onPress={createAndSignTransaction2}
-        />
         <Spacer vertical={12} />
         <AppText>{message}</AppText>
       </View>

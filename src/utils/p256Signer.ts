@@ -31,6 +31,7 @@ import {
   stark,
   V2DeclareSignerDetails,
   V3DeclareSignerDetails,
+  cairo,
 } from 'starknet'
 import { Buffer } from 'buffer'
 
@@ -193,13 +194,46 @@ export class EnclaveSigner implements SignerInterface {
     return this.signRaw(msgHash as string)
   }
 
+  // This is returning a hard coded signature
   protected async signRaw(msgHash: string): Promise<Signature> {
-    // Changed to Enclave sign
-    const messageHashBuffer = Buffer.from(msgHash.slice(2), 'hex').toString('hex')
-    console.log('messageHashBuffer: ', messageHashBuffer)
-    let signature = await sign(accountName, messageHashBuffer, promptCopy)
-    console.log('signature', signature)
+    let messageBuffer = Buffer.from(msgHash.slice(2), 'hex').toString('hex')
+    let signature = await sign(accountName, messageBuffer, promptCopy)
+    let { r, s } = parseSignature(signature)
 
-    return ['0x0', '0x0', '0x0', '0x0', '0x0', '0x0']
+    // Convert hex string to Uint8Array
+    const messageArray = Uint8Array.from(Buffer.from(msgHash.slice(2), 'hex'))
+    // Convert Uint8Array to Array<u8>
+    const messageArrayU8: Array<number> = Array.from(messageArray)
+
+    let r_uin256 = cairo.uint256(r)
+    let s_uin256 = cairo.uint256(s)
+    return [
+      r_uin256.low.toString(16),
+      r_uin256.high.toString(16),
+      s_uin256.low.toString(16),
+      s_uin256.high.toString(16),
+      '0x' + messageArrayU8.length.toString(16),
+      ...messageArrayU8.map((num) => '0x' + num.toString(16).padStart(2, '0')),
+    ]
   }
+}
+
+function parseSignature(signature: any): { r: bigint; s: bigint } {
+  const signatureBuffer = Buffer.from(signature, 'hex')
+  const signatureBytes = new Uint8Array(signatureBuffer)
+
+  // Assume the signature is in the DER format (0x30 || length || 0x02 || r_length || r || 0x02 || s_length || s)
+  const rLength = signatureBytes[3]
+  const r = signatureBytes
+    .slice(4, 4 + rLength)
+    .reduce((acc, val) => (acc << 8n) + BigInt(val), 0n)
+
+  const sLength = signatureBytes[4 + rLength + 1]
+  const sStart = 4 + rLength + 2
+  const sEnd = sStart + sLength
+  const s = signatureBytes
+    .slice(sStart, sEnd)
+    .reduce((acc, val) => (acc << 8n) + BigInt(val), 0n)
+
+  return { r, s }
 }
