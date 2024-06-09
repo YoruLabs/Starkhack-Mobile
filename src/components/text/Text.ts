@@ -39,24 +39,3 @@ export function getFontName(size: TextSize): FontName {
   // @ts-expect-error should be unreachable.
   throw new Error(`Invalid font size supplied: ${size}!`)
 }
-
-export function getFontVariant(
-  font: FontName,
-  type: FontVariant,
-): `${typeof font}-${string}` {
-  switch (font) {
-    case 'SFProRounded':
-      switch (type) {
-        case 'regular':
-          return 'SFProRounded-Regular'
-        case 'medium':
-          return 'SFProRounded-Medium'
-        case 'bold':
-          return 'SFProRounded-Bold'
-      }
-      // @ts-expect-error should be unreachable.
-      throw new Error(`Invalid font variant supplied: ${type}!`)
-  }
-  // @ts-expect-error should be unreachable.
-  throw new Error(`Invalid font name supplied: ${font}!`)
-}

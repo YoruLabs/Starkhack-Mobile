@@ -80,6 +80,9 @@ function getScreen(screenName: Screen): ScreenType {
       return require('@navigation/HomeNavigator').default
     case 'Home':
       return require('@screens/home/Home').default
+    case 'Transactions':
+      return require('@screens/home/Transactions').default
+
     // -------------------- Fallback --------------------
     default:
       return require('@screens/onboarding/Welcome').default
