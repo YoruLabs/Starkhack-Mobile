@@ -7,7 +7,7 @@ export function parseSignature(signature: any): { r: bigint; s: bigint } {
     throw new Error('Invalid signature format')
   }
 
-  const rLength = signatureBytes[3]
+  const rLength: any = signatureBytes[3]
   const r = signatureBytes
     .slice(4, 4 + rLength)
     .reduce((acc, val) => (acc << 8n) + BigInt(val), 0n)
