@@ -5,7 +5,7 @@ import {
   sign,
   verify,
   PromptCopy,
-} from '../../modules/expo-enclave'
+} from '../../../modules/expo-enclave'
 
 import {
   Abi,
@@ -34,6 +34,7 @@ import {
   cairo,
 } from 'starknet'
 import { Buffer } from 'buffer'
+import { parseSignature } from './crypto_utils'
 
 // TEST VALUES
 const accountName = 'exampleAccount'
@@ -76,9 +77,6 @@ enum ETransactionVersion3 {
   V3 = '0x3',
   F3 = '0x100000000000000000000000000000003',
 }
-
-//TODO: Need to implement formatP256Signature, check:
-// https://github.com/starknet-io/starknet.js/blob/66a5c0341eccfef0dcdf1312c15627b7d4f6b675/src/signer/ethSigner.ts#L175
 
 export class EnclaveSigner implements SignerInterface {
   protected pk: Uint8Array | string
@@ -207,6 +205,7 @@ export class EnclaveSigner implements SignerInterface {
 
     let r_uin256 = cairo.uint256(r)
     let s_uin256 = cairo.uint256(s)
+    console.log('signing values', r_uin256, s_uin256, messageArrayU8)
     return [
       r_uin256.low.toString(16),
       r_uin256.high.toString(16),
@@ -216,24 +215,4 @@ export class EnclaveSigner implements SignerInterface {
       ...messageArrayU8.map((num) => '0x' + num.toString(16).padStart(2, '0')),
     ]
   }
-}
-
-function parseSignature(signature: any): { r: bigint; s: bigint } {
-  const signatureBuffer = Buffer.from(signature, 'hex')
-  const signatureBytes = new Uint8Array(signatureBuffer)
-
-  // Assume the signature is in the DER format (0x30 || length || 0x02 || r_length || r || 0x02 || s_length || s)
-  const rLength = signatureBytes[3]
-  const r = signatureBytes
-    .slice(4, 4 + rLength)
-    .reduce((acc, val) => (acc << 8n) + BigInt(val), 0n)
-
-  const sLength = signatureBytes[4 + rLength + 1]
-  const sStart = 4 + rLength + 2
-  const sEnd = sStart + sLength
-  const s = signatureBytes
-    .slice(sStart, sEnd)
-    .reduce((acc, val) => (acc << 8n) + BigInt(val), 0n)
-
-  return { r, s }
 }

@@ -22,7 +22,7 @@ export function parseSignature(signature: any): { r: bigint; s: bigint } {
   return { r, s }
 }
 
-export function derPublicKeyToXandY(pubKeyHex: any) {
+export function derPublicKeyToXandY(pubKeyHex: any): [bigint, bigint] {
   // Check if the public key starts with the DER prefix
   if (!pubKeyHex.startsWith('3059301306072a8648ce3d020106082a8648ce3d03010703420004')) {
     throw new Error('Invalid DER public key format')
