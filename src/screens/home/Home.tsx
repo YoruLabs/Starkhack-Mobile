@@ -8,12 +8,11 @@ import { useAtomValue } from 'jotai'
 import React, { ReactElement } from 'react'
 import { StyleSheet, View } from 'react-native'
 import AppButton from '@components/AppButton'
-import IonIcons from '@expo/vector-icons/Ionicons'
+import IonIcons from '@expo/vector-icons/MaterialIcons'
 import { Spacer } from '@components/Spacer'
 import { PressableOpacity } from 'react-native-pressable-opacity'
 import { SCREEN_HEIGHT } from '@utils/Constants'
 import ViewFiller from '@components/ViewFiller'
-import { transactions } from '@types/transaction'
 import TransactionList from '@screens/components/TransactionList'
 
 export default function HomeScreen(): ReactElement {
@@ -26,16 +25,16 @@ export default function HomeScreen(): ReactElement {
       name: 'Add Money',
     },
     {
-      icon: 'swap-horizontal',
+      icon: 'swap-horiz',
       name: 'Exchange',
     },
     {
-      icon: 'information-circle-outline',
-      name: 'Details',
+      icon: 'call-made',
+      name: 'Send',
     },
     {
-      icon: 'ellipsis-horizontal',
-      name: 'More',
+      icon: 'call-received',
+      name: 'Receive',
     },
   ]
 

@@ -8,7 +8,6 @@ import { Card } from '@components/Card'
 import { EmptyList } from '@components/EmptyList'
 import { getFormattedDate } from '@utils/DateTime'
 import { Spacer } from '@components/Spacer'
-import { isEmpty } from '@utils/util'
 
 type TransactionProps = {
   transaction: Transaction
