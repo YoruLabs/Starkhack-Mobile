@@ -9,21 +9,37 @@ import {
   sign,
   verify,
 } from '../../../modules/expo-enclave'
-import { ACCOUNT_NAME, HEX_MESSAGE, PROMPT_COPY } from '@utils/crypto/SignerConstants'
+import {
+  ACCOUNT_NAME,
+  HEX_MESSAGE,
+  PROMPT_COPY,
+  ACCOUNT_ADDRESS,
+  ERC20_ADDRESS,
+  RPC_ENDPOINT,
+} from '@utils/crypto/SignerConstants'
 import Header from '@components/Header'
 import AppButton from '@components/AppButton'
 import { Spacer } from '@components/Spacer'
 import { derPublicKeyToXandY } from '@utils/crypto/crypto_utils'
 
-// Import functions from zapAccount and erc20 modules
-import { deployAndInitialize } from '@utils/crypto/zapAccount'
-import { approve, getAllowance, getBalance, mint } from '@utils/crypto/erc20'
+import ERC20Manager from '@utils/crypto/ERC20Manager'
+import ZapAccountManager from '@utils/crypto/ZapAccountManager'
 
 export default function ExperimentScreen(): ReactElement {
   const [message, setMessage] = useState('')
   const [signature, setSignature] = useState('')
-  const [accountAddress, setAccountAddress] = useState(
-    '0x15ed3e955161432ff55d43717e8c44c7ee4cce8dff91f10d1833969909e3d86',
+  const [accountAddress, setAccountAddress] = useState(ACCOUNT_ADDRESS)
+
+  const erc20Manager = new ERC20Manager(
+    accountAddress,
+    ERC20_ADDRESS,
+    RPC_ENDPOINT,
+    '0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a',
+  )
+
+  const zapAccountManager = new ZapAccountManager(
+    RPC_ENDPOINT,
+    '0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a',
   )
 
   async function handleCreateKeyPair(): Promise<void> {
@@ -52,7 +68,8 @@ export default function ExperimentScreen(): ReactElement {
   async function handleDeployAndInitializeAccount(): Promise<void> {
     const publicKeyHex: any = await fetchPublicKey(ACCOUNT_NAME)
 
-    const { address, deploymentTransactionHash } = await deployAndInitialize(publicKeyHex)
+    const { address, deploymentTransactionHash } =
+      await zapAccountManager.deployAndInitialize(publicKeyHex)
     setAccountAddress(address)
     setMessage(`Account deployed and initialized at address: ${address}`)
   }
@@ -63,7 +80,7 @@ export default function ExperimentScreen(): ReactElement {
       setMessage('Please deploy and initialize the account first.')
       return
     }
-    const balance = await getBalance(accountAddress)
+    const balance = await erc20Manager.getBalance(accountAddress)
     setMessage(`Balance: ${balance.balance}`)
   }
 
@@ -72,7 +89,7 @@ export default function ExperimentScreen(): ReactElement {
       setMessage('Please deploy and initialize the account first.')
       return
     }
-    const txHash = await mint(accountAddress, 1000) // Mint 1000 tokens
+    const txHash = await erc20Manager.mint(accountAddress, 1000) // Mint 1000 tokens
     setMessage(`Minted 1000 tokens. Transaction hash: ${txHash}`)
   }
 
@@ -81,8 +98,8 @@ export default function ExperimentScreen(): ReactElement {
       setMessage('Please deploy and initialize the account first.')
       return
     }
-    const txHash = await approve(accountAddress, 100000) // Mint 1000 tokens
-    setMessage(`Minted 1000 tokens. Transaction hash: ${txHash}`)
+    const txHash = await erc20Manager.approve(accountAddress, 100000) // Approve 100000 tokens
+    setMessage(`Approved 100000 tokens. Transaction hash: ${txHash}`)
   }
 
   async function handleAllowance(): Promise<void> {
@@ -90,7 +107,7 @@ export default function ExperimentScreen(): ReactElement {
       setMessage('Please deploy and initialize the account first.')
       return
     }
-    const tx = await getAllowance(accountAddress, accountAddress) // Mint 1000 tokens
+    const tx = await erc20Manager.getAllowance(accountAddress, accountAddress) // Check allowance
     setMessage(`Allowance is: ${tx.allowance}`)
   }
 
