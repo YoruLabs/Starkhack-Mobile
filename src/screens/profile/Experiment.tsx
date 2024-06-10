@@ -13,7 +13,6 @@ import { ACCOUNT_NAME, HEX_MESSAGE, PROMPT_COPY } from '@utils/crypto/SignerCons
 import Header from '@components/Header'
 import AppButton from '@components/AppButton'
 import { Spacer } from '@components/Spacer'
-import { createAndSignTransaction } from '../../utils/crypto/sendTransaction'
 import { derPublicKeyToXandY } from '@utils/crypto/crypto_utils'
 
 // Import functions from zapAccount and erc20 modules
