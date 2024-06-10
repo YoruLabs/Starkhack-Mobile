@@ -2,26 +2,31 @@ import { AppText } from '@components/text/AppText'
 import React, { ReactElement, useState } from 'react'
 import { AppColors } from '@utils/Colors'
 import { SafeAreaView } from 'react-native-safe-area-context'
-
 import { StyleSheet, View } from 'react-native'
-
 import {
   fetchPublicKey,
   createKeyPair,
   sign,
   verify,
 } from '../../../modules/expo-enclave'
-
-import { ACCOUNT_NAME, HEX_MESSAGE, PROMPT_COPY } from '@utils/SignerConstants'
+import { ACCOUNT_NAME, HEX_MESSAGE, PROMPT_COPY } from '@utils/crypto/SignerConstants'
 import Header from '@components/Header'
 import AppButton from '@components/AppButton'
 import { Spacer } from '@components/Spacer'
-import { createAndSignTransaction } from '../../crypto_functions/sendTransaction'
-import { derPublicKeyToXandY } from '@utils/crypto_utils'
+import { createAndSignTransaction } from '../../utils/crypto/sendTransaction'
+import { derPublicKeyToXandY } from '@utils/crypto/crypto_utils'
+
+// Import functions from zapAccount and erc20 modules
+import { deployAndInitialize } from '@utils/crypto/zapAccount'
+import { approve, getAllowance, getBalance, mint } from '@utils/crypto/erc20'
 
 export default function ExperimentScreen(): ReactElement {
   const [message, setMessage] = useState('')
   const [signature, setSignature] = useState('')
+  const [accountAddress, setAccountAddress] = useState(
+    '0x15ed3e955161432ff55d43717e8c44c7ee4cce8dff91f10d1833969909e3d86',
+  )
+
   async function handleCreateKeyPair(): Promise<void> {
     const publicKey = await createKeyPair(ACCOUNT_NAME)
     console.log('Public Key - ', publicKey)
@@ -31,7 +36,6 @@ export default function ExperimentScreen(): ReactElement {
   async function handleFetchPublicKey(): Promise<void> {
     const publicKeyHex = await fetchPublicKey(ACCOUNT_NAME)
     let [x, y] = derPublicKeyToXandY(publicKeyHex)
-
     setMessage(`Public Key Hex: ${publicKeyHex} x: ${x} y: ${y}`)
   }
 
@@ -46,7 +50,51 @@ export default function ExperimentScreen(): ReactElement {
     setMessage(`Verification Result: ${isValid}`)
   }
 
-  // Verify the signature using the parsed r and s values
+  async function handleDeployAndInitializeAccount(): Promise<void> {
+    const publicKeyHex: any = await fetchPublicKey(ACCOUNT_NAME)
+
+    const { address, deploymentTransactionHash } = await deployAndInitialize(publicKeyHex)
+    setAccountAddress(address)
+    setMessage(`Account deployed and initialized at address: ${address}`)
+  }
+
+  async function handleFetchBalance(): Promise<void> {
+    console.log('Account', accountAddress)
+    if (!accountAddress) {
+      setMessage('Please deploy and initialize the account first.')
+      return
+    }
+    const balance = await getBalance(accountAddress)
+    setMessage(`Balance: ${balance.balance}`)
+  }
+
+  async function handleMint(): Promise<void> {
+    if (!accountAddress) {
+      setMessage('Please deploy and initialize the account first.')
+      return
+    }
+    const txHash = await mint(accountAddress, 1000) // Mint 1000 tokens
+    setMessage(`Minted 1000 tokens. Transaction hash: ${txHash}`)
+  }
+
+  async function handleApprove(): Promise<void> {
+    if (!accountAddress) {
+      setMessage('Please deploy and initialize the account first.')
+      return
+    }
+    const txHash = await approve(accountAddress, 100000) // Mint 1000 tokens
+    setMessage(`Minted 1000 tokens. Transaction hash: ${txHash}`)
+  }
+
+  async function handleAllowance(): Promise<void> {
+    if (!accountAddress) {
+      setMessage('Please deploy and initialize the account first.')
+      return
+    }
+    const tx = await getAllowance(accountAddress, accountAddress) // Mint 1000 tokens
+    setMessage(`Allowance is: ${tx.allowance}`)
+  }
+
   async function verifySignature(
     ACCOUNT_NAME: any,
     signature: any,
@@ -68,10 +116,17 @@ export default function ExperimentScreen(): ReactElement {
         <AppButton label="Verify Signature" onPress={handleVerify} />
         <Spacer vertical={12} />
         <AppButton
-          label="Check Starknet Tx Signature"
-          onPress={createAndSignTransaction}
+          label="Deploy and Initialize Account"
+          onPress={handleDeployAndInitializeAccount}
         />
         <Spacer vertical={12} />
+        <AppButton label="Fetch Balance" onPress={handleFetchBalance} />
+        <Spacer vertical={12} />
+        <AppButton label="Mint to Account" onPress={handleMint} />
+        <Spacer vertical={12} />
+        <AppButton label="Approve to Account" onPress={handleApprove} />
+        <Spacer vertical={12} />
+        <AppButton label="Allowance to Account" onPress={handleAllowance} />
         <Spacer vertical={12} />
         <AppText>{message}</AppText>
       </View>

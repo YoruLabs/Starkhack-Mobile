@@ -1,6 +1,6 @@
 import { RpcProvider, Contract, Account } from 'starknet' // Import hash from starknet.js
-import { ABI } from '@utils/SignerConstants'
-import { EnclaveSigner } from '@utils/p256Signer'
+import { ABI } from '@utils/crypto/SignerConstants'
+import { EnclaveSigner } from '@utils/crypto/p256Signer'
 
 const RPC_ENDPOINT = 'https://4fc9-189-120-76-5.ngrok-free.app'
 // 1. Connect to StarkNet
