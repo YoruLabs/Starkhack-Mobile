@@ -44,21 +44,6 @@ const promptCopy: PromptCopy = {
 }
 
 /**
- * V_ Transaction versions HexString
- * F_ Fee Transaction Versions HexString (2 ** 128 + TRANSACTION_VERSION)
- */
-enum ETransactionVersion {
-  V0 = '0x0',
-  V1 = '0x1',
-  V2 = '0x2',
-  V3 = '0x3',
-  F0 = '0x100000000000000000000000000000000',
-  F1 = '0x100000000000000000000000000000001',
-  F2 = '0x100000000000000000000000000000002',
-  F3 = '0x100000000000000000000000000000003',
-}
-
-/**
  * Old Transaction Versions
  */
 enum ETransactionVersion2 {
