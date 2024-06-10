@@ -1,0 +1,186 @@
+{
+  "abi": [
+    {
+      "type": "impl",
+      "name": "ZapAccount",
+      "interface_name": "zap_contracts::account::zap_account::IZapAccount"
+    },
+    {
+      "type": "struct",
+      "name": "core::integer::u256",
+      "members": [
+        { "name": "low", "type": "core::integer::u128" },
+        { "name": "high", "type": "core::integer::u128" }
+      ]
+    },
+    {
+      "type": "interface",
+      "name": "zap_contracts::account::zap_account::IZapAccount",
+      "items": [
+        {
+          "type": "function",
+          "name": "get_public_key",
+          "inputs": [],
+          "outputs": [{ "type": "core::felt252" }],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "initialize",
+          "inputs": [
+            { "name": "point_x", "type": "core::integer::u256" },
+            { "name": "point_y", "type": "core::integer::u256" }
+          ],
+          "outputs": [],
+          "state_mutability": "external"
+        },
+        {
+          "type": "function",
+          "name": "get_public_key_point",
+          "inputs": [],
+          "outputs": [{ "type": "(core::integer::u256, core::integer::u256)" }],
+          "state_mutability": "view"
+        }
+      ]
+    },
+    {
+      "type": "impl",
+      "name": "SRC6Impl",
+      "interface_name": "openzeppelin::account::interface::ISRC6"
+    },
+    {
+      "type": "struct",
+      "name": "core::array::Span::<core::felt252>",
+      "members": [{ "name": "snapshot", "type": "@core::array::Array::<core::felt252>" }]
+    },
+    {
+      "type": "struct",
+      "name": "core::starknet::account::Call",
+      "members": [
+        { "name": "to", "type": "core::starknet::contract_address::ContractAddress" },
+        { "name": "selector", "type": "core::felt252" },
+        { "name": "calldata", "type": "core::array::Span::<core::felt252>" }
+      ]
+    },
+    {
+      "type": "interface",
+      "name": "openzeppelin::account::interface::ISRC6",
+      "items": [
+        {
+          "type": "function",
+          "name": "__execute__",
+          "inputs": [
+            {
+              "name": "calls",
+              "type": "core::array::Array::<core::starknet::account::Call>"
+            }
+          ],
+          "outputs": [
+            { "type": "core::array::Array::<core::array::Span::<core::felt252>>" }
+          ],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "__validate__",
+          "inputs": [
+            {
+              "name": "calls",
+              "type": "core::array::Array::<core::starknet::account::Call>"
+            }
+          ],
+          "outputs": [{ "type": "core::felt252" }],
+          "state_mutability": "view"
+        },
+        {
+          "type": "function",
+          "name": "is_valid_signature",
+          "inputs": [
+            { "name": "hash", "type": "core::felt252" },
+            { "name": "signature", "type": "core::array::Array::<core::felt252>" }
+          ],
+          "outputs": [{ "type": "core::felt252" }],
+          "state_mutability": "view"
+        }
+      ]
+    },
+    {
+      "type": "impl",
+      "name": "SRC5Impl",
+      "interface_name": "openzeppelin::introspection::interface::ISRC5"
+    },
+    {
+      "type": "enum",
+      "name": "core::bool",
+      "variants": [
+        { "name": "False", "type": "()" },
+        { "name": "True", "type": "()" }
+      ]
+    },
+    {
+      "type": "interface",
+      "name": "openzeppelin::introspection::interface::ISRC5",
+      "items": [
+        {
+          "type": "function",
+          "name": "supports_interface",
+          "inputs": [{ "name": "interface_id", "type": "core::felt252" }],
+          "outputs": [{ "type": "core::bool" }],
+          "state_mutability": "view"
+        }
+      ]
+    },
+    {
+      "type": "constructor",
+      "name": "constructor",
+      "inputs": [{ "name": "public_key", "type": "core::felt252" }]
+    },
+    {
+      "type": "function",
+      "name": "is_supported_interface",
+      "inputs": [{ "name": "interface_id", "type": "core::felt252" }],
+      "outputs": [{ "type": "core::bool" }],
+      "state_mutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "__validate_deploy__",
+      "inputs": [
+        { "name": "class_hash", "type": "core::felt252" },
+        { "name": "contract_address_salt", "type": "core::felt252" },
+        { "name": "_public_key", "type": "core::felt252" }
+      ],
+      "outputs": [{ "type": "core::felt252" }],
+      "state_mutability": "view"
+    },
+    {
+      "type": "event",
+      "name": "zap_contracts::account::zap_account::ZapAccount::AccountCreated",
+      "kind": "struct",
+      "members": [{ "name": "public_key", "type": "core::felt252", "kind": "key" }]
+    },
+    {
+      "type": "event",
+      "name": "openzeppelin::introspection::src5::SRC5Component::Event",
+      "kind": "enum",
+      "variants": []
+    },
+    {
+      "type": "event",
+      "name": "zap_contracts::account::zap_account::ZapAccount::Event",
+      "kind": "enum",
+      "variants": [
+        {
+          "name": "AccountCreated",
+          "type": "zap_contracts::account::zap_account::ZapAccount::AccountCreated",
+          "kind": "nested"
+        },
+        {
+          "name": "SRC5Event",
+          "type": "openzeppelin::introspection::src5::SRC5Component::Event",
+          "kind": "flat"
+        }
+      ]
+    }
+  ]
+}
