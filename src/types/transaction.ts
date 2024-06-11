@@ -13,6 +13,50 @@ export type Transaction = {
 
 export type TransactionType = 'exchange' | 'send'
 
+export type Currency = {
+  name: string
+  code: CurrencyCode
+  symbol: string
+}
+
+export type Balance = {
+  currencyCode: CurrencyCode
+  amount: number
+}
+
+export type CurrencyCode = 'BTC' | 'ETH' | 'USDT' | 'USDC' | 'STRK'
+
+// This data is temporary and will be fetched from backend
+
+// Bitcoin, Eth, USDT, USDC, Stark
+export const currencies: Currency[] = [
+  {
+    name: 'Bitcoin',
+    code: 'BTC',
+    symbol: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png',
+  },
+  {
+    name: 'Ethereum',
+    code: 'ETH',
+    symbol: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png',
+  },
+  {
+    name: 'Tether',
+    code: 'USDT',
+    symbol: 'https://assets.coingecko.com/coins/images/325/large/Tether-logo.png',
+  },
+  {
+    name: 'USD Coin',
+    code: 'USDC',
+    symbol: 'https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png',
+  },
+  {
+    name: 'StarkNet',
+    code: 'STRK',
+    symbol: 'https://assets.coingecko.com/coins/images/26433/large/starknet.png',
+  },
+]
+
 // Sample Data
 export const transactions: Transaction[] = [
   {

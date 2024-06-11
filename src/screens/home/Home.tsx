@@ -18,6 +18,8 @@ import TransactionList from '@screens/components/TransactionList'
 export default function HomeScreen(): ReactElement {
   const mainNavigation = useNavigation()
   const user = useAtomValue(Atoms.User)
+  const currentAccount = useAtomValue(Atoms.CurrentAccount)
+  const balance = useAtomValue(Atoms.Balance)
 
   const options = [
     {
@@ -74,14 +76,18 @@ export default function HomeScreen(): ReactElement {
         <View style={styles.mainContainer}>
           <View style={styles.balanceContainer}>
             <AppText size="very-small" color={AppColors.white}>
-              Main &#183; USD
+              Main &#183; {currentAccount.name}
             </AppText>
             <Spacer vertical={4} />
-            <AppText size="very-large" color={AppColors.white} type="bold">
-              $ 1.07
+            <AppText size="large" color={AppColors.white} type="bold">
+              {currentAccount.code}{' '}
+              {balance.find((item) => item.currencyCode === currentAccount.code)
+                ?.amount ?? 0}
             </AppText>
             <Spacer vertical={12} />
-            <PressableOpacity style={styles.accountsButton}>
+            <PressableOpacity
+              style={styles.accountsButton}
+              onPress={() => mainNavigation.navigate('AccountListBT')}>
               <AppText size="small" color={AppColors.white}>
                 Accounts
               </AppText>
