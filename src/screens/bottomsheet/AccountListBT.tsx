@@ -24,7 +24,7 @@ export default function AccountListBT({
     <BottomSheetContainer closeOnTappingBackdrop={true} snapPoints={snapPoints}>
       <View style={styles.container}>
         <Header
-          title="Select Accounts"
+          title="Select Account"
           backType="close"
           onBackPress={() => navigation.goBack()}
         />
