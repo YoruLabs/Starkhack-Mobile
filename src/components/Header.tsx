@@ -11,10 +11,12 @@ import { AppColors } from '@utils/Colors'
 import FocusAwareStatusBar from './FocusAwareStatusBar'
 import { useNetwork } from '@config/Network'
 import { IPAD_EXTRA_PADDING, SAFE_TOP, SCREEN_WIDTH } from '@utils/Constants'
+import IonIcons from '@expo/vector-icons/Ionicons'
 
 type Props = {
   title?: string
   headerRight?: React.ReactNode
+  backType?: 'back' | 'close'
   onBackPress?: () => void
   darker?: boolean
   onPress?: () => void
@@ -27,7 +29,7 @@ export default function Header({
   onBackPress,
   darker = false,
   onPress,
-  elevation = 0,
+  backType = 'back',
 }: Props): ReactElement {
   const navigation = useNavigation()
   const { isOnline } = useNetwork()
@@ -56,7 +58,15 @@ export default function Header({
             onPress={() =>
               onBackPress !== undefined ? onBackPress() : navigation.goBack()
             }>
-            <BackIcon tintColor={darker ? AppColors.white : AppColors.primary} />
+            {backType === 'back' ? (
+              <BackIcon tintColor={darker ? AppColors.white : AppColors.primary} />
+            ) : (
+              <IonIcons
+                name="close"
+                size={32}
+                color={darker ? AppColors.white : AppColors.primary}
+              />
+            )}
           </PressableOpacity>
         ) : (
           <View style={styles.emptyFiller} />
