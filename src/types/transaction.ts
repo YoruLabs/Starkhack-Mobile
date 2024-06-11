@@ -51,7 +51,7 @@ export const currencies: Currency[] = [
     symbol: 'https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png',
   },
   {
-    name: 'StarkNet',
+    name: 'Starknet',
     code: 'STRK',
     symbol: 'https://assets.coingecko.com/coins/images/26433/large/starknet.png',
   },
