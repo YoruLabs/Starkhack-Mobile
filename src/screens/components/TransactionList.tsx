@@ -2,13 +2,12 @@ import { AppColors } from '@utils/Colors'
 import React from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import IonIcons from '@expo/vector-icons/Ionicons'
-import { Transaction, transactions } from '@types/transaction'
+import { Transaction, transactions } from 'types/transaction'
 import { AppText } from '@components/text/AppText'
 import { Card } from '@components/Card'
 import { EmptyList } from '@components/EmptyList'
 import { getFormattedDate } from '@utils/DateTime'
 import { Spacer } from '@components/Spacer'
-import { isEmpty } from '@utils/util'
 
 type TransactionProps = {
   transaction: Transaction

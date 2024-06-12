@@ -23,11 +23,16 @@ export type HomeStack = {
   Transactions: undefined
 }
 
+export type BottomSheetStack = {
+  AccountListBT: undefined
+}
+
 export type AllScreens =
   | keyof MainStack
   | keyof OnboardingStack
   | keyof ProfileStack
   | keyof HomeStack
+  | keyof BottomSheetStack
 
 export type ScreenProps<ScreenName extends AllScreens> =
   ScreenName extends keyof MainStack
@@ -38,11 +43,17 @@ export type ScreenProps<ScreenName extends AllScreens> =
     ? NativeStackScreenProps<ProfileStack, ScreenName>
     : ScreenName extends keyof HomeStack
     ? NativeStackScreenProps<HomeStack, ScreenName>
+    : ScreenName extends keyof BottomSheetStack
+    ? NativeStackScreenProps<BottomSheetStack, ScreenName>
     : never
 
 export type Screen = AllScreens
 
-export type AllStacks = MainStack & OnboardingStack & ProfileStack & HomeStack
+export type AllStacks = MainStack &
+  OnboardingStack &
+  ProfileStack &
+  HomeStack &
+  BottomSheetStack
 
 declare global {
   namespace ReactNavigation {
