@@ -8,17 +8,18 @@ import { useAtomValue } from 'jotai'
 import React, { ReactElement } from 'react'
 import { StyleSheet, View } from 'react-native'
 import AppButton from '@components/AppButton'
-import IonIcons from '@expo/vector-icons/Ionicons'
+import IonIcons from '@expo/vector-icons/MaterialIcons'
 import { Spacer } from '@components/Spacer'
 import { PressableOpacity } from 'react-native-pressable-opacity'
 import { SCREEN_HEIGHT } from '@utils/Constants'
 import ViewFiller from '@components/ViewFiller'
-import { transactions } from '@types/transaction'
 import TransactionList from '@screens/components/TransactionList'
 
 export default function HomeScreen(): ReactElement {
   const mainNavigation = useNavigation()
   const user = useAtomValue(Atoms.User)
+  const currentAccount = useAtomValue(Atoms.CurrentAccount)
+  const balance = useAtomValue(Atoms.Balance)
 
   const options = [
     {
@@ -26,16 +27,16 @@ export default function HomeScreen(): ReactElement {
       name: 'Add Money',
     },
     {
-      icon: 'swap-horizontal',
+      icon: 'swap-horiz',
       name: 'Exchange',
     },
     {
-      icon: 'information-circle-outline',
-      name: 'Details',
+      icon: 'call-made',
+      name: 'Send',
     },
     {
-      icon: 'ellipsis-horizontal',
-      name: 'More',
+      icon: 'call-received',
+      name: 'Receive',
     },
   ]
 
@@ -75,14 +76,18 @@ export default function HomeScreen(): ReactElement {
         <View style={styles.mainContainer}>
           <View style={styles.balanceContainer}>
             <AppText size="very-small" color={AppColors.white}>
-              Main &#183; USD
+              Main &#183; {currentAccount.name}
             </AppText>
             <Spacer vertical={4} />
-            <AppText size="very-large" color={AppColors.white} type="bold">
-              $ 1.07
+            <AppText size="large" color={AppColors.white} type="bold">
+              {currentAccount.code}{' '}
+              {balance.find((item) => item.currencyCode === currentAccount.code)
+                ?.amount ?? 0}
             </AppText>
             <Spacer vertical={12} />
-            <PressableOpacity style={styles.accountsButton}>
+            <PressableOpacity
+              style={styles.accountsButton}
+              onPress={() => mainNavigation.navigate('AccountListBT')}>
               <AppText size="small" color={AppColors.white}>
                 Accounts
               </AppText>
