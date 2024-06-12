@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TextInput,
   TextInputProps,
+  TextStyle,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -16,7 +17,7 @@ export type AppTextInputProps = TextInputProps & {
   isError?: boolean
   isSuccess?: boolean
   customContainerStyles?: ViewStyle
-  customTextStyles?: ViewStyle
+  customTextStyles?: TextStyle
   PrefixIcon?: JSX.Element
   onPress?: () => void
   useBottomSheetTextInput?: boolean

@@ -1,6 +1,7 @@
 import type { NavigatorScreenParams } from '@react-navigation/native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import type { RouteProp as NRouteProp } from '@react-navigation/native'
+import { SendDetails } from 'types/transaction'
 
 export type MainStack = {
   OnboardingStack: NavigatorScreenParams<OnboardingStack>
@@ -21,6 +22,10 @@ export type ProfileStack = {
 export type HomeStack = {
   Home: undefined
   Transactions: undefined
+  Send: undefined
+  PreviewSend: {
+    details: SendDetails
+  }
 }
 
 export type BottomSheetStack = {

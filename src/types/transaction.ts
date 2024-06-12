@@ -24,6 +24,12 @@ export type Balance = {
   amount: number
 }
 
+export type SendDetails = {
+  recipientEmail: string
+  amount: number
+  currency: Currency
+}
+
 export type CurrencyCode = 'BTC' | 'ETH' | 'USDT' | 'USDC' | 'STRK'
 
 // This data is temporary and will be fetched from backend
