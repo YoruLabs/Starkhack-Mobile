@@ -6,4 +6,5 @@ export default {
   SIGN_IN_WITH_GOOGLE: 'Sign in with Google',
   ENTER_EMAIL: 'Please enter email',
   ENTER_AMOUNT: 'Please enter the amount',
+  SEND_SUCCESS: 'Money sent successfully',
 }
