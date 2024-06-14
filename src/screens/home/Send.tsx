@@ -43,7 +43,7 @@ export default function SendScreen({ navigation }: ScreenProps<'Send'>): ReactEl
 
     navigation.navigate('PreviewSend', {
       details: {
-        email: email,
+        recipientEmail: email,
         amount: parseFloat(amount),
         // @ts-ignore
         currency: selectedCurrency,
