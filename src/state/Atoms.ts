@@ -15,6 +15,7 @@ export const Atoms = {
     storageForObject,
   ),
   AuthToken: atomWithStorage<string>('authToken', '', storageForString),
+  AccountAddress: atomWithStorage<string>('accountAddress', '', storageForString),
   Balance: atomWithStorage<Balance[]>(
     'balance',
     [],
@@ -46,4 +47,7 @@ export const logout = atom(null, (_get, set) => {
   set(Atoms.LoggedIn, RESET)
   set(Atoms.User, RESET)
   set(Atoms.AuthToken, RESET)
+  set(Atoms.AccountAddress, RESET)
+  set(Atoms.Balance, RESET)
+  set(Atoms.CurrentAccount, RESET)
 })

@@ -32,7 +32,7 @@ export const MainNavigator = (): ReactElement => {
     if (isLoggedIn) {
       return 'HomeStack'
     } else {
-      return 'HomeStack'
+      return 'OnboardingStack'
     }
   }
 

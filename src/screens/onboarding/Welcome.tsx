@@ -9,13 +9,15 @@ import React, { ReactElement, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import GoogleIcon from '@assets/icons/google'
-import { login } from '@state/Atoms'
+import { Atoms, login } from '@state/Atoms'
 import { useSetAtom } from 'jotai'
 import { useNavigation } from '@react-navigation/native'
 import Strings from '@utils/Strings'
 
 export default function WelcomeScreen(): ReactElement {
   const loginUser = useSetAtom(login)
+  const setAccountAddress = useSetAtom(Atoms.AccountAddress)
+
   const mainNavigation = useNavigation()
 
   useEffect(() => {
@@ -38,6 +40,8 @@ export default function WelcomeScreen(): ReactElement {
 
       loginUser(user, token)
 
+      updateAccountAddress()
+
       // Navigate to Home inside HomeStack
       mainNavigation.reset({
         index: 0,
@@ -51,6 +55,11 @@ export default function WelcomeScreen(): ReactElement {
     } catch (e) {
       console.log('Error - ', e)
     }
+  }
+
+  function updateAccountAddress(): void {
+    // TODO: Call backend function to get user account address
+    // setAccountAddress(address)
   }
 
   return (

@@ -33,6 +33,9 @@ export default function HomeScreen(): ReactElement {
     {
       icon: 'call-made',
       name: 'Send',
+      onPress: () => {
+        mainNavigation.navigate('HomeStack', { screen: 'Send' })
+      },
     },
     {
       icon: 'call-received',
@@ -95,7 +98,9 @@ export default function HomeScreen(): ReactElement {
           </View>
           <View style={styles.optionsContainer}>
             {options.map((_, index) => (
-              <PressableOpacity style={styles.optionItem}>
+              <PressableOpacity
+                style={styles.optionItem}
+                onPress={options[index]?.onPress}>
                 <View style={styles.optionImage}>
                   <IonIcons
                     // @ts-ignore

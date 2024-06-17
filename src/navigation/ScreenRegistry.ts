@@ -82,6 +82,10 @@ function getScreen(screenName: Screen): ScreenType {
       return require('@screens/home/Home').default
     case 'Transactions':
       return require('@screens/home/Transactions').default
+    case 'Send':
+      return require('@screens/home/Send').default
+    case 'PreviewSend':
+      return require('@screens/home/PreviewSend').default
     // -------------------- BottomSheets -----------------
     case 'AccountListBT':
       return require('@screens/bottomsheet/AccountListBT').default
