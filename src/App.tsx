@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider, focusManager } from '@tanstack/react-
 import { NetworkProvider } from '@config/Network'
 import { ToastProvider } from '@components/Toast'
 import { Provider as JotaiProvider } from 'jotai'
+import { RootSiblingParent } from 'react-native-root-siblings'
 
 let appState = AppState.currentState
 AppState.addEventListener('change', (newAppState) => {
@@ -33,12 +34,12 @@ function App(): ReactElement {
     currentScreenName.current = currentRouteName
   }, [])
 
-  console.log('🔄', 'Re-rendering App()...')
-
   const onReady = useCallback(() => {
     console.log('🧭', 'Navigation Container is ready!')
     currentScreenName.current = navigationContainer.current?.getCurrentRoute()?.name
   }, [])
+
+  console.log('🔄', 'Re-rendering App()...')
 
   const queryClient = new QueryClient()
 
@@ -47,16 +48,18 @@ function App(): ReactElement {
       <StatusBar barStyle="dark-content" backgroundColor={AppColors.white} />
       <QueryClientProvider client={queryClient}>
         <JotaiProvider>
-          <ToastProvider>
-            <NavigationContainer
-              ref={navigationContainer}
-              onReady={onReady}
-              onStateChange={onStateChange}>
-              <NetworkProvider>
-                <MainNavigator />
-              </NetworkProvider>
-            </NavigationContainer>
-          </ToastProvider>
+          <RootSiblingParent>
+            <ToastProvider>
+              <NavigationContainer
+                ref={navigationContainer}
+                onReady={onReady}
+                onStateChange={onStateChange}>
+                <NetworkProvider>
+                  <MainNavigator />
+                </NetworkProvider>
+              </NavigationContainer>
+            </ToastProvider>
+          </RootSiblingParent>
         </JotaiProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>
