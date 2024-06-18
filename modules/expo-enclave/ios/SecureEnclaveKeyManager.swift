@@ -91,7 +91,15 @@ public class SecureEnclaveKeyManager : KeyManager {
         let signature = try key.signature(for: message)
         return signature.derRepresentation.hexEncodedString()
     }
-
+    
+    public func signWithHash(accountName: String, hexMessage: String, usageMessage: String) throws -> String {
+        let message = Data(fromHexEncodedString: hexMessage)!
+        let hash = SHA256.hash(data: message)
+        let key = try getSigningPrivkeyWithContext(accountName: accountName, usage: usageMessage)
+        let signature = try key.signature(for: hash)
+        return signature.derRepresentation.hexEncodedString()
+    }
+    
     public func verify(accountName: String, hexSignature: String, hexMessage: String) throws -> Bool {
         let message = Data(fromHexEncodedString: hexMessage)!
         let signature = try P256.Signing.ECDSASignature(derRepresentation: Data(fromHexEncodedString: hexSignature)!)
