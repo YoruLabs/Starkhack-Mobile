@@ -12,6 +12,5 @@ protocol KeyManager {
     func createKeyPair(accountName: String) throws -> String
     func deleteKeyPair(accountName: String) throws
     func sign(accountName: String, hexMessage: String, usageMessage: String) throws -> String
-    func signWithHash(accountName: String, hexMessage: String, usageMessage: String) throws -> String
     func verify(accountName: String, hexSignature: String, hexMessage: String) throws -> Bool
 }
