@@ -19,10 +19,9 @@ export default function RevolutWebScreen({
   const injectedJavaScript = `(function() {
   const oldOpen = XMLHttpRequest.prototype.open;
   XMLHttpRequest.prototype.open = function(method, url, async, user, password) {
-    console.log('--- New Request ---');
-    console.log('Method:', method);
-    console.log('URL:', url);
+    console.log('--- Request ---');
     const headers = {};
+    const isLoaded = false;
 
     // Optional: Capture Headers
     if (this.setRequestHeader) {
@@ -30,7 +29,6 @@ export default function RevolutWebScreen({
         const header = this.getAllResponseHeaders()[i].split(':')[0].trim();
         headers[header] = this.getAllResponseHeaders()[i].split(':')[1].trim();
       }
-      console.log('Headers:', headers);
     }
 
     const request = { type: 'request', method, url, headers };
@@ -40,8 +38,10 @@ export default function RevolutWebScreen({
       console.log('--- Response ---');
       console.log('Status:', this.status);
       console.log('Response:', this.responseText);
-      const response = { type: 'response', status: this.status, response: this.responseText };
-      window.ReactNativeWebView.postMessage(JSON.stringify(response, null, 2));
+      const response = { type: 'response', content: this, status: this.status, response: this.responseText };
+      if (isLoaded === false) {
+        window.ReactNativeWebView.postMessage(JSON.stringify(response, null, 2));
+      }
     });
 
     oldOpen.call(this, method, url, async, user, password);
@@ -53,7 +53,7 @@ export default function RevolutWebScreen({
     const { type } = JSON.parse(event.nativeEvent.data)
     console.log(`--- Network ${type} ---`)
     console.log(event.nativeEvent.data)
-    console.log('\n\n\n\n')
+    console.log('\n')
   }
 
   function goBack(): void {
