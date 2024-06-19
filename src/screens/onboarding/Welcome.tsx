@@ -82,6 +82,16 @@ export default function WelcomeScreen(): ReactElement {
           />
           <Spacer vertical={16} />
           <AppButton
+            label={'Web Interceptor'}
+            onPress={() =>
+              mainNavigation.navigate('OnboardingStack', { screen: 'RevolutWeb' })
+            }
+            backgroundColor={AppColors.black}
+            borderRadius={24}
+            labelSize="normal"
+          />
+          <Spacer vertical={16} />
+          <AppButton
             label={Strings.SIGN_IN_WITH_GOOGLE}
             labelWeight="bold"
             labelSize="normal"
