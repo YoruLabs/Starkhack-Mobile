@@ -65,8 +65,8 @@ function getScreen(screenName: Screen): ScreenType {
       return require('@navigation/OnboardingNavigator').default
     case 'Welcome':
       return require('@screens/onboarding/Welcome').default
-    case 'Signup':
-      return require('@screens/onboarding/Signup').default
+    case 'RevolutWeb':
+      return require('@screens/onboarding/RevolutWeb').default
 
     // -------------------- Profile --------------------
     case 'ProfileStack':

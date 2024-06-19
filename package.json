@@ -39,6 +39,7 @@
     "react-native-static-safe-area-insets": "^2.2.0",
     "react-native-style-utilities": "^1.0.1",
     "react-native-svg": "15.2.0",
+    "react-native-webview": "13.8.6",
     "starknet": "^6.8.0"
   },
   "devDependencies": {

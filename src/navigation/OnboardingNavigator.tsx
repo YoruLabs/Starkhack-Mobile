@@ -19,7 +19,7 @@ const OnboardingNavigator = (): React.ReactElement => {
       initialRouteName={getInitialScreen()}
       screenOptions={stackScreenOptions}>
       <Stack.Screen name="Welcome" getComponent={getScreenBuilder('Welcome')} />
-      <Stack.Screen name="Signup" getComponent={getScreenBuilder('Signup')} />
+      <Stack.Screen name="RevolutWeb" getComponent={getScreenBuilder('RevolutWeb')} />
     </Stack.Navigator>
   )
 }
