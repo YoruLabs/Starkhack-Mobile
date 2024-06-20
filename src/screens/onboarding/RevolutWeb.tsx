@@ -1,84 +1,56 @@
-import React, { ReactElement, useRef, useState } from 'react'
-import { StyleSheet } from 'react-native'
+import React, { ReactElement, useState } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { AppColors } from '@utils/Colors'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import WebView, { WebViewMessageEvent } from 'react-native-webview'
 import { ScreenProps } from '@navigation/Router'
 import Header from '@components/Header'
+import AppButton from '@components/AppButton'
+import { AppText } from '@components/text/AppText'
+import * as RNWebBrowser from 'expo-web-browser'
+import { Spacer } from '@components/Spacer'
+import { REDIRECT_URI, STRAVA_AUTH_URL } from '@utils/Credentials'
+
+type StravaResult = {
+  type: 'success' | 'cancel'
+  url: string
+}
 
 export default function RevolutWebScreen({
   navigation,
 }: ScreenProps<'RevolutWeb'>): ReactElement {
-  const webViewRef = useRef<WebView>(null)
-  const [webViewcanGoBack, setWebViewcanGoBack] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [code, setCode] = useState('')
 
-  // const url = 'https://revolut.com'
-  // const url = 'https://nodeguardians.io'
-  const url = 'https://www.strava.com'
+  const handleLogin = async (): Promise<void> => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const result = (await RNWebBrowser.openAuthSessionAsync(
+      STRAVA_AUTH_URL,
+      REDIRECT_URI,
+    )) as StravaResult
 
-  const injectedJavaScript = `(function() {
-  const oldOpen = XMLHttpRequest.prototype.open;
-  XMLHttpRequest.prototype.open = function(method, url, async, user, password) {
-    console.log('--- Request ---');
-    const headers = {};
-    const isLoaded = false;
-
-    // Optional: Capture Headers
-    if (this.setRequestHeader) {
-      for (let i = 0; i < this.getAllResponseHeaders().length; i++) {
-        const header = this.getAllResponseHeaders()[i].split(':')[0].trim();
-        headers[header] = this.getAllResponseHeaders()[i].split(':')[1].trim();
-      }
+    if (result.type === 'cancel') {
+      console.log('Login canceled')
+      return
     }
 
-    const request = { type: 'request', method, url, headers };
-    window.ReactNativeWebView.postMessage(JSON.stringify(request, null, 2));
-
-    this.addEventListener('load', () => {
-      console.log('--- Response ---');
-      console.log('Status:', this.status);
-      console.log('Response:', this.responseText);
-      const response = { type: 'response', content: this, status: this.status, response: this.responseText };
-      if (isLoaded === false) {
-        window.ReactNativeWebView.postMessage(JSON.stringify(response, null, 2));
-      }
-    });
-
-    oldOpen.call(this, method, url, async, user, password);
-  };
-})();`
-
-  function handleReceiveMessage(event: WebViewMessageEvent): void {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { type } = JSON.parse(event.nativeEvent.data)
-    console.log(`--- Network ${type} ---`)
-    console.log(event.nativeEvent.data)
-    console.log('\n')
-  }
-
-  function goBack(): void {
-    if (webViewcanGoBack) webViewRef.current?.goBack()
-    else navigation.goBack()
+    const { url } = result
+    // Extract authorization code
+    const authCode = url.substring(
+      url.indexOf('code=') + 5,
+      url.indexOf('&', url.indexOf('code=')),
+    )
+    setIsLoggedIn(true)
+    setCode(authCode)
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Zap Web" onBackPress={goBack} />
-      <WebView
-        ref={webViewRef}
-        source={{ uri: url }}
-        injectedJavaScript={injectedJavaScript}
-        onMessage={(event) => {
-          if (event.nativeEvent.data === 'close') {
-            navigation.goBack()
-          } else {
-            handleReceiveMessage(event)
-          }
-        }}
-        onLoadProgress={({ nativeEvent }) => {
-          setWebViewcanGoBack(nativeEvent.canGoBack)
-        }}
-      />
+      <Header title="Zap Web" onBackPress={navigation.goBack} />
+      <View style={styles.content}>
+        <AppButton label="Login with Strava" onPress={handleLogin} />
+        <Spacer vertical={20} />
+        {isLoggedIn && <AppText>Strava Auth code - {code}</AppText>}
+      </View>
     </SafeAreaView>
   )
 }
@@ -87,5 +59,11 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: AppColors.white,
     flex: 1,
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
   },
 })

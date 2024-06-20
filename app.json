@@ -2,6 +2,7 @@
   "expo": {
     "name": "zap-mobile",
     "slug": "zap-mobile",
+    "scheme": "zap-mobile",
     "displayName": "Zap",
     "version": "1.0.0",
     "orientation": "portrait",
