@@ -11,7 +11,7 @@ export type MainStack = {
 
 export type OnboardingStack = {
   Welcome: undefined
-  Signup: undefined
+  RevolutWeb: undefined
 }
 
 export type ProfileStack = {
