@@ -21,6 +21,7 @@
     "expo": "~51.0.8",
     "expo-image": "~1.12.9",
     "expo-status-bar": "~1.12.1",
+    "expo-web-browser": "~13.0.3",
     "fs": "^0.0.1-security",
     "jotai": "^2.8.2",
     "moment": "^2.30.1",
@@ -39,6 +40,7 @@
     "react-native-static-safe-area-insets": "^2.2.0",
     "react-native-style-utilities": "^1.0.1",
     "react-native-svg": "15.2.0",
+    "react-native-webview": "13.8.6",
     "starknet": "^6.8.0"
   },
   "devDependencies": {
