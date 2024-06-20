@@ -43,10 +43,6 @@ public class ExpoEnclaveModule: Module {
       return try self.keyManager.sign(accountName: accountName, hexMessage: hexMessage, usageMessage: promptCopy.usageMessage)
     }
 
-    AsyncFunction("signWithHash") { (accountName: String, hexMessage: String, promptCopy: PromptCopy) throws -> String in
-      return try self.keyManager.sign(accountName: accountName, hexMessage: hexMessage, usageMessage: promptCopy.usageMessage)
-    }
-
     AsyncFunction("verify") { (accountName: String, hexSignature: String, hexMessage: String) throws -> Bool in
       return try self.keyManager.verify(accountName: accountName, hexSignature: hexSignature, hexMessage: hexMessage)
     }
