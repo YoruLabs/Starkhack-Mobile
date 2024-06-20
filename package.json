@@ -21,6 +21,7 @@
     "expo": "~51.0.8",
     "expo-image": "~1.12.9",
     "expo-status-bar": "~1.12.1",
+    "expo-web-browser": "~13.0.3",
     "fs": "^0.0.1-security",
     "jotai": "^2.8.2",
     "moment": "^2.30.1",

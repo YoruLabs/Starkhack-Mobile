@@ -82,7 +82,7 @@ export default function WelcomeScreen(): ReactElement {
           />
           <Spacer vertical={16} />
           <AppButton
-            label={'Web Interceptor'}
+            label={'Login with Strava'}
             onPress={() =>
               mainNavigation.navigate('OnboardingStack', { screen: 'RevolutWeb' })
             }
