@@ -1,7 +1,8 @@
-import { RpcProvider, Contract, Account, cairo } from 'starknet'
+import { RpcProvider, Contract, Account, cairo, RPC } from 'starknet'
 import { EnclaveSigner } from './p256Signer'
 import erc20Abi from '../abis/ERC20.json'
 import { Buffer } from 'buffer'
+import { RPC_ENDPOINT } from './SignerConstants'
 global.Buffer = Buffer
 
 class ERC20Manager {
@@ -16,9 +17,10 @@ class ERC20Manager {
     private privateKey: any,
   ) {
     this.provider = new RpcProvider({
-      nodeUrl: this.rpcEndpoint,
+      // TODO: change for .env variable
+      nodeUrl: RPC_ENDPOINT,
     })
-
+    // TODO: Chanve privateKey to .env variable
     const enclaveSigner = new EnclaveSigner(this.privateKey)
     this.account = new Account(this.provider, this.accountAddress, enclaveSigner)
     this.contract = new Contract(erc20Abi.abi, this.contractAddress, this.account)
