@@ -67,6 +67,12 @@ public class FallbackKeyManager : KeyManager {
         return signature.derRepresentation.hexEncodedString()
     }
 
+    public func signWithHash(accountName: String, hexMessageHash: SHA256Digest, usageMessage: String) throws -> String {
+        let key = try getSigningPrivkey(accountName: accountName)
+        let signature = try key.signature(for: hexMessageHash)
+        return signature.derRepresentation.hexEncodedString()
+    }
+
     public func verify(accountName: String, hexSignature: String, hexMessage: String) throws -> Bool {
         let message = Data(fromHexEncodedString: hexMessage)!
         let signature = try P256.Signing.ECDSASignature(derRepresentation: Data(fromHexEncodedString: hexSignature)!)
