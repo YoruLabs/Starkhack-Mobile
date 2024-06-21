@@ -1,51 +1,42 @@
 import Header from '@components/Header'
 import { AppColors } from '@utils/Colors'
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AppText } from '@components/text/AppText'
 import { ScreenProps } from '@navigation/Router'
-import AppButton from '@components/AppButton'
-import { useToast } from '@components/Toast'
-import Strings from '@utils/Strings'
 import { Spacer } from '@components/Spacer'
 import { Card } from '@components/Card'
 import ViewFiller from '@components/ViewFiller'
+import { getFormattedDate } from '@utils/DateTime'
 
-export default function PreviewSendScreen({
-  navigation,
+export default function TransactionDetailsScreen({
   route,
-}: ScreenProps<'PreviewSend'>): ReactElement {
-  const { details } = route.params
-  const { addToast } = useToast()
-
-  const [isLoading, setLoading] = useState(false)
-
-  function onSendPress(): void {
-    // TODO: Call the backebnd send function
-    setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-      addToast({
-        message: Strings.SEND_SUCCESS,
-        type: 'success',
-      })
-      navigation.navigate('Home')
-    }, 2000)
-  }
+}: ScreenProps<'TransactionDetails'>): ReactElement {
+  const { transaction } = route.params
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Preview Send" />
+      <Header title="Transaction Details" />
       <View style={styles.content}>
-        <Card>
-          <AppText size="small" type="medium" color={AppColors.darkGrey}>
-            Send to
-          </AppText>
-          <ViewFiller />
-          <AppText size="small" type="bold">
-            {details.recipientEmail}
-          </AppText>
+        <Card flexDirection="column">
+          <View style={{ flexDirection: 'row' }}>
+            <AppText size="small" type="medium" color={AppColors.darkGrey}>
+              Sent to
+            </AppText>
+            <ViewFiller />
+            <AppText size="small" type="bold">
+              {transaction.receiver.email}
+            </AppText>
+          </View>
+          <Spacer vertical={12} />
+          <View style={{ flexDirection: 'row' }}>
+            <AppText size="small" type="medium" color={AppColors.darkGrey}>
+              Date
+            </AppText>
+            <ViewFiller />
+            <AppText size="small">{getFormattedDate(transaction.date)}</AppText>
+          </View>
         </Card>
 
         <Spacer vertical={16} />
@@ -57,7 +48,7 @@ export default function PreviewSendScreen({
             </AppText>
             <ViewFiller />
             <AppText size="small" type="medium">
-              {details.currency.code} {details.amount}
+              {transaction.toCurrency.code} {transaction.toAmount}
             </AppText>
           </View>
 
@@ -81,24 +72,10 @@ export default function PreviewSendScreen({
             </AppText>
             <ViewFiller />
             <AppText size="small" type="medium">
-              {details.currency.code} {details.amount}
+              {transaction.toCurrency.code} {transaction.toAmount}
             </AppText>
           </View>
         </Card>
-
-        <Spacer vertical={16} />
-
-        <Card>
-          <AppText size="small" type="medium" color={AppColors.darkGrey}>
-            Estimated arrival
-          </AppText>
-          <ViewFiller />
-          <AppText size="small">Usually in seconds</AppText>
-        </Card>
-
-        <View style={styles.buttonContainer}>
-          <AppButton label="Send" isLoading={isLoading} onPress={onSendPress} />
-        </View>
       </View>
     </SafeAreaView>
   )
@@ -113,11 +90,5 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 16,
     paddingHorizontal: 12,
-  },
-  buttonContainer: {
-    position: 'absolute',
-    width: '100%',
-    bottom: 16,
-    alignSelf: 'center',
   },
 })

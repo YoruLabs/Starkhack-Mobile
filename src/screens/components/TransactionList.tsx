@@ -1,39 +1,46 @@
 import { AppColors } from '@utils/Colors'
 import React from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
-import IonIcons from '@expo/vector-icons/Ionicons'
 import { Transaction, transactions } from 'types/transaction'
 import { AppText } from '@components/text/AppText'
 import { Card } from '@components/Card'
 import { EmptyList } from '@components/EmptyList'
 import { getFormattedDate } from '@utils/DateTime'
 import { Spacer } from '@components/Spacer'
+import { AppImage } from '@components/AppImage'
+import { useNavigation } from '@react-navigation/native'
 
 type TransactionProps = {
   transaction: Transaction
 }
 
 function ListItem({ transaction }: TransactionProps): JSX.Element {
+  const mainNavigation = useNavigation()
+  const navigateToTransactionDetails = (): void => {
+    mainNavigation.navigate('HomeStack', {
+      screen: 'TransactionDetails',
+      params: {
+        transaction: transaction,
+      },
+    })
+  }
+
   return (
     <Card
       flexDirection="row"
       paddingHorizontal={14}
       paddingVertical={12}
-      customStyle={styles.cardContainer}>
+      customStyle={styles.cardContainer}
+      onPress={navigateToTransactionDetails}>
       <View style={styles.transactionImage}>
-        <IonIcons
-          // @ts-ignore
-          name="briefcase"
-          size={22}
-          color={AppColors.white}
-        />
+        <AppImage source={transaction.toCurrency.symbol} />
       </View>
       <Spacer horizontal={12} />
       <View>
         <AppText size="small" type="bold">
-          {transaction.type === 'exchange'
+          {transaction.mode === 'exchange'
             ? transaction.fromCurrency + ' -> ' + transaction.toCurrency
-            : transaction.receiverName}
+            : transaction.receiver.name}
         </AppText>
         <Spacer vertical={2} />
         <AppText size="very-small" color={AppColors.darkGrey}>
@@ -43,13 +50,13 @@ function ListItem({ transaction }: TransactionProps): JSX.Element {
       <Spacer horizontal={12} />
       <View style={styles.amountContainer}>
         <AppText size="small" type="medium">
-          {transaction.type === 'exchange' ? '+' : '-'} {transaction.toCurrencySymbol}
+          {transaction.mode === 'exchange' ? '+' : '-'} {transaction.toCurrency.code}{' '}
           {transaction.toAmount}
         </AppText>
         <Spacer vertical={2} />
         <AppText size="very-small" color={AppColors.darkGrey}>
-          {transaction.type === 'exchange'
-            ? '- ' + transaction.fromCurrencySymbol + transaction.fromAmount
+          {transaction.mode === 'exchange'
+            ? '- ' + transaction.fromCurrency?.code + ' ' + transaction.fromAmount
             : ''}
         </AppText>
       </View>
@@ -87,8 +94,6 @@ const styles = StyleSheet.create({
   transactionImage: {
     width: 44,
     height: 44,
-    backgroundColor: AppColors.darkGrey,
-    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
   },
