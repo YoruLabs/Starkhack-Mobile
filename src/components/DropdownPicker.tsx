@@ -5,6 +5,8 @@ import { AppText } from '@components/text/AppText'
 import { AppColors } from '@utils/Colors'
 import IonIcon from '@expo/vector-icons/Ionicons'
 import { IPAD_EXTRA_PADDING } from '@utils/constants/Constants'
+import { TextSize } from './text/Text'
+import ViewFiller from './ViewFiller'
 
 type Props = {
   options: string[]
@@ -12,6 +14,8 @@ type Props = {
   onToggle: (index: number) => void
   align?: 'left' | 'right'
   dropdownWidth?: number
+  textSize?: TextSize
+  optionTextSize?: TextSize
 }
 
 const DropdownPicker = ({
@@ -20,6 +24,8 @@ const DropdownPicker = ({
   onToggle,
   align,
   dropdownWidth = 128 + 2 * IPAD_EXTRA_PADDING,
+  textSize = 'very-small',
+  optionTextSize = 'very-small',
 }: Props): ReactElement => {
   const [activeIndex, setActiveIndex] = useState(defaultIndex)
   const [isDropdownVisible, setIsDropdownVisible] = useState(false)
@@ -39,13 +45,13 @@ const DropdownPicker = ({
         style={{ ...styles.dropdownButton, width: dropdownWidth }}
         onPress={toggleDropdown}>
         <AppText
-          size="very-small"
+          size={textSize}
           ellipsizeMode="tail"
           numberOfLines={1}
           style={{ maxWidth: dropdownWidth - 12 }}>
           {options[activeIndex]}
         </AppText>
-        <Spacer horizontal={4} />
+        <ViewFiller />
         <IonIcon
           name={isDropdownVisible ? 'chevron-up' : 'chevron-down'}
           size={20}
@@ -71,7 +77,7 @@ const DropdownPicker = ({
                 setActiveIndex(index)
                 toggleDropdown()
               }}>
-              <AppText size="very-small">{option}</AppText>
+              <AppText size={optionTextSize}>{option}</AppText>
             </TouchableOpacity>
           ))}
         </View>
@@ -89,7 +95,8 @@ const styles = StyleSheet.create({
     borderColor: AppColors.border,
     borderRadius: 8,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 10,
     backgroundColor: AppColors.white,
     height: 44,
   },

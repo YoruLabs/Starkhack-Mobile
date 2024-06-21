@@ -8,4 +8,5 @@ export default {
   ENTER_EMAIL: 'Please enter email',
   ENTER_AMOUNT: 'Please enter the amount',
   SEND_SUCCESS: 'Money sent successfully',
+  COMING_SOON: 'Coming soon',
 }
