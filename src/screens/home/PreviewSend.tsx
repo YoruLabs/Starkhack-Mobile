@@ -15,6 +15,7 @@ import ERC20Manager from 'managers/ERC20Manager'
 import { ACCOUNT_ADDRESS, ERC20_ADDRESS } from '@utils/constants/SignerConstants'
 import { useAtomValue } from 'jotai'
 import { Atoms } from '@state/Atoms'
+import { getAddress } from 'requests/server_requests'
 
 export default function PreviewSendScreen({
   navigation,
@@ -36,8 +37,8 @@ export default function PreviewSendScreen({
     console.log('Amount:', amount)
 
     // TODO: Check if user used email, address or ens
-    // TODO: FETCH ACCOUNT_ADDRESS FROM BACKEND -> On BACKEND RETURN ESCROW ADDRESS IF NOT an
-    let to = '0x01f7888e80ef310fc98d8e82b9e2f22cf962ee0342fe830aaabeaf1b0fc05bdf'
+    // TODO: On BACKEND RETURN ESCROW ADDRESS IF NOT an
+    let to = await getAddress(recipientEmail)
     // TODO: GET ERC20_ADDRESS based on "currency.code" or "currency.address"
     // let erc20address = currency.address
     const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS)
