@@ -61,18 +61,6 @@ export default function AddMoneyScreen(): ReactElement {
             color="#000"
           />
         </TouchableOpacity>
-        {/* <DropdownPicker
-          dropdownWidth={SCREEN_WIDTH - 32}
-          options={platformNames}
-          textSize="small"
-          optionTextSize="small"
-          onToggle={(index) => {
-            setPlatform(
-              Object.values(platforms).find((p) => p.name === platformNames[index]) ??
-                platforms.Revolut,
-            )
-          }}
-        /> */}
         <Spacer vertical={16} />
         <AppText size="small">Amount</AppText>
         <Spacer vertical={8} />
