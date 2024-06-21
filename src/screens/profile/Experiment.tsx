@@ -15,7 +15,6 @@ import {
   PROMPT_COPY,
   ACCOUNT_ADDRESS,
   ERC20_ADDRESS,
-  RPC_ENDPOINT,
 } from '@utils/constants/SignerConstants'
 import Header from '@components/Header'
 import AppButton from '@components/AppButton'
@@ -30,15 +29,9 @@ export default function ExperimentScreen(): ReactElement {
   const [signature, setSignature] = useState('')
   const [accountAddress, setAccountAddress] = useState(ACCOUNT_ADDRESS)
 
-  const erc20Manager = new ERC20Manager(
-    accountAddress,
-    ERC20_ADDRESS,
-    RPC_ENDPOINT,
-    '0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a',
-  )
+  const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS)
 
   const zapAccountManager = new ZapAccountManager(
-    RPC_ENDPOINT,
     '0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a',
   )
 
@@ -161,7 +154,7 @@ export default function ExperimentScreen(): ReactElement {
         <Spacer vertical={12} />
         <AppButton label="Allowance to Account" onPress={handleAllowance} />
         <Spacer vertical={12} />
-        <AppButton label="Send Transaction1" onPress={handleSendTransaction} />
+        <AppButton label="Send Transaction" onPress={handleSendTransaction} />
         <Spacer vertical={12} />
         <AppText>{message}</AppText>
       </View>
