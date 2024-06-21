@@ -69,6 +69,9 @@ type TransactionListProps = {
 }
 
 export default function TransactionList({ limit }: TransactionListProps): JSX.Element {
+
+  // TODO: Determine transaction type (send/receive) after backend is integrated
+
   return (
     <FlatList
       data={limit === undefined ? transactions : transactions.slice(0, limit)}
