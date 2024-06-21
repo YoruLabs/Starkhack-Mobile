@@ -4,7 +4,7 @@ import type { User } from 'types/user'
 
 import { storageForBoolean, storageForObject, storageForString } from './Storage'
 import { isEmpty } from '@utils/util'
-import { Balance, Currency } from 'types/transaction'
+import { Balance, currencies, Currency } from 'types/transaction'
 
 export const Atoms = {
   LoggedIn: atomWithStorage<boolean>('isLoggedIn', false, storageForBoolean),
@@ -24,11 +24,7 @@ export const Atoms = {
   ),
   CurrentAccount: atomWithStorage<Currency>(
     'currentAccount',
-    {
-      name: 'Tether',
-      code: 'USDT',
-      symbol: 'https://assets.coingecko.com/coins/images/325/large/Tether-logo.png',
-    },
+    currencies.USDT,
     // @ts-ignore
     storageForObject,
   ),

@@ -63,7 +63,7 @@ export default function PreviewSendScreen({
       <View style={styles.content}>
         <Card>
           <AppText size="small" type="medium" color={AppColors.darkGrey}>
-            To
+            Send to
           </AppText>
           <ViewFiller />
           <AppText size="small" type="bold">
@@ -80,7 +80,7 @@ export default function PreviewSendScreen({
             </AppText>
             <ViewFiller />
             <AppText size="small" type="medium">
-              {details.amount} {details.currency.code}
+              {details.currency.code} {details.amount}
             </AppText>
           </View>
 
@@ -104,7 +104,7 @@ export default function PreviewSendScreen({
             </AppText>
             <ViewFiller />
             <AppText size="small" type="medium">
-              {details.amount} {details.currency.code}
+              {details.currency.code} {details.amount}
             </AppText>
           </View>
         </Card>
