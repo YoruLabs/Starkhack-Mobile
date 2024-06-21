@@ -11,7 +11,7 @@ import AppButton from '@components/AppButton'
 import IonIcons from '@expo/vector-icons/MaterialIcons'
 import { Spacer } from '@components/Spacer'
 import { PressableOpacity } from 'react-native-pressable-opacity'
-import { SCREEN_HEIGHT } from '@utils/Constants'
+import { SCREEN_HEIGHT } from '@utils/constants/Constants'
 import ViewFiller from '@components/ViewFiller'
 import TransactionList from '@screens/components/TransactionList'
 

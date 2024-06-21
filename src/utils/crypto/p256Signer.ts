@@ -1,14 +1,6 @@
-import {
-  getHardwareSecurityLevel,
-  fetchPublicKey,
-  createKeyPair,
-  sign,
-  verify,
-  PromptCopy,
-} from '../../../modules/expo-enclave'
+import { sign, PromptCopy, fetchPublicKey } from '../../../modules/expo-enclave'
 
 import {
-  Abi,
   Call,
   DeclareSignerDetails,
   DeployAccountSignerDetails,
@@ -17,13 +9,9 @@ import {
   TypedData,
   hash,
   CallData,
-  ec,
   transaction, // Import transaction module
   typedData as type,
   SignerInterface,
-  ArraySignatureType,
-  num,
-  encode,
   V2InvocationsSignerDetails,
   V3InvocationsSignerDetails,
   V2DeployAccountSignerDetails,
@@ -34,7 +22,8 @@ import {
   cairo,
 } from 'starknet'
 import { Buffer } from 'buffer'
-import { parseSignature } from './crypto_utils'
+import { parseSignature } from './utils'
+import { ACCOUNT_NAME } from '@utils/constants/SignerConstants'
 
 // TEST VALUES
 const accountName = 'exampleAccount'
@@ -64,14 +53,9 @@ enum ETransactionVersion3 {
 }
 
 export class EnclaveSigner implements SignerInterface {
-  protected pk: Uint8Array | string
-
-  constructor(pk: Uint8Array) {
-    this.pk = pk instanceof Uint8Array ? encode.buf2hex(pk) : num.toHex(pk)
-  }
-
   public async getPubKey(): Promise<string> {
-    return ec.starkCurve.getStarkKey(this.pk)
+    // TODO: GET ACCOUNT_NAME from Global State
+    return String(await fetchPublicKey(ACCOUNT_NAME))
   }
 
   public async signMessage(

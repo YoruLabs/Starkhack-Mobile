@@ -1,5 +1,5 @@
 import { AppColors } from '@utils/Colors'
-import { BORDER_RADIUS } from '@utils/Constants'
+import { BORDER_RADIUS } from '@utils/constants/Constants'
 import React, { ReactElement, ReactNode, useCallback, useMemo } from 'react'
 import { StyleSheet, View, ViewStyle } from 'react-native'
 import { PressableScale } from 'react-native-pressable-scale'
