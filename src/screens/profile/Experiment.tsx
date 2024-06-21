@@ -36,15 +36,30 @@ export default function ExperimentScreen(): ReactElement {
   )
 
   async function handleCreateKeyPair(): Promise<void> {
-    const publicKey = await createKeyPair(ACCOUNT_NAME)
-    console.log('Public Key - ', publicKey)
-    setMessage(`Public Key: ${publicKey}`)
+    try {
+      const publicKey = await fetchPublicKey('testing100')
+      console.log('Public Key - ', publicKey)
+      setMessage(`Public Key: ${publicKey}`)
+    } catch {
+      console.log('Public Key already created')
+      setMessage('Public Key already created')
+    }
   }
 
   async function handleFetchPublicKey(): Promise<void> {
-    const publicKeyHex = await fetchPublicKey(ACCOUNT_NAME)
-    let [x, y] = derPublicKeyToXandY(publicKeyHex)
-    setMessage(`Public Key Hex: ${publicKeyHex} x: ${x} y: ${y}`)
+    let value = 'testing10000'
+    let publicKeyHex
+    try {
+      publicKeyHex = await createKeyPair(value)
+      console.log('Created Public Key Hex:', publicKeyHex)
+      setMessage(`Public Key Created: ${publicKeyHex}`)
+    } catch (error) {
+      console.log('Public Key already created')
+
+      publicKeyHex = await fetchPublicKey(value)
+      console.log('Fetched Public Key Hex:', publicKeyHex)
+      setMessage(`Public Key Fetched: ${publicKeyHex}`)
+    }
   }
 
   async function handleSign(): Promise<void> {

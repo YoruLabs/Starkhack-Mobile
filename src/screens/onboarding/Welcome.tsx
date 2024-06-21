@@ -13,7 +13,8 @@ import { Atoms, login } from '@state/Atoms'
 import { useSetAtom } from 'jotai'
 import { useNavigation } from '@react-navigation/native'
 import Strings from '@utils/Strings'
-import { ACCOUNT_ADDRESS } from '@utils/constants/SignerConstants'
+import { getAddress, signupOrSignin } from 'requests/server_requests'
+import { createKeyPair, fetchPublicKey } from '../../../modules/expo-enclave'
 
 export default function WelcomeScreen(): ReactElement {
   const loginUser = useSetAtom(login)
@@ -39,28 +40,69 @@ export default function WelcomeScreen(): ReactElement {
         photo: currentUser.user.photo ?? undefined,
       }
 
-      loginUser(user, token)
+      let publicKeyHex: any
 
-      updateAccountAddress()
+      try {
+        publicKeyHex = await createKeyPair(user.email)
+        console.log('Created Public Key Hex:', publicKeyHex)
+      } catch (error) {
+        console.log('Public Key already created')
+        publicKeyHex = await fetchPublicKey(user.email)
+        console.log('Fetched Public Key Hex:', publicKeyHex)
+      }
 
-      // Navigate to Home inside HomeStack
-      mainNavigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: 'HomeStack',
-            params: {},
-          },
-        ],
-      })
+      const signupOrSigninResponse = await signupOrSignin(
+        user.name || '',
+        user.email,
+        publicKeyHex,
+      )
+      console.log('Server Response', signupOrSigninResponse)
+
+      // TODO: Add aditional check to handle all possible response cases from the server
+      if (signupOrSigninResponse) {
+        const accountAddress = signupOrSigninResponse.account_address
+
+        console.log('User', user)
+        console.log('Token', token)
+        console.log('Account Address', accountAddress)
+
+        await loginAndUpdateAccountAddress(user, token, accountAddress)
+
+        // Navigate to Home inside HomeStack
+        mainNavigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: 'HomeStack',
+              params: {},
+            },
+          ],
+        })
+      } else {
+        console.log('Account address not found. Signin aborted.')
+        // Handle the case when there is no account address
+        // You can show an error message or take appropriate action
+      }
     } catch (e) {
       console.log('Error - ', e)
     }
   }
 
-  function updateAccountAddress(): void {
-    // TODO: Call backend function to get user account address
-    setAccountAddress(ACCOUNT_ADDRESS)
+  const loginAndUpdateAccountAddress = async (
+    user: any,
+    token: string | undefined,
+    accountAddress: string,
+  ): Promise<void> => {
+    try {
+      // Login user
+      loginUser(user, token)
+
+      // Update account address
+      setAccountAddress(accountAddress)
+    } catch (error) {
+      console.log('Error - ', error)
+      throw error
+    }
   }
 
   return (
