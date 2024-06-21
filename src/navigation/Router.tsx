@@ -29,6 +29,8 @@ export type HomeStack = {
   TransactionDetails: {
     transaction: Transaction
   }
+  AddMoney: undefined
+  AttestApps: undefined
 }
 
 export type BottomSheetStack = {
