@@ -15,30 +15,23 @@ import {
   PROMPT_COPY,
   ACCOUNT_ADDRESS,
   ERC20_ADDRESS,
-  RPC_ENDPOINT,
-} from '@utils/crypto/SignerConstants'
+} from '@utils/constants/SignerConstants'
 import Header from '@components/Header'
 import AppButton from '@components/AppButton'
 import { Spacer } from '@components/Spacer'
-import { derPublicKeyToXandY } from '@utils/crypto/crypto_utils'
+import { derPublicKeyToXandY } from '@utils/crypto/utils'
 
-import ERC20Manager from '@utils/crypto/ERC20Manager'
-import ZapAccountManager from '@utils/crypto/ZapAccountManager'
+import ERC20Manager from 'managers/ERC20Manager'
+import ZapAccountManager from 'managers/ZapAccountManager'
 
 export default function ExperimentScreen(): ReactElement {
   const [message, setMessage] = useState('')
   const [signature, setSignature] = useState('')
   const [accountAddress, setAccountAddress] = useState(ACCOUNT_ADDRESS)
 
-  const erc20Manager = new ERC20Manager(
-    accountAddress,
-    ERC20_ADDRESS,
-    RPC_ENDPOINT,
-    '0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a',
-  )
+  const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS)
 
   const zapAccountManager = new ZapAccountManager(
-    RPC_ENDPOINT,
     '0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a',
   )
 
@@ -119,6 +112,23 @@ export default function ExperimentScreen(): ReactElement {
     return await verify(ACCOUNT_NAME, signature, HEX_MESSAGE)
   }
 
+  async function handleSendTransaction(): Promise<void> {
+    if (!accountAddress) {
+      setMessage('Please deploy and initialize the account first.')
+      return
+    }
+
+    const to = '0x01f7888e80ef310fc98d8e82b9e2f22cf962ee0342fe830aaabeaf1b0fc05bdf' // Specify the recipient's address
+
+    try {
+      const txHash = await erc20Manager.transfer(to, 100) // Mint 1000 tokens
+      setMessage(`Transfered 100 tokens. Transaction hash: ${txHash}`)
+    } catch (error) {
+      console.error('Transaction error:', error)
+      setMessage('Transaction failed. Please check the console for details.')
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Experiment" />
@@ -143,6 +153,8 @@ export default function ExperimentScreen(): ReactElement {
         <AppButton label="Approve to Account" onPress={handleApprove} />
         <Spacer vertical={12} />
         <AppButton label="Allowance to Account" onPress={handleAllowance} />
+        <Spacer vertical={12} />
+        <AppButton label="Send Transaction" onPress={handleSendTransaction} />
         <Spacer vertical={12} />
         <AppText>{message}</AppText>
       </View>

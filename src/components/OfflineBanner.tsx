@@ -1,5 +1,5 @@
 import { AppColors } from '@utils/Colors'
-import { SAFE_TOP } from '@utils/Constants'
+import { SAFE_TOP } from '@utils/constants/Constants'
 import React, { ReactElement } from 'react'
 import { StatusBar, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'

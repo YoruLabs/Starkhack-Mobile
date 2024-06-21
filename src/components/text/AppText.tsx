@@ -2,7 +2,7 @@ import React from 'react'
 import { useStyle } from 'react-native-style-utilities'
 import { Text, TextProps } from 'react-native'
 import { FontVariant, getFontSize, TextSize } from './Text'
-import { IPAD_EXTRA } from '@utils/Constants'
+import { IPAD_EXTRA } from '@utils/constants/Constants'
 
 interface AppTextProps extends TextProps {
   size?: TextSize

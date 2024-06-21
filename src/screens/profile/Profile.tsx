@@ -38,7 +38,9 @@ export default function ProfileScreen(): ReactElement {
           <View style={styles.userDetails}>
             <AppText size="small">{user?.name}</AppText>
             <Spacer vertical={2} />
-            <AppText size="very-small" color={AppColors.darkGrey}>{user?.email}</AppText>
+            <AppText size="very-small" color={AppColors.darkGrey}>
+              {user?.email}
+            </AppText>
           </View>
         </View>
         <Spacer vertical={24} />
