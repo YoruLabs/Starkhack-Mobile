@@ -1,6 +1,6 @@
 import { InputStyleTypes, useColorStyles } from '@hooks/useColorStyles'
 import { AppColors } from '@utils/Colors'
-import { BORDER_RADIUS } from '@utils/Constants'
+import { BORDER_RADIUS } from '@utils/constants/Constants'
 import React, { useEffect, useRef, useState } from 'react'
 import {
   StyleSheet,

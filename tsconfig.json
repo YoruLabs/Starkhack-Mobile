@@ -38,7 +38,13 @@
       "@types/*": ["types/*"]
     }
   },
-  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.d.ts"],
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "./src/**/*.d.ts",
+    "src/screens/profile/Experiment.js",
+    "src/screens/profile/AuthScreen.js"
+  ],
   "exclude": ["node_modules", "./src/assets/icons/*"],
   "extends": "expo/tsconfig.base"
 }

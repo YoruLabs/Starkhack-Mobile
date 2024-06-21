@@ -10,7 +10,7 @@ import ViewFiller from './ViewFiller'
 import { AppColors } from '@utils/Colors'
 import FocusAwareStatusBar from './FocusAwareStatusBar'
 import { useNetwork } from '@config/Network'
-import { IPAD_EXTRA_PADDING, SAFE_TOP, SCREEN_WIDTH } from '@utils/Constants'
+import { IPAD_EXTRA_PADDING, SAFE_TOP, SCREEN_WIDTH } from '@utils/constants/Constants'
 import IonIcons from '@expo/vector-icons/Ionicons'
 
 type Props = {

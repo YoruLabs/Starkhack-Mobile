@@ -16,15 +16,14 @@ import {
   ACCOUNT_ADDRESS,
   ERC20_ADDRESS,
   RPC_ENDPOINT,
-} from '@utils/crypto/SignerConstants'
+} from '@utils/constants/SignerConstants'
 import Header from '@components/Header'
 import AppButton from '@components/AppButton'
 import { Spacer } from '@components/Spacer'
-import { derPublicKeyToXandY } from '@utils/crypto/crypto_utils'
+import { derPublicKeyToXandY } from '@utils/crypto/utils'
 
-import ERC20Manager from '@utils/crypto/ERC20Manager'
-import ZapAccountManager from '@utils/crypto/ZapAccountManager'
-import sendTransaction from '@utils/crypto/sendTransactions'
+import ERC20Manager from 'managers/ERC20Manager'
+import ZapAccountManager from 'managers/ZapAccountManager'
 
 export default function ExperimentScreen(): ReactElement {
   const [message, setMessage] = useState('')
@@ -120,24 +119,17 @@ export default function ExperimentScreen(): ReactElement {
     return await verify(ACCOUNT_NAME, signature, HEX_MESSAGE)
   }
 
-  // TODO: Debug Send Transaction
-
   async function handleSendTransaction(): Promise<void> {
-    // if (!accountAddress) {
-    //   setMessage('Please deploy and initialize the account first.')
-    //   return
-    // }
+    if (!accountAddress) {
+      setMessage('Please deploy and initialize the account first.')
+      return
+    }
 
-    const token = 'ETH' // Specify the token symbol
-    const amount = 1 // Specify the amount to transfer
     const to = '0x01f7888e80ef310fc98d8e82b9e2f22cf962ee0342fe830aaabeaf1b0fc05bdf' // Specify the recipient's address
 
     try {
       const txHash = await erc20Manager.transfer(to, 100) // Mint 1000 tokens
       setMessage(`Transfered 100 tokens. Transaction hash: ${txHash}`)
-      // console.log('Before calling sendTransactoin')
-      // const txHash = await sendTransaction(token, amount, to, accountAddress)
-      // setMessage(`Transaction sent. Transaction hash: ${txHash}`)
     } catch (error) {
       console.error('Transaction error:', error)
       setMessage('Transaction failed. Please check the console for details.')
@@ -169,7 +161,7 @@ export default function ExperimentScreen(): ReactElement {
         <Spacer vertical={12} />
         <AppButton label="Allowance to Account" onPress={handleAllowance} />
         <Spacer vertical={12} />
-        <AppButton label="Send Transaction" onPress={handleSendTransaction} />
+        <AppButton label="Send Transaction1" onPress={handleSendTransaction} />
         <Spacer vertical={12} />
         <AppText>{message}</AppText>
       </View>

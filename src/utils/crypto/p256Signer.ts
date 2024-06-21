@@ -34,7 +34,7 @@ import {
   cairo,
 } from 'starknet'
 import { Buffer } from 'buffer'
-import { parseSignature } from './crypto_utils'
+import { parseSignature } from './utils'
 
 // TEST VALUES
 const accountName = 'exampleAccount'
