@@ -9,77 +9,48 @@ import {
   sign,
   verify,
 } from '../../../modules/expo-enclave'
-import {
-  ACCOUNT_NAME,
-  HEX_MESSAGE,
-  PROMPT_COPY,
-  ACCOUNT_ADDRESS,
-  ERC20_ADDRESS,
-} from '@utils/constants/SignerConstants'
+import { HEX_MESSAGE, PROMPT_COPY, ERC20_ADDRESS } from '@utils/constants/SignerConstants'
 import Header from '@components/Header'
 import AppButton from '@components/AppButton'
 import { Spacer } from '@components/Spacer'
 import { derPublicKeyToXandY } from '@utils/crypto/utils'
 
 import ERC20Manager from 'managers/ERC20Manager'
-import ZapAccountManager from 'managers/ZapAccountManager'
+import { useAtomValue } from 'jotai'
+import { Atoms } from '@state/Atoms'
 
 export default function ExperimentScreen(): ReactElement {
   const [message, setMessage] = useState('')
   const [signature, setSignature] = useState('')
-  const [accountAddress, setAccountAddress] = useState(ACCOUNT_ADDRESS)
+  let accountAddress = useAtomValue(Atoms.AccountAddress)
 
-  const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS)
-
-  const zapAccountManager = new ZapAccountManager(
-    '0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a',
-  )
+  let accountEmail = String(useAtomValue(Atoms.User)?.email)
+  const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS, accountEmail)
 
   async function handleCreateKeyPair(): Promise<void> {
-    try {
-      const publicKey = await fetchPublicKey('testing100')
-      console.log('Public Key - ', publicKey)
-      setMessage(`Public Key: ${publicKey}`)
-    } catch {
-      console.log('Public Key already created')
-      setMessage('Public Key already created')
-    }
+    const publicKey = await createKeyPair(accountEmail)
+    console.log('Public Key - ', publicKey)
+    setMessage(`Public Key: ${publicKey}`)
   }
 
   async function handleFetchPublicKey(): Promise<void> {
-    let value = 'testing10000'
-    let publicKeyHex
-    try {
-      publicKeyHex = await createKeyPair(value)
-      console.log('Created Public Key Hex:', publicKeyHex)
-      setMessage(`Public Key Created: ${publicKeyHex}`)
-    } catch (error) {
-      console.log('Public Key already created')
-
-      publicKeyHex = await fetchPublicKey(value)
-      console.log('Fetched Public Key Hex:', publicKeyHex)
-      setMessage(`Public Key Fetched: ${publicKeyHex}`)
-    }
+    let accountEmail = 'danilowhk@gmail.com'
+    console.log('accountEmail', accountEmail)
+    const publicKeyHex = await fetchPublicKey(accountEmail)
+    let [x, y] = derPublicKeyToXandY(publicKeyHex)
+    setMessage(`Public Key Hex: ${publicKeyHex} x: ${x} y: ${y}`)
+    console.log('Public Key Hex - ', publicKeyHex)
   }
 
   async function handleSign(): Promise<void> {
-    const signature = await sign(ACCOUNT_NAME, HEX_MESSAGE, PROMPT_COPY)
+    const signature = await sign(accountEmail, HEX_MESSAGE, PROMPT_COPY)
     setSignature(signature)
   }
 
   async function handleVerify(): Promise<void> {
-    const isValid = await verifySignature(ACCOUNT_NAME, signature, HEX_MESSAGE)
+    const isValid = await verifySignature(accountEmail, signature, HEX_MESSAGE)
     console.log('Verification Result', isValid)
     setMessage(`Verification Result: ${isValid}`)
-  }
-
-  async function handleDeployAndInitializeAccount(): Promise<void> {
-    const publicKeyHex: any = await fetchPublicKey(ACCOUNT_NAME)
-
-    const { address, deploymentTransactionHash } =
-      await zapAccountManager.deployAndInitialize(publicKeyHex)
-    setAccountAddress(address)
-    setMessage(`Account deployed and initialized at address: ${address}`)
   }
 
   async function handleFetchBalance(): Promise<void> {
@@ -93,6 +64,7 @@ export default function ExperimentScreen(): ReactElement {
   }
 
   async function handleMint(): Promise<void> {
+    console.log('accountAddress', accountAddress)
     if (!accountAddress) {
       setMessage('Please deploy and initialize the account first.')
       return
@@ -120,11 +92,11 @@ export default function ExperimentScreen(): ReactElement {
   }
 
   async function verifySignature(
-    ACCOUNT_NAME: any,
+    accountEmail: any,
     signature: any,
     HEX_MESSAGE: any,
   ): Promise<boolean> {
-    return await verify(ACCOUNT_NAME, signature, HEX_MESSAGE)
+    return await verify(accountEmail, signature, HEX_MESSAGE)
   }
 
   async function handleSendTransaction(): Promise<void> {
@@ -156,10 +128,7 @@ export default function ExperimentScreen(): ReactElement {
         <Spacer vertical={12} />
         <AppButton label="Verify Signature" onPress={handleVerify} />
         <Spacer vertical={12} />
-        <AppButton
-          label="Deploy and Initialize Account"
-          onPress={handleDeployAndInitializeAccount}
-        />
+
         <Spacer vertical={12} />
         <AppButton label="Fetch Balance" onPress={handleFetchBalance} />
         <Spacer vertical={12} />
@@ -169,7 +138,7 @@ export default function ExperimentScreen(): ReactElement {
         <Spacer vertical={12} />
         <AppButton label="Allowance to Account" onPress={handleAllowance} />
         <Spacer vertical={12} />
-        <AppButton label="Send Transaction" onPress={handleSendTransaction} />
+        <AppButton label="Send Transaction1" onPress={handleSendTransaction} />
         <Spacer vertical={12} />
         <AppText>{message}</AppText>
       </View>
