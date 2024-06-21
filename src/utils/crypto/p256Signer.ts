@@ -22,11 +22,9 @@ import {
   cairo,
 } from 'starknet'
 import { Buffer } from 'buffer'
-import { parseSignature } from './utils'
-import { ACCOUNT_NAME } from '@utils/constants/SignerConstants'
+import { derPublicKeyToXandY, parseSignature } from './utils'
 
 // TEST VALUES
-const accountName = 'exampleAccount'
 const promptCopy: PromptCopy = {
   usageMessage: 'Please authenticate to continue.',
   androidTitle: 'Authentication Required',
@@ -53,9 +51,13 @@ enum ETransactionVersion3 {
 }
 
 export class EnclaveSigner implements SignerInterface {
+  private accountName: string
+
+  constructor(accountName: string) {
+    this.accountName = accountName
+  }
   public async getPubKey(): Promise<string> {
-    // TODO: GET ACCOUNT_NAME from Global State
-    return String(await fetchPublicKey(ACCOUNT_NAME))
+    return String(await fetchPublicKey(this.accountName))
   }
 
   public async signMessage(
@@ -163,8 +165,14 @@ export class EnclaveSigner implements SignerInterface {
 
   // This is returning a hard coded signature
   protected async signRaw(msgHash: string): Promise<Signature> {
+    console.log('Signer AccountName', this.accountName)
+    let pubKey = await fetchPublicKey(this.accountName)
+    console.log('Signer PubKey', pubKey)
+    let [x, y] = derPublicKeyToXandY(pubKey)
+    console.log('Signer x', x, 'y', y)
+
     let messageBuffer = Buffer.from(msgHash.slice(2), 'hex').toString('hex')
-    let signature = await sign(accountName, messageBuffer, promptCopy)
+    let signature = await sign(this.accountName, messageBuffer, promptCopy)
     let { r, s } = parseSignature(signature)
 
     // Convert hex string to Uint8Array
