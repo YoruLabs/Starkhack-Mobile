@@ -25,6 +25,9 @@ export default function HomeScreen(): ReactElement {
     {
       icon: 'add',
       name: 'Add Money',
+      onPress: () => {
+        mainNavigation.navigate('HomeStack', { screen: 'AddMoney' })
+      },
     },
     {
       icon: 'swap-horiz',
