@@ -1,13 +1,4 @@
-import {
-  Account,
-  CallData,
-  Contract,
-  RpcProvider,
-  stark,
-  ec,
-  hash,
-  cairo,
-} from 'starknet'
+import { Account, CallData, Contract, RpcProvider, ec, hash, cairo } from 'starknet'
 import zapAccountAbi from '../utils/abis/ZapAccount.json'
 import { derPublicKeyToXandY } from '../utils/crypto/utils'
 import { RPC_ENDPOINT } from '../utils/constants/SignerConstants'
@@ -18,9 +9,9 @@ class ZapAccountManager {
   private privateKey: string
   private ZAPaccountClassHash: string
 
-  constructor(rpcEndpoint: string, privateKey: string) {
+  constructor(privateKey: string) {
     this.provider = new RpcProvider({
-      nodeUrl: rpcEndpoint,
+      nodeUrl: RPC_ENDPOINT,
     })
     this.privateKey = privateKey
     this.ZAPaccountClassHash =

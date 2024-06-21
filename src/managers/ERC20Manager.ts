@@ -10,18 +10,13 @@ class ERC20Manager {
   private contract: Contract
   private account: Account
 
-  constructor(
-    private accountAddress: string,
-    private contractAddress: string,
-    private rpcEndpoint: string,
-    private privateKey: any,
-  ) {
+  constructor(private accountAddress: string, private contractAddress: string) {
     this.provider = new RpcProvider({
       // TODO: change for .env variable
       nodeUrl: RPC_ENDPOINT,
     })
     // TODO: Chanve privateKey to .env variable
-    const enclaveSigner = new EnclaveSigner(this.privateKey)
+    const enclaveSigner = new EnclaveSigner()
     this.account = new Account(this.provider, this.accountAddress, enclaveSigner)
     this.contract = new Contract(erc20Abi.abi, this.contractAddress, this.account)
   }
