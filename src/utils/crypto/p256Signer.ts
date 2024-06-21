@@ -23,7 +23,6 @@ import {
 } from 'starknet'
 import { Buffer } from 'buffer'
 import { derPublicKeyToXandY, parseSignature } from './utils'
-import { ACCOUNT_NAME } from '@utils/constants/SignerConstants'
 
 // TEST VALUES
 const promptCopy: PromptCopy = {
@@ -58,8 +57,7 @@ export class EnclaveSigner implements SignerInterface {
     this.accountName = accountName
   }
   public async getPubKey(): Promise<string> {
-    // TODO: GET ACCOUNT_NAME from Global State
-    return String(await fetchPublicKey(ACCOUNT_NAME))
+    return String(await fetchPublicKey(this.accountName))
   }
 
   public async signMessage(
