@@ -11,8 +11,11 @@ import Strings from '@utils/Strings'
 import { Spacer } from '@components/Spacer'
 import { Card } from '@components/Card'
 import ViewFiller from '@components/ViewFiller'
+import { ERC20_ADDRESS } from '@utils/constants/SignerConstants'
+import { useAtomValue } from 'jotai'
+import { Atoms } from '@state/Atoms'
+import { getAddress } from 'requests/server_requests'
 import ERC20Manager from 'managers/ERC20Manager'
-import { ACCOUNT_ADDRESS, ERC20_ADDRESS } from '@utils/constants/SignerConstants'
 
 export default function PreviewSendScreen({
   navigation,
@@ -22,11 +25,10 @@ export default function PreviewSendScreen({
   const { addToast } = useToast()
 
   const [isLoading, setLoading] = useState(false)
+  let accountAddress = useAtomValue(Atoms.AccountAddress)
+  let accountEmail = String(useAtomValue(Atoms.User)?.email)
 
   async function onSendPress(): Promise<void> {
-    // TODO: Get account address from Global State
-    let accountAddress = ACCOUNT_ADDRESS
-
     // Get the recipient email, amount, and currency from the route params
     const { recipientEmail, amount, currency } = details
 
@@ -34,14 +36,18 @@ export default function PreviewSendScreen({
     console.log('Token:', currency.code)
     console.log('Amount:', amount)
 
-    // TODO: FETCH ACCOUNT_ADDRESS FROM BACKEND -> On BACKEND RETURN ESCROW ADDRESS IF NOT an
-    let to = '0x01f7888e80ef310fc98d8e82b9e2f22cf962ee0342fe830aaabeaf1b0fc05bdf'
     // TODO: GET ERC20_ADDRESS based on "currency.code" or "currency.address"
-    const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS)
+    // let erc20address = currency.address
 
-    setLoading(true)
+    const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS, accountEmail)
 
     try {
+      // TODO: On BACKEND RETURN ESCROW ADDRESS IF NOT an
+      // TODO: Check if user used email, address or ens
+      let response = await getAddress(recipientEmail)
+      let to = response.blockchain_address
+
+      setLoading(true)
       const txHash = await erc20Manager.transfer(to, amount) // Mint 1000 tokens
       console.log('txHash', txHash)
 
@@ -63,7 +69,7 @@ export default function PreviewSendScreen({
       <View style={styles.content}>
         <Card>
           <AppText size="small" type="medium" color={AppColors.darkGrey}>
-            Send to
+            To
           </AppText>
           <ViewFiller />
           <AppText size="small" type="bold">
@@ -80,7 +86,7 @@ export default function PreviewSendScreen({
             </AppText>
             <ViewFiller />
             <AppText size="small" type="medium">
-              {details.currency.code} {details.amount}
+              {details.amount} {details.currency.code}
             </AppText>
           </View>
 
@@ -104,7 +110,7 @@ export default function PreviewSendScreen({
             </AppText>
             <ViewFiller />
             <AppText size="small" type="medium">
-              {details.currency.code} {details.amount}
+              {details.amount} {details.currency.code}
             </AppText>
           </View>
         </Card>
