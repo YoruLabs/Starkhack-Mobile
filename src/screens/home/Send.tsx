@@ -7,7 +7,7 @@ import { AppTextInput } from '@components/text/AppTextInput'
 import { Spacer } from '@components/Spacer'
 import { AppText } from '@components/text/AppText'
 import DropdownPicker from '@components/DropdownPicker'
-import { Currency, currencies } from 'types/transaction'
+import { Currency, currencies, currencyCodes } from 'types/transaction'
 import AppButton from '@components/AppButton'
 import { ScreenProps } from '@navigation/Router'
 import { DismissKeyboardView } from '@components/DismissKeyboardView'
@@ -18,10 +18,8 @@ import Strings from '@utils/Strings'
 export default function SendScreen({ navigation }: ScreenProps<'Send'>): ReactElement {
   const [email, setEmail] = useState('')
   const [amount, setAmount] = useState('')
-  const currencyList = currencies as Currency[]
-  const [selectedCurrency, setSelectedCurrency] = useState<Currency | undefined>(
-    currencyList[0] ?? undefined,
-  )
+  const currencyList = currencies
+  const [selectedCurrency, setSelectedCurrency] = useState<Currency>(currencyList.BTC)
   const { addToast } = useToast()
 
   function navigateToPreviewSend(): void {
@@ -71,9 +69,13 @@ export default function SendScreen({ navigation }: ScreenProps<'Send'>): ReactEl
         <View style={styles.amountContainer}>
           <DropdownPicker
             dropdownWidth={80}
-            options={currencyList.map((item) => item.code)}
+            options={currencyCodes}
             onToggle={(index) => {
-              setSelectedCurrency(currencyList[index])
+              setSelectedCurrency(
+                Object.values(currencies).find(
+                  (currency) => currency.code === currencyCodes[index],
+                ) ?? currencies.BTC,
+              )
             }}
           />
           <Spacer horizontal={8} />

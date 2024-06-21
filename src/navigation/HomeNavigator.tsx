@@ -22,6 +22,10 @@ const HomeNavigator = (): React.ReactElement => {
       <Stack.Screen name="Transactions" getComponent={getScreenBuilder('Transactions')} />
       <Stack.Screen name="Send" getComponent={getScreenBuilder('Send')} />
       <Stack.Screen name="PreviewSend" getComponent={getScreenBuilder('PreviewSend')} />
+      <Stack.Screen
+        name="TransactionDetails"
+        getComponent={getScreenBuilder('TransactionDetails')}
+      />
     </Stack.Navigator>
   )
 }

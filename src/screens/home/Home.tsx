@@ -119,7 +119,7 @@ export default function HomeScreen(): ReactElement {
         </View>
         <View style={styles.transactionsContainer}>
           <AppText size="large" type="medium" color={AppColors.black}>
-            Transactions
+            Recent Transactions
           </AppText>
           <ViewFiller />
           <PressableOpacity
