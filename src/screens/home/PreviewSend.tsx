@@ -13,6 +13,8 @@ import { Card } from '@components/Card'
 import ViewFiller from '@components/ViewFiller'
 import ERC20Manager from 'managers/ERC20Manager'
 import { ACCOUNT_ADDRESS, ERC20_ADDRESS } from '@utils/constants/SignerConstants'
+import { useAtomValue } from 'jotai'
+import { Atoms } from '@state/Atoms'
 
 export default function PreviewSendScreen({
   navigation,
@@ -24,8 +26,7 @@ export default function PreviewSendScreen({
   const [isLoading, setLoading] = useState(false)
 
   async function onSendPress(): Promise<void> {
-    // TODO: Get account address from Global State
-    let accountAddress = ACCOUNT_ADDRESS
+    let accountAddress = useAtomValue(Atoms.AccountAddress)
 
     // Get the recipient email, amount, and currency from the route params
     const { recipientEmail, amount, currency } = details
@@ -34,9 +35,11 @@ export default function PreviewSendScreen({
     console.log('Token:', currency.code)
     console.log('Amount:', amount)
 
+    // TODO: Check if user used email, address or ens
     // TODO: FETCH ACCOUNT_ADDRESS FROM BACKEND -> On BACKEND RETURN ESCROW ADDRESS IF NOT an
     let to = '0x01f7888e80ef310fc98d8e82b9e2f22cf962ee0342fe830aaabeaf1b0fc05bdf'
     // TODO: GET ERC20_ADDRESS based on "currency.code" or "currency.address"
+    // let erc20address = currency.address
     const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS)
 
     setLoading(true)
@@ -63,7 +66,7 @@ export default function PreviewSendScreen({
       <View style={styles.content}>
         <Card>
           <AppText size="small" type="medium" color={AppColors.darkGrey}>
-            Send to
+            To
           </AppText>
           <ViewFiller />
           <AppText size="small" type="bold">
@@ -80,7 +83,7 @@ export default function PreviewSendScreen({
             </AppText>
             <ViewFiller />
             <AppText size="small" type="medium">
-              {details.currency.code} {details.amount}
+              {details.amount} {details.currency.code}
             </AppText>
           </View>
 
@@ -104,7 +107,7 @@ export default function PreviewSendScreen({
             </AppText>
             <ViewFiller />
             <AppText size="small" type="medium">
-              {details.currency.code} {details.amount}
+              {details.amount} {details.currency.code}
             </AppText>
           </View>
         </Card>

@@ -13,6 +13,7 @@ import { Atoms, login } from '@state/Atoms'
 import { useSetAtom } from 'jotai'
 import { useNavigation } from '@react-navigation/native'
 import Strings from '@utils/Strings'
+import { ACCOUNT_ADDRESS } from '@utils/constants/SignerConstants'
 
 export default function WelcomeScreen(): ReactElement {
   const loginUser = useSetAtom(login)
@@ -59,7 +60,7 @@ export default function WelcomeScreen(): ReactElement {
 
   function updateAccountAddress(): void {
     // TODO: Call backend function to get user account address
-    // setAccountAddress(address)
+    setAccountAddress(ACCOUNT_ADDRESS)
   }
 
   return (
