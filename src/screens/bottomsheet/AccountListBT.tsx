@@ -17,7 +17,7 @@ export default function AccountListBT({
 }: ScreenProps<'AccountListBT'>): ReactElement {
   const balance = useAtomValue(Atoms.Balance)
   const setCurrentAccount = useSetAtom(Atoms.CurrentAccount)
-  const currencyList = currencies as Currency[]
+  const currencyList = currencies
   const snapPoints = React.useMemo(() => [640, 640], [])
 
   return (
@@ -29,7 +29,7 @@ export default function AccountListBT({
           onBackPress={() => navigation.goBack()}
         />
         <FlatList
-          data={currencyList}
+          data={Object.values(currencyList)}
           renderItem={({ item }) => {
             return (
               <PressableOpacity
