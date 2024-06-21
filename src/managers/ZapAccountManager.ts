@@ -8,9 +8,9 @@ import {
   hash,
   cairo,
 } from 'starknet'
-import zapAccountAbi from '../abis/ZapAccount.json'
-import { derPublicKeyToXandY } from './crypto_utils'
-import { RPC_ENDPOINT } from './SignerConstants'
+import zapAccountAbi from '../utils/abis/ZapAccount.json'
+import { derPublicKeyToXandY } from '../utils/crypto/utils'
+import { RPC_ENDPOINT } from '../utils/constants/SignerConstants'
 
 class ZapAccountManager {
   private provider: RpcProvider

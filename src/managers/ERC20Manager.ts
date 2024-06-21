@@ -1,8 +1,8 @@
 import { RpcProvider, Contract, Account, cairo, RPC } from 'starknet'
-import { EnclaveSigner } from './p256Signer'
-import erc20Abi from '../abis/ERC20.json'
+import { EnclaveSigner } from '../utils/crypto/p256Signer'
+import erc20Abi from '../utils/abis/ERC20.json'
 import { Buffer } from 'buffer'
-import { RPC_ENDPOINT } from './SignerConstants'
+import { RPC_ENDPOINT } from '../utils/constants/SignerConstants'
 global.Buffer = Buffer
 
 class ERC20Manager {
@@ -73,6 +73,8 @@ class ERC20Manager {
 
   public async transfer(to: string, amount: number): Promise<string> {
     try {
+      console.log('CONTRACT ADDRESS: ', this.accountAddress)
+      console.log('ZAP ACCOUNT: ', this.account)
       const transfer_tx = await this.contract.transfer(to, amount)
       await this.provider.waitForTransaction(transfer_tx.transaction_hash)
       return transfer_tx.transaction_hash

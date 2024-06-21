@@ -1,6 +1,6 @@
 import { ToastTypes, useColorStyles } from '@hooks/useColorStyles'
 import { AppColors } from '@utils/Colors'
-import { BORDER_RADIUS, EDGE_SPACING } from '@utils/Constants'
+import { BORDER_RADIUS, EDGE_SPACING } from '@utils/constants/Constants'
 import { hapticFeedback } from '@utils/HapticFeedback'
 import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { KeyboardAvoidingView, Platform, StyleSheet, View, ViewProps } from 'react-native'

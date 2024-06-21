@@ -4,7 +4,7 @@ import { Spacer } from '@components/Spacer'
 import { AppText } from '@components/text/AppText'
 import { AppColors } from '@utils/Colors'
 import IonIcon from '@expo/vector-icons/Ionicons'
-import { IPAD_EXTRA_PADDING } from '@utils/Constants'
+import { IPAD_EXTRA_PADDING } from '@utils/constants/Constants'
 
 type Props = {
   options: string[]
