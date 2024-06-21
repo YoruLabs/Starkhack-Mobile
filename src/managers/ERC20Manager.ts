@@ -3,6 +3,8 @@ import { EnclaveSigner } from '../utils/crypto/p256Signer'
 import erc20Abi from '../utils/abis/ERC20.json'
 import { Buffer } from 'buffer'
 import { RPC_ENDPOINT } from '../utils/constants/SignerConstants'
+import { useAtomValue } from 'jotai'
+import { Atoms } from '@state/Atoms'
 global.Buffer = Buffer
 
 class ERC20Manager {
@@ -10,13 +12,16 @@ class ERC20Manager {
   private contract: Contract
   private account: Account
 
-  constructor(private accountAddress: string, private contractAddress: string) {
+  constructor(
+    private accountAddress: string,
+    private contractAddress: string,
+    private accountName: string,
+  ) {
     this.provider = new RpcProvider({
       // TODO: change for .env variable
       nodeUrl: RPC_ENDPOINT,
     })
-    // TODO: Chanve privateKey to .env variable
-    const enclaveSigner = new EnclaveSigner()
+    const enclaveSigner = new EnclaveSigner(accountName)
     this.account = new Account(this.provider, this.accountAddress, enclaveSigner)
     this.contract = new Contract(erc20Abi.abi, this.contractAddress, this.account)
   }

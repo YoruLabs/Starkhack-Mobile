@@ -42,14 +42,17 @@ export default function WelcomeScreen(): ReactElement {
 
       let publicKeyHex: any
 
+      console.log('User Email', user.email)
+
       try {
-        publicKeyHex = await createKeyPair(user.email)
+        publicKeyHex = await createKeyPair(String(user.email))
         console.log('Created Public Key Hex:', publicKeyHex)
       } catch (error) {
         console.log('Public Key already created')
-        publicKeyHex = await fetchPublicKey(user.email)
+        publicKeyHex = await fetchPublicKey(String(user.email))
         console.log('Fetched Public Key Hex:', publicKeyHex)
       }
+      console.log('Before SignupOrSignin')
 
       const signupOrSigninResponse = await signupOrSignin(
         user.name || '',
@@ -60,7 +63,7 @@ export default function WelcomeScreen(): ReactElement {
 
       // TODO: Add aditional check to handle all possible response cases from the server
       if (signupOrSigninResponse) {
-        const accountAddress = signupOrSigninResponse.account_address
+        const accountAddress = signupOrSigninResponse.blockchain_address
 
         console.log('User', user)
         console.log('Token', token)

@@ -11,11 +11,11 @@ import Strings from '@utils/Strings'
 import { Spacer } from '@components/Spacer'
 import { Card } from '@components/Card'
 import ViewFiller from '@components/ViewFiller'
-import ERC20Manager from 'managers/ERC20Manager'
-import { ACCOUNT_ADDRESS, ERC20_ADDRESS } from '@utils/constants/SignerConstants'
+import { ERC20_ADDRESS } from '@utils/constants/SignerConstants'
 import { useAtomValue } from 'jotai'
 import { Atoms } from '@state/Atoms'
 import { getAddress } from 'requests/server_requests'
+import ERC20Manager from 'managers/ERC20Manager'
 
 export default function PreviewSendScreen({
   navigation,
@@ -25,10 +25,10 @@ export default function PreviewSendScreen({
   const { addToast } = useToast()
 
   const [isLoading, setLoading] = useState(false)
+  let accountAddress = useAtomValue(Atoms.AccountAddress)
+  let accountEmail = String(useAtomValue(Atoms.User)?.email)
 
   async function onSendPress(): Promise<void> {
-    let accountAddress = useAtomValue(Atoms.AccountAddress)
-
     // Get the recipient email, amount, and currency from the route params
     const { recipientEmail, amount, currency } = details
 
@@ -36,16 +36,18 @@ export default function PreviewSendScreen({
     console.log('Token:', currency.code)
     console.log('Amount:', amount)
 
-    // TODO: Check if user used email, address or ens
-    // TODO: On BACKEND RETURN ESCROW ADDRESS IF NOT an
-    let to = await getAddress(recipientEmail)
     // TODO: GET ERC20_ADDRESS based on "currency.code" or "currency.address"
     // let erc20address = currency.address
-    const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS)
 
-    setLoading(true)
+    const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS, accountEmail)
 
     try {
+      // TODO: On BACKEND RETURN ESCROW ADDRESS IF NOT an
+      // TODO: Check if user used email, address or ens
+      let response = await getAddress(recipientEmail)
+      let to = response.blockchain_address
+
+      setLoading(true)
       const txHash = await erc20Manager.transfer(to, amount) // Mint 1000 tokens
       console.log('txHash', txHash)
 

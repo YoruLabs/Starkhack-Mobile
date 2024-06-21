@@ -1,6 +1,6 @@
 import { PromptCopy } from '../../../modules/expo-enclave'
 
-export const ACCOUNT_NAME: string = 'exampleAccount'
+export const ACCOUNT_NAME: string = 'danilowhk'
 export const HEX_MESSAGE: string = '48656c6c6f2c20776f726c6421'
 
 export const PROMPT_COPY: PromptCopy = {
@@ -8,11 +8,11 @@ export const PROMPT_COPY: PromptCopy = {
   androidTitle: 'Authentication Required',
 }
 export const ERC20_ADDRESS: string =
-  '0x0641a7e12c43701d4b437468b5047a2e748e5f6a7f562395262cf6f60645d397'
+  '0x0592e877b1bd580c408849a29f0469ea8efa872f6accd2689048210ac5697a3f'
 export const ACCOUNT_ADDRESS: string =
-  '0x14d781e241ef4edf92e231d50407c5e6cd03d9922e0abe6f4c271607a140f74'
+  '0x1c4690a1332bbcc70745de5be2780fbb522feeb74a9875004d610dc38cfb50'
 
-export const RPC_ENDPOINT = 'https://0d84-189-120-76-5.ngrok-free.app'
+export const RPC_ENDPOINT = 'https://0e01-189-120-76-5.ngrok-free.app'
 
 export const ABI = [
   {
