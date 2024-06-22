@@ -5,7 +5,7 @@ import { Spacer } from '@components/Spacer'
 import { AppText } from '@components/text/AppText'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { AppColors } from '@utils/Colors'
-import React, { ReactElement, useEffect } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import GoogleIcon from '@assets/icons/google'
@@ -13,12 +13,13 @@ import { Atoms, login } from '@state/Atoms'
 import { useSetAtom } from 'jotai'
 import { useNavigation } from '@react-navigation/native'
 import Strings from '@utils/Strings'
-import { getAddress, signupOrSignin } from 'requests/server_requests'
+import { signupOrSignin } from 'requests/server_requests'
 import { createKeyPair, fetchPublicKey } from '../../../modules/expo-enclave'
 
 export default function WelcomeScreen(): ReactElement {
   const loginUser = useSetAtom(login)
   const setAccountAddress = useSetAtom(Atoms.AccountAddress)
+  const [isLoading, setIsLoading] = useState(false)
 
   const mainNavigation = useNavigation()
 
@@ -28,6 +29,8 @@ export default function WelcomeScreen(): ReactElement {
 
   const signIn = async (): Promise<void> => {
     try {
+      setIsLoading(true)
+
       GoogleSignin.hasPlayServices()
       const currentUser = await GoogleSignin.signIn()
       console.log('UserInfo - ', currentUser)
@@ -81,13 +84,17 @@ export default function WelcomeScreen(): ReactElement {
             },
           ],
         })
+        setIsLoading(false)
       } else {
         console.log('Account address not found. Signin aborted.')
+        setIsLoading(false)
+
         // Handle the case when there is no account address
         // You can show an error message or take appropriate action
       }
     } catch (e) {
       console.log('Error - ', e)
+      setIsLoading(false)
     }
   }
 
@@ -146,6 +153,7 @@ export default function WelcomeScreen(): ReactElement {
             borderRadius={24}
             labelColor={AppColors.white}
             onPress={signIn}
+            isLoading={isLoading} // Add this line to show loading state
           />
         </View>
       </View>

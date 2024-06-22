@@ -1,15 +1,19 @@
+import { BACKEND_ENDPOINT } from '@utils/constants/SignerConstants'
 import axios, { AxiosError } from 'axios'
 
 // Base URL for the API endpoints
-const baseURL = 'http://localhost:4001'
 
 // Signup or Signin request
-export async function signupOrSignin(name: string, email: string, publicKeyHex: string) {
+export async function signupOrSignin(
+  name: string,
+  email: string,
+  enclavePublicKey: string,
+) {
   try {
-    const response = await axios.post(`${baseURL}/signup_or_signin`, {
+    const response = await axios.post(`${BACKEND_ENDPOINT}/signup_or_signin`, {
       name,
       email,
-      publicKeyHex,
+      enclavePublicKey,
     })
     return response.data
   } catch (error) {
@@ -22,7 +26,7 @@ export async function signupOrSignin(name: string, email: string, publicKeyHex: 
 // Get Address request
 export async function getAddress(email: string) {
   try {
-    const response = await axios.get(`${baseURL}/get_address`, {
+    const response = await axios.get(`${BACKEND_ENDPOINT}/get_address`, {
       params: { email },
     })
     return response.data
@@ -37,7 +41,7 @@ export async function getAddress(email: string) {
 export async function sendTransaction(email: string) {
   try {
     const response = await axios.post(
-      `${baseURL}/send_transaction`,
+      `${BACKEND_ENDPOINT}/send_transaction`,
       {
         email,
       },

@@ -59,7 +59,7 @@ export default function ExperimentScreen(): ReactElement {
       setMessage('Please deploy and initialize the account first.')
       return
     }
-    const balance = await erc20Manager.getBalance(accountAddress)
+    const balance = await erc20Manager.balance(accountAddress)
     setMessage(`Balance: ${balance.balance}`)
   }
 
@@ -87,7 +87,7 @@ export default function ExperimentScreen(): ReactElement {
       setMessage('Please deploy and initialize the account first.')
       return
     }
-    const tx = await erc20Manager.getAllowance(accountAddress, accountAddress) // Check allowance
+    const tx = await erc20Manager.allowance(accountAddress, accountAddress) // Check allowance
     setMessage(`Allowance is: ${tx.allowance}`)
   }
 

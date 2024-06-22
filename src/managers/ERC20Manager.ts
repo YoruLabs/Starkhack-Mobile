@@ -26,7 +26,7 @@ class ERC20Manager {
     this.contract = new Contract(erc20Abi.abi, this.contractAddress, this.account)
   }
 
-  public async getBalance(address: string): Promise<{ balance: string }> {
+  public async balance(address: string): Promise<{ balance: string }> {
     try {
       const balance = await this.contract.balanceOf(address)
       return { balance: balance.toString() }
@@ -36,13 +36,10 @@ class ERC20Manager {
     }
   }
 
-  public async getAllowance(
-    owner: string,
-    spender: string,
-  ): Promise<{ allowance: string }> {
+  public async allowance(owner: string, spender: string): Promise<number> {
     try {
       const allowance = await this.contract.allowance(owner, spender)
-      return { allowance: allowance.toString() }
+      return allowance
     } catch (error) {
       console.error('Get allowance error:', error)
       throw error

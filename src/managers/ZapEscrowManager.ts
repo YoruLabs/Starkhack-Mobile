@@ -6,6 +6,7 @@ import {
   hash,
   ec,
   WeierstrassSignatureType,
+  BigNumberish,
 } from 'starknet'
 import { EnclaveSigner } from './p256Signer'
 import ZapEscrowAbi from '../utils/abis/zap_contracts_ZapEscrow.contract_class.json'
@@ -27,31 +28,22 @@ class EscrowManager {
     this.provider = new RpcProvider({
       nodeUrl: RPC_ENDPOINT,
     })
-    this.account = new Account(this.provider, this.accountAddress, '0x00')
+    this.account = new Account(
+      this.provider,
+      this.accountAddress,
+      new EnclaveSigner(accountName),
+    )
     this.contract = new Contract(ZapEscrowAbi.abi, this.contractAddress, this.account)
   }
 
-  public async deposit(amount: number, tokenId: number): Promise<string> {
+  public async deposit(amount: BigNumberish, tokenId: number): Promise<string> {
     try {
-      const deposit_tx = await this.contract.deposit(cairo.uint256(amount), tokenId)
+      console.log('amount on deposit', amount)
+      const deposit_tx = await this.contract.deposit(amount, tokenId)
       await this.provider.waitForTransaction(deposit_tx.transaction_hash)
       return deposit_tx.transaction_hash
     } catch (error) {
       console.error('Deposit function error:', error)
-      throw error
-    }
-  }
-
-  public async claimTokens(signature: WeierstrassSignatureType): Promise<string> {
-    try {
-      const claim_tx = await this.contract.claim_tokens(this.accountAddress, [
-        signature.r,
-        signature.s,
-      ])
-      await this.provider.waitForTransaction(claim_tx.transaction_hash)
-      return claim_tx.transaction_hash
-    } catch (error) {
-      console.error('Claim tokens function error:', error)
       throw error
     }
   }

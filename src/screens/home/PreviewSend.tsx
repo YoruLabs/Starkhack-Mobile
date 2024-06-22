@@ -37,6 +37,8 @@ export default function PreviewSendScreen({
     console.log('Token:', currency.code)
     console.log('Amount:', amount)
 
+    console.log('accountAddress', accountAddress)
+
     // TODO: GET ERC20_ADDRESS based on "currency.code" or "currency.address"
     // let erc20address = currency.address
 
@@ -45,29 +47,37 @@ export default function PreviewSendScreen({
     try {
       // TODO: Check if user used email, address or ens
       // TODO: On BACKEND RETURN ESCROW ADDRESS IF NOT an
+      setLoading(true)
 
       let response = await sendTransaction(recipientEmail)
 
       if (response.is_escrow == false) {
-        setLoading(true)
         let to = response.blockchain_address
 
         const txHash = await erc20Manager.transfer(to, amount) // Mint 1000 tokens
         console.log('txHash', txHash)
       } else {
-        setLoading(true)
         let escrow_address = response.blockchain_address
+        console.log('escrow_address', escrow_address)
         const escrowManager = new ZapEscrowManager(
           accountAddress,
           escrow_address,
           accountEmail,
         )
         // TODO: Implement multicall
-        // TODO: First check Allowance and approve only if needed
-        const approveHash = await erc20Manager.approve(escrow_address, amount)
-        console.log('approveHash', approveHash)
-        // TODO: Get Token ID from currency
-        const depositHash = await escrowManager.deposit(amount, 0)
+        let allowance: number = await erc20Manager.allowance(
+          accountAddress,
+          escrow_address,
+        )
+
+        if (allowance < amount) {
+          const approveHash = await erc20Manager.approve(escrow_address, amount)
+          console.log('approveHash', approveHash)
+        }
+
+        // TODO: Get Token ID from currencyw
+        let tokenId = 0
+        const depositHash = await escrowManager.deposit(amount, tokenId)
         console.log('depositHash', depositHash)
       }
 

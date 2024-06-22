@@ -1,3 +1,5 @@
+import { BigNumberish } from 'starknet'
+
 export function parseSignature(signature: any): { r: bigint; s: bigint } {
   const signatureBuffer = Buffer.from(signature, 'hex')
   const signatureBytes = new Uint8Array(signatureBuffer)
