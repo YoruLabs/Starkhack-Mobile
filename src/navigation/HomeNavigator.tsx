@@ -27,7 +27,7 @@ const HomeNavigator = (): React.ReactElement => {
         getComponent={getScreenBuilder('TransactionDetails')}
       />
       <Stack.Screen name="AddMoney" getComponent={getScreenBuilder('AddMoney')} />
-      <Stack.Screen name="AttestApps" getComponent={getScreenBuilder('AttestApps')} />
+      <Stack.Screen name="DataProofs" getComponent={getScreenBuilder('DataProofs')} />
     </Stack.Navigator>
   )
 }
