@@ -1,5 +1,5 @@
 import { AppColors } from '@utils/Colors'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { Transaction, transactions } from 'types/transaction'
 import { AppText } from '@components/text/AppText'
@@ -9,6 +9,10 @@ import { getFormattedDate } from '@utils/DateTime'
 import { Spacer } from '@components/Spacer'
 import { AppImage } from '@components/AppImage'
 import { useNavigation } from '@react-navigation/native'
+import { useAtomValue } from 'jotai'
+import { Atoms } from '@state/Atoms'
+import { fetchPublicKey } from '../../../modules/expo-enclave'
+import axios from 'axios'
 
 type TransactionProps = {
   transaction: Transaction
