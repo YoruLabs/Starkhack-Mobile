@@ -14,8 +14,9 @@ import ViewFiller from '@components/ViewFiller'
 import { ERC20_ADDRESS } from '@utils/constants/SignerConstants'
 import { useAtomValue } from 'jotai'
 import { Atoms } from '@state/Atoms'
-import { getAddress } from 'requests/server_requests'
+import { getAddress, sendTransaction } from 'requests/server_requests'
 import ERC20Manager from 'managers/ERC20Manager'
+import ZapEscrowManager from 'managers/ZapEscrowManager'
 
 export default function PreviewSendScreen({
   navigation,
@@ -42,14 +43,33 @@ export default function PreviewSendScreen({
     const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS, accountEmail)
 
     try {
-      // TODO: On BACKEND RETURN ESCROW ADDRESS IF NOT an
       // TODO: Check if user used email, address or ens
-      let response = await getAddress(recipientEmail)
-      let to = response.blockchain_address
+      // TODO: On BACKEND RETURN ESCROW ADDRESS IF NOT an
 
-      setLoading(true)
-      const txHash = await erc20Manager.transfer(to, amount) // Mint 1000 tokens
-      console.log('txHash', txHash)
+      let response = await sendTransaction(recipientEmail)
+
+      if (response.is_escrow == false) {
+        setLoading(true)
+        let to = response.blockchain_address
+
+        const txHash = await erc20Manager.transfer(to, amount) // Mint 1000 tokens
+        console.log('txHash', txHash)
+      } else {
+        setLoading(true)
+        let escrow_address = response.blockchain_address
+        const escrowManager = new ZapEscrowManager(
+          accountAddress,
+          escrow_address,
+          accountEmail,
+        )
+        // TODO: Implement multicall
+        // TODO: First check Allowance and approve only if needed
+        const approveHash = await erc20Manager.approve(escrow_address, amount)
+        console.log('approveHash', approveHash)
+        // TODO: Get Token ID from currency
+        const depositHash = await escrowManager.deposit(amount, 0)
+        console.log('depositHash', depositHash)
+      }
 
       setLoading(false)
       addToast({

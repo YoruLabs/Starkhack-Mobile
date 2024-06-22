@@ -36,3 +36,13 @@ export function derPublicKeyToXandY(pubKeyHex: any): [bigint, bigint] {
 
   return [key1, key2]
 }
+
+export function stringToBigIntArray(str: string): BigNumberish[] {
+  const result: BigNumberish[] = []
+  for (let i = 0; i < str.length; i += 31) {
+    const chunk = str.slice(i, i + 31)
+    const bigIntValue = BigInt('0x' + Buffer.from(chunk).toString('hex'))
+    result.push(bigIntValue)
+  }
+  return result
+}

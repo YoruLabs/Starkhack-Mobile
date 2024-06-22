@@ -32,3 +32,25 @@ export async function getAddress(email: string) {
     throw error
   }
 }
+
+// Send Transaction request
+export async function sendTransaction(email: string) {
+  try {
+    const response = await axios.post(
+      `${baseURL}/send_transaction`,
+      {
+        email,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    return response.data
+  } catch (error) {
+    const axiosError = error as AxiosError
+    console.error('Error sending transaction:', axiosError.response?.data)
+    throw error
+  }
+}
