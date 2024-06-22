@@ -15,6 +15,9 @@ export const Atoms = {
     storageForObject,
   ),
   AuthToken: atomWithStorage<string>('authToken', '', storageForString),
+  
+  AuthtokenApi: atomWithStorage<string>('authApiToken', '', storageForString),
+
   AccountAddress: atomWithStorage<string>('accountAddress', '', storageForString),
   Balance: atomWithStorage<Balance[]>(
     'balance',
@@ -30,13 +33,17 @@ export const Atoms = {
   ),
 }
 
-export const login = atom(null, (_get, set, user: User, token?: string) => {
+export const login = atom(null, (_get, set, user: User, token?: string, api_token?: string) => {
   if (!isEmpty(token)) {
     set(Atoms.AuthToken, token)
+  }
+  if(!isEmpty(api_token)){
+    set(Atoms.AuthtokenApi, api_token)
   }
 
   set(Atoms.LoggedIn, true)
   set(Atoms.User, user)
+
 })
 
 export const logout = atom(null, (_get, set) => {

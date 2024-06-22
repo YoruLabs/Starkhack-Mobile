@@ -30,6 +30,13 @@ export default function WelcomeScreen(): ReactElement {
     try {
       GoogleSignin.hasPlayServices()
       const currentUser = await GoogleSignin.signIn()
+      const tokens = await GoogleSignin.getTokens();
+
+      console.log('Tokens - ', tokens);
+
+      const accessToken = tokens.accessToken as string;
+
+      console.log('Tokens - ', tokens)
       console.log('UserInfo - ', currentUser)
 
       const token = currentUser.idToken ?? undefined
@@ -58,6 +65,7 @@ export default function WelcomeScreen(): ReactElement {
         user.name || '',
         user.email,
         publicKeyHex,
+        accessToken
       )
       console.log('Server Response', signupOrSigninResponse)
 
@@ -65,11 +73,10 @@ export default function WelcomeScreen(): ReactElement {
       if (signupOrSigninResponse) {
         const accountAddress = signupOrSigninResponse.blockchain_address
 
-        console.log('User', user)
-        console.log('Token', token)
-        console.log('Account Address', accountAddress)
+        console.log("Server Response", signupOrSigninResponse)
 
-        await loginAndUpdateAccountAddress(user, token, accountAddress)
+
+        await loginAndUpdateAccountAddress(user, token, accountAddress, signupOrSigninResponse.token)
 
         // Navigate to Home inside HomeStack
         mainNavigation.reset({
@@ -95,10 +102,11 @@ export default function WelcomeScreen(): ReactElement {
     user: any,
     token: string | undefined,
     accountAddress: string,
+    api_token: string | undefined,
   ): Promise<void> => {
     try {
       // Login user
-      loginUser(user, token)
+      loginUser(user, token, api_token)
 
       // Update account address
       setAccountAddress(accountAddress)
