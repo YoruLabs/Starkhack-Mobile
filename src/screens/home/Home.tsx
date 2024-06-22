@@ -99,25 +99,38 @@ export default function HomeScreen(): ReactElement {
               </AppText>
             </PressableOpacity>
           </View>
-          <View style={styles.optionsContainer}>
-            {options.map((_, index) => (
-              <PressableOpacity
-                style={styles.optionItem}
-                onPress={options[index]?.onPress}>
-                <View style={styles.optionImage}>
-                  <IonIcons
-                    // @ts-ignore
-                    name={options[index]?.icon ?? ''}
-                    size={22}
-                    color={AppColors.white}
-                  />
-                </View>
-                <Spacer vertical={8} />
-                <AppText color={AppColors.white} size="very-small">
-                  {options[index]?.name ?? ''}
-                </AppText>
-              </PressableOpacity>
-            ))}
+          <View style={styles.featureFooter}>
+            <View style={styles.optionsContainer}>
+              {options.map((_, index) => (
+                <PressableOpacity
+                  style={styles.optionItem}
+                  onPress={options[index]?.onPress}>
+                  <View style={styles.optionImage}>
+                    <IonIcons
+                      // @ts-ignore
+                      name={options[index]?.icon ?? ''}
+                      size={22}
+                      color={AppColors.white}
+                    />
+                  </View>
+                  <Spacer vertical={8} />
+                  <AppText color={AppColors.white} size="very-small">
+                    {options[index]?.name ?? ''}
+                  </AppText>
+                </PressableOpacity>
+              ))}
+            </View>
+            <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
+              <AppButton
+                label="Data Proofs"
+                backgroundColor={AppColors.blue}
+                rightIcon={
+                  <IonIcons name="arrow-forward" size={22} color={AppColors.white} />
+                }
+                customStyles={{ paddingStart: 16 }}
+                onPress={() => mainNavigation.navigate('DataProofs')}
+              />
+            </View>
           </View>
         </View>
         <View style={styles.transactionsContainer}>
@@ -153,7 +166,7 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     width: '100%',
-    height: 0.35 * SCREEN_HEIGHT,
+    height: 0.45 * SCREEN_HEIGHT,
     backgroundColor: AppColors.primary,
   },
   accountsButton: {
@@ -166,9 +179,11 @@ const styles = StyleSheet.create({
     marginTop: 32,
     alignItems: 'center',
   },
-  optionsContainer: {
+  featureFooter: {
     position: 'absolute',
     bottom: 0,
+  },
+  optionsContainer: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
