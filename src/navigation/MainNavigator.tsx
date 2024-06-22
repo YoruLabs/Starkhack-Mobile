@@ -29,7 +29,7 @@ export const MainNavigator = (): ReactElement => {
   const isLoggedIn = useAtomValue(Atoms.LoggedIn)
 
   const getInitialScreen = (): keyof MainStack => {
-    if (!isLoggedIn) {
+    if (isLoggedIn) {
       return 'HomeStack'
     } else {
       return 'OnboardingStack'
