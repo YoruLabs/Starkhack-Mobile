@@ -33,3 +33,8 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# Request these files from repo owner if you are part of the project
+android/google-services.json
+ios/GoogleService-Info.plist
+src/utils/Credentials.ts
