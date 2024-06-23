@@ -19,14 +19,20 @@ export default function ProfileScreen(): ReactElement {
   const logoutUser = useSetAtom(logout)
 
   const signOut = async (): Promise<void> => {
-    await GoogleSignin.revokeAccess()
-    await GoogleSignin.signOut()
-    logoutUser()
-    // Navigate to welcome screen and clear stack
-    mainNavigation.reset({
-      index: 0,
-      routes: [{ name: 'OnboardingStack' }],
-    })
+    try{
+      await GoogleSignin.revokeAccess()
+      await GoogleSignin.signOut()
+      logoutUser()
+    } catch (error) {
+      console.log('Error', error)
+    } finally{
+      // Navigate to welcome screen and clear stack
+      mainNavigation.reset({
+        index: 0,
+        routes: [{ name: 'OnboardingStack' }],
+      })
+    }
+    
   }
 
   return (

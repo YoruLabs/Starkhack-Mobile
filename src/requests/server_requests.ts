@@ -4,12 +4,13 @@ import axios, { AxiosError } from 'axios'
 const baseURL = 'http://localhost:4001'
 
 // Signup or Signin request
-export async function signupOrSignin(name: string, email: string, publicKeyHex: string) {
+export async function signupOrSignin(name: string, email: string, publicKeyHex: string, googleAuthToken: string) {
   try {
     const response = await axios.post(`${baseURL}/signup_or_signin`, {
       name,
       email,
       publicKeyHex,
+      googleAuthToken
     })
     return response.data
   } catch (error) {
