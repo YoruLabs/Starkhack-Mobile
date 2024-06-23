@@ -69,16 +69,17 @@ function ListItem({ transaction }: TransactionProps): JSX.Element {
 }
 
 type TransactionListProps = {
-  limit?: number
+  limit?: number,
+  transactionsUser: Array<any>
 }
 
-export default function TransactionList({ limit }: TransactionListProps): JSX.Element {
+export default function TransactionList({ limit, transactionsUser }: TransactionListProps): JSX.Element {
 
   // TODO: Determine transaction type (send/receive) after backend is integrated
 
   return (
     <FlatList
-      data={limit === undefined ? transactions : transactions.slice(0, limit)}
+      data={limit === undefined ? transactionsUser : (transactionsUser?.length > limit?  transactionsUser?.slice(0, limit): transactionsUser)}
       nestedScrollEnabled={true}
       contentContainerStyle={styles.list}
       renderItem={({ item }) => <ListItem transaction={item} />}
