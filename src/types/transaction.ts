@@ -35,9 +35,15 @@ export type SendDetails = {
 
 export type CurrencyCode = 'BTC' | 'ETH' | 'USDT' | 'USDC' | 'STRK'
 
+export const currencyAddresses = {
+  "0x0592e877b1bd580c408849a29f0469ea8efa872f6accd2689048210ac5697a3f": 'BTC'
+} as {
+  [key: string]: CurrencyCode
+}
+
 // This data is temporary and will be fetched from backend
 export const currencies: Record<CurrencyCode, Currency> = {
-  BTC: {
+  "BTC": {
     name: 'Bitcoin',
     code: 'BTC',
     symbol: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png',
