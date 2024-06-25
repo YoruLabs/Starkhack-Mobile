@@ -84,7 +84,7 @@ export class EnclaveSigner implements SignerInterface {
       msgHash = hash.calculateInvokeTransactionHash({
         ...det,
         senderAddress: det.walletAddress,
-        compiledCalldata,
+        compiledCalldata: compiledCalldata,
         version: det.version,
       })
     } else if (Object.values(ETransactionVersion3).includes(details.version as any)) {
@@ -92,7 +92,7 @@ export class EnclaveSigner implements SignerInterface {
       msgHash = hash.calculateInvokeTransactionHash({
         ...det,
         senderAddress: det.walletAddress,
-        compiledCalldata,
+        compiledCalldata: compiledCalldata,
         version: det.version,
         nonceDataAvailabilityMode: stark.intDAM(det.nonceDataAvailabilityMode),
         feeDataAvailabilityMode: stark.intDAM(det.feeDataAvailabilityMode),
@@ -124,7 +124,7 @@ export class EnclaveSigner implements SignerInterface {
       msgHash = hash.calculateDeployAccountTransactionHash({
         ...det,
         salt: det.addressSalt,
-        compiledConstructorCalldata,
+        compiledConstructorCalldata: compiledConstructorCalldata,
         version: det.version,
         nonceDataAvailabilityMode: stark.intDAM(det.nonceDataAvailabilityMode),
         feeDataAvailabilityMode: stark.intDAM(det.feeDataAvailabilityMode),
@@ -166,22 +166,22 @@ export class EnclaveSigner implements SignerInterface {
   // This is returning a hard coded signature
   protected async signRaw(msgHash: string): Promise<Signature> {
     console.log('Signer AccountName', this.accountName)
-    let pubKey = await fetchPublicKey(this.accountName)
+    const pubKey = await fetchPublicKey(this.accountName)
     console.log('Signer PubKey', pubKey)
-    let [x, y] = derPublicKeyToXandY(pubKey)
+    const [x, y] = derPublicKeyToXandY(pubKey)
     console.log('Signer x', x, 'y', y)
 
-    let messageBuffer = Buffer.from(msgHash.slice(2), 'hex').toString('hex')
-    let signature = await sign(this.accountName, messageBuffer, promptCopy)
-    let { r, s } = parseSignature(signature)
+    const messageBuffer = Buffer.from(msgHash.slice(2), 'hex').toString('hex')
+    const signature = await sign(this.accountName, messageBuffer, promptCopy)
+    const { r, s } = parseSignature(signature)
 
     // Convert hex string to Uint8Array
     const messageArray = Uint8Array.from(Buffer.from(msgHash.slice(2), 'hex'))
     // Convert Uint8Array to Array<u8>
     const messageArrayU8: Array<number> = Array.from(messageArray)
 
-    let r_uin256 = cairo.uint256(r)
-    let s_uin256 = cairo.uint256(s)
+    const r_uin256 = cairo.uint256(r)
+    const s_uin256 = cairo.uint256(s)
     console.log('signing values', r_uin256, s_uin256, messageArrayU8)
     return [
       r_uin256.low.toString(16),

@@ -1,7 +1,7 @@
 import { AppColors } from '@utils/Colors'
 import React, { useEffect } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
-import { Transaction, transactions } from 'types/transaction'
+import { Transaction, currencies } from 'types/transaction'
 import { AppText } from '@components/text/AppText'
 import { Card } from '@components/Card'
 import { EmptyList } from '@components/EmptyList'
@@ -9,10 +9,13 @@ import { getFormattedDate } from '@utils/DateTime'
 import { Spacer } from '@components/Spacer'
 import { AppImage } from '@components/AppImage'
 import { useNavigation } from '@react-navigation/native'
+import { useQuery } from '@tanstack/react-query'
+import { getTransactions } from '@api/transaction'
 import { useAtomValue } from 'jotai'
 import { Atoms } from '@state/Atoms'
+import { isEmpty } from '@utils/util'
 import { fetchPublicKey } from '../../../modules/expo-enclave'
-import axios from 'axios'
+import { Loader } from '@components/Loader'
 
 type TransactionProps = {
   transaction: Transaction
@@ -43,12 +46,12 @@ function ListItem({ transaction }: TransactionProps): JSX.Element {
       <View>
         <AppText size="small" type="bold">
           {transaction.mode === 'exchange'
-            ? transaction.fromCurrency + ' -> ' + transaction.toCurrency
+            ? transaction.fromCurrency?.code + ' -> ' + transaction.toCurrency.code
             : transaction.receiver.name}
         </AppText>
         <Spacer vertical={2} />
         <AppText size="very-small" color={AppColors.darkGrey}>
-          {getFormattedDate(transaction.date)}
+          {getFormattedDate(new Date(transaction.date * 1000))}
         </AppText>
       </View>
       <Spacer horizontal={12} />
@@ -69,23 +72,46 @@ function ListItem({ transaction }: TransactionProps): JSX.Element {
 }
 
 type TransactionListProps = {
-  limit?: number,
-  transactionsUser: Array<any>
+  limit?: number
 }
 
-export default function TransactionList({ limit, transactionsUser }: TransactionListProps): JSX.Element {
+export default function TransactionList({ limit }: TransactionListProps): JSX.Element {
+  const user = useAtomValue(Atoms.User)
 
-  // TODO: Determine transaction type (send/receive) after backend is integrated
+  const { data, isPending } = useQuery({
+    queryKey: ['transaction-list'],
+    queryFn: async () => {
+      const publicKeyHex = await fetchPublicKey(user?.email ?? '')
+      return getTransactions(publicKeyHex ?? '')
+    },
+    enabled: !isEmpty(user),
+  })
+
+  useEffect(() => {
+    // TODO: Update this code later
+    data?.map((transaction) => {
+      transaction.date = new Date(transaction.date * 1000).getTime()
+      transaction.type = 'send'
+      transaction.mode = 'send'
+      transaction.toCurrency =
+        Object.values(currencies).find(
+          (currency) => currency.address === transaction.tokenAddress,
+        ) ?? currencies.BTC
+    })
+  }, [data])
 
   return (
-    <FlatList
-      data={limit === undefined ? transactionsUser : (transactionsUser?.length > limit?  transactionsUser?.slice(0, limit): transactionsUser)}
-      nestedScrollEnabled={true}
-      contentContainerStyle={styles.list}
-      renderItem={({ item }) => <ListItem transaction={item} />}
-      keyExtractor={(item) => item.id}
-      ListEmptyComponent={<EmptyList text="No Transactions" />}
-    />
+    <>
+      {isPending ? <Loader /> : null}
+      <FlatList
+        data={limit === undefined ? data : data?.slice(0, limit)}
+        nestedScrollEnabled={true}
+        contentContainerStyle={styles.list}
+        renderItem={({ item }) => <ListItem transaction={item} />}
+        keyExtractor={(item) => item.id}
+        ListEmptyComponent={<EmptyList text="No Transactions" />}
+      />
+    </>
   )
 }
 

@@ -7,8 +7,10 @@ import { ReactElement, useCallback, useRef } from 'react'
 import { QueryClient, QueryClientProvider, focusManager } from '@tanstack/react-query'
 import { NetworkProvider } from '@config/Network'
 import { ToastProvider } from '@components/Toast'
-import { Provider as JotaiProvider } from 'jotai'
+import { Provider as JotaiProvider, useAtomValue } from 'jotai'
 import { RootSiblingParent } from 'react-native-root-siblings'
+import { Atoms } from '@state/Atoms'
+import { setHeaders } from '@config/ZapAPI'
 
 let appState = AppState.currentState
 AppState.addEventListener('change', (newAppState) => {
@@ -23,6 +25,8 @@ AppState.addEventListener('memoryWarning', () => {
 function App(): ReactElement {
   const currentScreenName = useRef<string>()
   const navigationContainer = useRef<NavigationContainerRef<never>>(null)
+  const isLoggedIn = useAtomValue(Atoms.LoggedIn)
+  const authTokens = useAtomValue(Atoms.AuthTokens)
 
   const onStateChange = useCallback(() => {
     const previousRouteName = currentScreenName.current
@@ -40,6 +44,10 @@ function App(): ReactElement {
   }, [])
 
   console.log('🔄', 'Re-rendering App()...')
+
+  if (isLoggedIn) {
+    setHeaders(authTokens)
+  }
 
   const queryClient = new QueryClient()
 

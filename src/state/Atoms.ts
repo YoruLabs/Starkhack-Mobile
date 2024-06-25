@@ -5,6 +5,7 @@ import type { AuthTokens, User } from 'types/user'
 import { storageForBoolean, storageForObject, storageForString } from './Storage'
 import { isEmpty } from '@utils/util'
 import { Balance, currencies, Currency } from 'types/transaction'
+import { setHeaders } from '@config/ZapAPI'
 
 export const Atoms = {
   LoggedIn: atomWithStorage<boolean>('isLoggedIn', false, storageForBoolean),
@@ -15,9 +16,9 @@ export const Atoms = {
     storageForObject,
   ),
 
-  AuthTokens: atomWithStorage<AuthTokens | null>(
+  AuthTokens: atomWithStorage<AuthTokens>(
     'authTokens',
-    null,
+    { googleAuthToken: '', apiToken: '' },
     // @ts-ignore
     storageForObject,
   ),
@@ -57,6 +58,8 @@ export const login = atom(
         googleAuthToken: googleAuthToken,
         apiToken: apiToken,
       })
+      // Set Auth headers for rest of the API's
+      setHeaders({ googleAuthToken: googleAuthToken, apiToken: apiToken })
     }
   },
 )

@@ -14,7 +14,7 @@ module.exports = {
     Logger: true,
     performance: true,
   },
-  ignorePatterns: ['scripts', 'assets', 'src/assets/icons/*.tsx'],
+  ignorePatterns: ['scripts', 'assets', 'src/assets/icons/*.tsx', 'global.d.ts'],
   plugins: ['@typescript-eslint'],
   extends: ['plugin:@typescript-eslint/recommended', '@react-native-community'],
   rules: {

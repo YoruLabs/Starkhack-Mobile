@@ -19,7 +19,7 @@ export function parseSignature(signature: any): { r: bigint; s: bigint } {
     .slice(sStart, sEnd)
     .reduce((acc, val) => (acc << 8n) + BigInt(val), 0n)
 
-  return { r, s }
+  return { r: r, s: s }
 }
 
 export function derPublicKeyToXandY(pubKeyHex: any): [bigint, bigint] {

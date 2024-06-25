@@ -1,6 +1,6 @@
 import { AppText } from '@components/text/AppText'
 import { Atoms } from '@state/Atoms'
-import { Currency, currencies } from 'types/transaction'
+import { currencies } from 'types/transaction'
 import { useAtomValue, useSetAtom } from 'jotai'
 import React, { ReactElement } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'

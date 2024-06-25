@@ -16,7 +16,7 @@ import { useAtomValue } from 'jotai'
 import { Atoms } from '@state/Atoms'
 import ERC20Manager from 'managers/ERC20Manager'
 import { useMutation } from '@tanstack/react-query'
-import { getAddress } from '@api/user'
+import { getAddress } from '@api/transaction'
 import { showError } from '@utils/ErrorUtil'
 
 export default function PreviewSendScreen({
