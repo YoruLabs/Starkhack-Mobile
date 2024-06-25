@@ -14,53 +14,61 @@ import ViewFiller from '@components/ViewFiller'
 import { ERC20_ADDRESS } from '@utils/constants/SignerConstants'
 import { useAtomValue } from 'jotai'
 import { Atoms } from '@state/Atoms'
-import { getAddress } from 'requests/server_requests'
 import ERC20Manager from 'managers/ERC20Manager'
+import { useMutation } from '@tanstack/react-query'
+import { getAddress } from '@api/user'
+import { showError } from '@utils/ErrorUtil'
 
 export default function PreviewSendScreen({
   navigation,
   route,
 }: ScreenProps<'PreviewSend'>): ReactElement {
-  const { details } = route.params
-  const { addToast } = useToast()
+  const { recipientEmail, amount, currency } = route.params.details
+
+  const accountAddress = useAtomValue(Atoms.AccountAddress)
+  const accountEmail = String(useAtomValue(Atoms.User)?.email)
 
   const [isLoading, setLoading] = useState(false)
-  let accountAddress = useAtomValue(Atoms.AccountAddress)
-  let accountEmail = String(useAtomValue(Atoms.User)?.email)
 
-  async function onSendPress(): Promise<void> {
-    // Get the recipient email, amount, and currency from the route params
-    const { recipientEmail, amount, currency } = details
+  const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS, accountEmail)
 
-    console.log('Recipient Email:', recipientEmail)
-    console.log('Token:', currency.code)
-    console.log('Amount:', amount)
+  const { mutate: mutateAddress, isPending } = useMutation({
+    mutationKey: ['getAddress'],
+    mutationFn: getAddress,
+  })
 
+  const { addToast } = useToast()
+
+  function onSendPress(): void {
     // TODO: GET ERC20_ADDRESS based on "currency.code" or "currency.address"
     // let erc20address = currency.address
+    mutateAddress(recipientEmail, {
+      onSuccess: (data) => {
+        transferAmount(data.blockchain_address)
+        console.log('data', data)
+      },
+      onError: (error) => {
+        console.log('error', error)
+      },
+    })
+  }
 
-    const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS, accountEmail)
-
+  async function transferAmount(toAddress: string): Promise<void> {
+    setLoading(true)
     try {
-      // TODO: On BACKEND RETURN ESCROW ADDRESS IF NOT an
-      // TODO: Check if user used email, address or ens
-      let response = await getAddress(recipientEmail)
-      let to = response.blockchain_address
-
-      setLoading(true)
-      const txHash = await erc20Manager.transfer(to, amount) // Mint 1000 tokens
-      console.log('txHash', txHash)
-
-      setLoading(false)
+      await erc20Manager.transfer(toAddress, amount) // Mint 1000 tokens
       addToast({
         message: Strings.SEND_SUCCESS,
         type: 'success',
       })
       navigation.navigate('Home')
     } catch (error) {
-      console.error('Transaction error:', error)
-      setLoading(false)
+      showError(
+        { message: Strings.TRANSACTION_FAILED },
+        Strings.ERROR_SOMETHING_WENT_WRONG,
+      )
     }
+    setLoading(false)
   }
 
   return (
@@ -73,7 +81,7 @@ export default function PreviewSendScreen({
           </AppText>
           <ViewFiller />
           <AppText size="small" type="bold">
-            {details.recipientEmail}
+            {recipientEmail}
           </AppText>
         </Card>
 
@@ -86,7 +94,7 @@ export default function PreviewSendScreen({
             </AppText>
             <ViewFiller />
             <AppText size="small" type="medium">
-              {details.amount} {details.currency.code}
+              {amount} {currency.code}
             </AppText>
           </View>
 
@@ -110,7 +118,7 @@ export default function PreviewSendScreen({
             </AppText>
             <ViewFiller />
             <AppText size="small" type="medium">
-              {details.amount} {details.currency.code}
+              {amount} {currency.code}
             </AppText>
           </View>
         </Card>
@@ -126,7 +134,11 @@ export default function PreviewSendScreen({
         </Card>
 
         <View style={styles.buttonContainer}>
-          <AppButton label="Send" isLoading={isLoading} onPress={onSendPress} />
+          <AppButton
+            label="Send"
+            isLoading={isLoading || isPending}
+            onPress={onSendPress}
+          />
         </View>
       </View>
     </SafeAreaView>
