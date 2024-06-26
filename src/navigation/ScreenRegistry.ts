@@ -20,6 +20,7 @@ export function getScreenBuilder(screen: Screen): ScreenBuilderType {
         console.log('😴', `Lazily registering Screen "${screen}"...`)
 
         cached = getScreen(screen)
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (cached == null) {
           throw new Error(
             `Screen "${screen}" could not be found - Make sure it is default-exported ('export default function MyScreen')`,

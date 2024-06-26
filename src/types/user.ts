@@ -5,7 +5,23 @@ export type User = {
   photo?: string
 }
 
-export type LoginArgs = {
+export type AuthTokens = {
+  googleAuthToken: string
+  apiToken: string
+}
+
+export type AuthArgs = {
+  name?: string
   email: string
-  code: number
+  publicKeyHex: string
+  googleAuthToken: string
+}
+
+export type AuthResponse = {
+  blockchain_address: string
+  token: string
+}
+
+export type AddressResponse = {
+  blockchain_address: string
 }

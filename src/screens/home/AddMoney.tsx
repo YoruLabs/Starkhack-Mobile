@@ -6,18 +6,14 @@ import { Spacer } from '@components/Spacer'
 import { useToast } from '@components/Toast'
 import { AppText } from '@components/text/AppText'
 import { AppTextInput } from '@components/text/AppTextInput'
-import { platformNames, platforms } from 'types/money'
+import { platforms } from 'types/money'
 import { currencies, currencyCodes } from 'types/transaction'
 import { AppColors } from '@utils/Colors'
 import Strings from '@utils/Strings'
 import React, { ReactElement, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import SegmentedPicker, {
-  PickerColumn,
-  PickerItem,
-  PickerOptions,
-} from 'react-native-segmented-picker'
+import SegmentedPicker, { PickerOptions } from 'react-native-segmented-picker'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import IonIcons from '@expo/vector-icons/Ionicons'
 import ViewFiller from '@components/ViewFiller'

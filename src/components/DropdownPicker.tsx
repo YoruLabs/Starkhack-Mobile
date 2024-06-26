@@ -1,6 +1,5 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import { TouchableOpacity, StyleSheet, View } from 'react-native'
-import { Spacer } from '@components/Spacer'
 import { AppText } from '@components/text/AppText'
 import { AppColors } from '@utils/Colors'
 import IonIcon from '@expo/vector-icons/Ionicons'

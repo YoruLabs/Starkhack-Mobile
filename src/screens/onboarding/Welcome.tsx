@@ -9,110 +9,111 @@ import React, { ReactElement, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import GoogleIcon from '@assets/icons/google'
-import { Atoms, login } from '@state/Atoms'
+import { login } from '@state/Atoms'
 import { useSetAtom } from 'jotai'
 import { useNavigation } from '@react-navigation/native'
 import Strings from '@utils/Strings'
-import { getAddress, signupOrSignin } from 'requests/server_requests'
 import { createKeyPair, fetchPublicKey } from '../../../modules/expo-enclave'
+import { useMutation } from '@tanstack/react-query'
+import { authenticateUser } from '@api/user'
+import { AuthArgs, User } from 'types/user'
+import { isEmpty } from '@utils/util'
+import { useToast } from '@components/Toast'
+import { showError } from '@utils/ErrorUtil'
 
 export default function WelcomeScreen(): ReactElement {
-  const loginUser = useSetAtom(login)
-  const setAccountAddress = useSetAtom(Atoms.AccountAddress)
+  const { addToast } = useToast()
 
   const mainNavigation = useNavigation()
+
+  const loginUser = useSetAtom(login)
+  const { mutate: mutateAuth, isPending } = useMutation({
+    mutationKey: ['authenticateUser'],
+    mutationFn: authenticateUser,
+  })
 
   useEffect(() => {
     GoogleSignin.configure()
   }, [])
 
   const signIn = async (): Promise<void> => {
-    try {
-      GoogleSignin.hasPlayServices()
-      const currentUser = await GoogleSignin.signIn()
-      const tokens = await GoogleSignin.getTokens();
+    // Sign In with google
+    const googleAuthResponse = await googleSignIn()
+    if (googleAuthResponse == null) return
+    const { googleAuthToken, user } = googleAuthResponse
 
-      console.log('Tokens - ', tokens);
+    // Get public key
+    const publicKeyHex = await getPublicKey(user.email)
 
-      const accessToken = tokens.accessToken as string;
+    // Authenticate user
+    const authArgs: AuthArgs = {
+      name: user.name ?? '',
+      email: user.email,
+      publicKeyHex: publicKeyHex,
+      googleAuthToken: googleAuthToken,
+    }
 
-      console.log('Tokens - ', tokens)
-      console.log('UserInfo - ', currentUser)
+    mutateAuth(authArgs, {
+      onSuccess: (data) => {
+        console.log('🪐', 'Auth Success', data)
+        loginUser(user, googleAuthToken, data.token, data.blockchain_address)
+      },
+      onError: (error) => {
+        showError(error, Strings.ERROR_SOMETHING_WENT_WRONG)
+        console.log('Error authenticating user:', error.message)
+      },
+    })
 
-      const token = currentUser.idToken ?? undefined
-      const user = {
-        id: currentUser.user.id,
-        name: currentUser.user.name ?? undefined,
-        email: currentUser.user.email,
-        photo: currentUser.user.photo ?? undefined,
-      }
+    // Navigate to Home and reset stack
+    mainNavigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: 'HomeStack',
+          params: {},
+        },
+      ],
+    })
+  }
 
-      let publicKeyHex: any
+  async function googleSignIn(): Promise<{
+    googleAuthToken: string
+    user: User
+  } | null> {
+    // Check for play services
+    GoogleSignin.hasPlayServices()
 
-      console.log('User Email', user.email)
+    // Sign In with Google and get access token
+    const response = await GoogleSignin.signIn()
+    const tokenResponse = await GoogleSignin.getTokens()
+    if (isEmpty(response.idToken) || isEmpty(tokenResponse.accessToken)) {
+      addToast({
+        message: Strings.SIGN_IN_WITH_GOOGLE_ERROR,
+        type: 'error',
+      })
+      return null
+    }
 
-      try {
-        publicKeyHex = await createKeyPair(String(user.email))
-        console.log('Created Public Key Hex:', publicKeyHex)
-      } catch (error) {
-        console.log('Public Key already created')
-        publicKeyHex = await fetchPublicKey(String(user.email))
-        console.log('Fetched Public Key Hex:', publicKeyHex)
-      }
-      console.log('Before SignupOrSignin')
+    // Set user info
+    const user = {
+      id: response.user.id,
+      name: response.user.name ?? undefined,
+      email: response.user.email,
+      photo: response.user.photo ?? undefined,
+    }
 
-      const signupOrSigninResponse = await signupOrSignin(
-        user.name || '',
-        user.email,
-        publicKeyHex,
-        accessToken
-      )
-      console.log('Server Response', signupOrSigninResponse)
-
-      // TODO: Add aditional check to handle all possible response cases from the server
-      if (signupOrSigninResponse) {
-        const accountAddress = signupOrSigninResponse.blockchain_address
-
-        console.log("Server Response", signupOrSigninResponse)
-
-
-        await loginAndUpdateAccountAddress(user, token, accountAddress, signupOrSigninResponse.token)
-
-        // Navigate to Home inside HomeStack
-        mainNavigation.reset({
-          index: 0,
-          routes: [
-            {
-              name: 'HomeStack',
-              params: {},
-            },
-          ],
-        })
-      } else {
-        console.log('Account address not found. Signin aborted.')
-        // Handle the case when there is no account address
-        // You can show an error message or take appropriate action
-      }
-    } catch (e) {
-      console.log('Error - ', e)
+    // Return as auth response
+    return {
+      googleAuthToken: tokenResponse.accessToken,
+      user: user,
     }
   }
 
-  const loginAndUpdateAccountAddress = async (
-    user: any,
-    token: string | undefined,
-    accountAddress: string,
-    api_token: string | undefined,
-  ): Promise<void> => {
+  async function getPublicKey(email: string): Promise<string> {
     try {
-      // Login user
-      loginUser(user, token, api_token)
-
-      // Update account address
-      setAccountAddress(accountAddress)
+      return await createKeyPair(email)
     } catch (error) {
-      console.log('Error - ', error)
-      throw error
+      return (await fetchPublicKey(email)) ?? ''
     }
   }
 
@@ -144,6 +145,7 @@ export default function WelcomeScreen(): ReactElement {
             borderRadius={24}
             labelColor={AppColors.white}
             onPress={signIn}
+            isLoading={isPending}
           />
         </View>
       </View>

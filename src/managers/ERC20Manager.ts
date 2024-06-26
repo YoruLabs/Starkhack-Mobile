@@ -1,10 +1,8 @@
-import { RpcProvider, Contract, Account, cairo, RPC } from 'starknet'
+import { RpcProvider, Contract, Account, cairo } from 'starknet'
 import { EnclaveSigner } from '../utils/crypto/p256Signer'
 import erc20Abi from '../utils/abis/ERC20.json'
 import { Buffer } from 'buffer'
 import { RPC_ENDPOINT } from '../utils/constants/SignerConstants'
-import { useAtomValue } from 'jotai'
-import { Atoms } from '@state/Atoms'
 global.Buffer = Buffer
 
 class ERC20Manager {

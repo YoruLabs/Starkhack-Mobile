@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { AppColors } from '@utils/Colors'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -11,7 +11,7 @@ export default function RevolutWebScreen({
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Zap Web" onBackPress={navigation.goBack} />
-      <View style={styles.content}></View>
+      <View style={styles.content} />
     </SafeAreaView>
   )
 }

@@ -18,13 +18,14 @@ import { derPublicKeyToXandY } from '@utils/crypto/utils'
 import ERC20Manager from 'managers/ERC20Manager'
 import { useAtomValue } from 'jotai'
 import { Atoms } from '@state/Atoms'
+import { isEmpty } from '@utils/util'
 
 export default function ExperimentScreen(): ReactElement {
   const [message, setMessage] = useState('')
   const [signature, setSignature] = useState('')
-  let accountAddress = useAtomValue(Atoms.AccountAddress)
+  const accountAddress = useAtomValue(Atoms.AccountAddress)
 
-  let accountEmail = String(useAtomValue(Atoms.User)?.email)
+  const accountEmail = String(useAtomValue(Atoms.User)?.email)
   const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS, accountEmail)
 
   async function handleCreateKeyPair(): Promise<void> {
@@ -34,10 +35,10 @@ export default function ExperimentScreen(): ReactElement {
   }
 
   async function handleFetchPublicKey(): Promise<void> {
-    let accountEmail = 'danilowhk@gmail.com'
+    const accountEmail = 'danilowhk@gmail.com'
     console.log('accountEmail', accountEmail)
     const publicKeyHex = await fetchPublicKey(accountEmail)
-    let [x, y] = derPublicKeyToXandY(publicKeyHex)
+    const [x, y] = derPublicKeyToXandY(publicKeyHex)
     setMessage(`Public Key Hex: ${publicKeyHex} x: ${x} y: ${y}`)
     console.log('Public Key Hex - ', publicKeyHex)
   }
@@ -55,7 +56,7 @@ export default function ExperimentScreen(): ReactElement {
 
   async function handleFetchBalance(): Promise<void> {
     console.log('Account', accountAddress)
-    if (!accountAddress) {
+    if (isEmpty(accountAddress)) {
       setMessage('Please deploy and initialize the account first.')
       return
     }
@@ -65,7 +66,7 @@ export default function ExperimentScreen(): ReactElement {
 
   async function handleMint(): Promise<void> {
     console.log('accountAddress', accountAddress)
-    if (!accountAddress) {
+    if (isEmpty(accountAddress)) {
       setMessage('Please deploy and initialize the account first.')
       return
     }
@@ -74,7 +75,7 @@ export default function ExperimentScreen(): ReactElement {
   }
 
   async function handleApprove(): Promise<void> {
-    if (!accountAddress) {
+    if (isEmpty(accountAddress)) {
       setMessage('Please deploy and initialize the account first.')
       return
     }
@@ -83,7 +84,7 @@ export default function ExperimentScreen(): ReactElement {
   }
 
   async function handleAllowance(): Promise<void> {
-    if (!accountAddress) {
+    if (isEmpty(accountAddress)) {
       setMessage('Please deploy and initialize the account first.')
       return
     }
@@ -92,15 +93,15 @@ export default function ExperimentScreen(): ReactElement {
   }
 
   async function verifySignature(
-    accountEmail: any,
-    signature: any,
-    HEX_MESSAGE: any,
+    accountEmail: string,
+    signature: string,
+    HEX_MESSAGE: string,
   ): Promise<boolean> {
     return await verify(accountEmail, signature, HEX_MESSAGE)
   }
 
   async function handleSendTransaction(): Promise<void> {
-    if (!accountAddress) {
+    if (isEmpty(accountAddress)) {
       setMessage('Please deploy and initialize the account first.')
       return
     }

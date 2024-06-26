@@ -1,7 +1,7 @@
 import { ZapAPI } from '@config/ZapAPI'
-import { LoginArgs as SignupArgs, User } from 'types/user'
+import { AuthResponse, AuthArgs } from 'types/user'
 
-const SIGNUP = '/auth/login'
+const SIGNUP = '/signup_or_signin'
 
-export const authenticateUser = (args: SignupArgs): Promise<User> =>
+export const authenticateUser = (args: AuthArgs): Promise<AuthResponse> =>
   ZapAPI.post(SIGNUP, { ...args })

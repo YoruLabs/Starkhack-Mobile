@@ -9,11 +9,11 @@ const alias = {
   '@state': './src/state',
   '@utils': './src/utils',
   '@services': './src/services',
-  'types': './src/types',
+  types: './src/types',
 }
 
-module.exports = function(api) {
-  api.cache(true);
+module.exports = function (api) {
+  api.cache(true)
   return {
     presets: ['babel-preset-expo'],
     plugins: [
@@ -26,5 +26,5 @@ module.exports = function(api) {
         },
       ],
     ],
-  };
-};
+  }
+}

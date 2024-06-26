@@ -4,6 +4,7 @@
 import { isEmpty } from '@utils/util'
 import axios from 'axios'
 import { COM_ZAP_API } from './api-urls'
+import { AuthTokens } from 'types/user'
 
 type Options = {
   baseUrl: string
@@ -24,22 +25,17 @@ ZapAPI.interceptors.response.use((res) => {
 
   if (res.data) {
     const requestUrl: string = res.request?._url
-    if (requestUrl.includes('auth')) {
-      setAuthToken(res.headers)
-      return res.data.data
-    } else {
-      // If response DOESN'T come inside a data object
-      if (isEmpty(res.data.data)) return res.data
+    // If response DOESN'T come inside a data object
+    if (isEmpty(res.data.data)) return res.data
 
-      // If the data is NOT paginated
-      if (!requestUrl.includes('page')) return res.data.data
+    // If the data is NOT paginated
+    if (!requestUrl.includes('page')) return res.data.data
 
-      // If the data is paginated
-      return {
-        data: res.data.data,
-        currentPage: res.data.meta?.page ?? 1,
-        totalPages: res.data.meta?.last ?? 1,
-      }
+    // If the data is paginated
+    return {
+      data: res.data.data,
+      currentPage: res.data.meta?.page ?? 1,
+      totalPages: res.data.meta?.last ?? 1,
     }
   }
   return res
@@ -58,9 +54,9 @@ if (__DEV__) {
   })
 }
 
-export function setAuthToken(headers: any): void {
+export function setHeaders(authToken: AuthTokens): void {
   console.log('👤', 'Set token as Authorization header')
-  ZapAPI.defaults.headers.common['access-token'] = headers.accessToken
+  ZapAPI.defaults.headers.common.Authorization = 'Bearer ' + authToken.apiToken
 }
 
 export function setBaseUrl({ baseUrl }: Options): void {
