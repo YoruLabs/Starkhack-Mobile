@@ -37,4 +37,5 @@ yarn-error.*
 # Request these files from repo owner if you are part of the project
 android/google-services.json
 ios/GoogleService-Info.plist
+ios/zapmobile/GoogleService-Info.plist
 src/utils/Credentials.ts
