@@ -9,7 +9,8 @@ export function showError(error?: unknown, fallbackMessage?: string): void {
     if (message.length < 48) {
       Toast.show({
         type: 'info',
-        text1: 'Profile',
+        text1: message,
+        text1Style: { fontSize: 16 },
         position: 'bottom',
       })
     } else {
@@ -20,6 +21,7 @@ export function showError(error?: unknown, fallbackMessage?: string): void {
       Toast.show({
         type: 'info',
         text1: fallbackMessage,
+        text1Style: { fontSize: 16 },
         position: 'bottom',
       })
     }

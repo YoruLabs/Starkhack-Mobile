@@ -32,6 +32,10 @@
         "foregroundImage": "./src/assets/png/logo.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": [
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT"
+      ],
       "package": "com.zapapp.android",
       "googleServicesFile": "./android/google-services.json"
     }

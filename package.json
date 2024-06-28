@@ -8,7 +8,8 @@
     "prebuild": "npx expo prebuild",
     "start": "npx expo start",
     "android": "npx expo run:android",
-    "ios": "npx expo run:ios"
+    "ios": "npx expo run:ios",
+    "iosd": "npx expo run:ios --device"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4.6.3",
