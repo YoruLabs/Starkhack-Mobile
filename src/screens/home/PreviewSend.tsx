@@ -18,6 +18,7 @@ import ERC20Manager from 'managers/ERC20Manager'
 import { useMutation } from '@tanstack/react-query'
 import { getAddress } from '@api/transaction'
 import { showError } from '@utils/ErrorUtil'
+import { verifyBiometric } from '@utils/Biometrics'
 
 export default function PreviewSendScreen({
   navigation,
@@ -39,7 +40,13 @@ export default function PreviewSendScreen({
 
   const { addToast } = useToast()
 
-  function onSendPress(): void {
+  async function onSendPress(): Promise<void> {
+    const isAutheticated = await verifyBiometric()
+    if (!isAutheticated) {
+      showError({ message: Strings.USER_VERIFICATION_FAILED })
+      return
+    }
+
     // TODO: GET ERC20_ADDRESS based on "currency.code" or "currency.address"
     // let erc20address = currency.address
     mutateAddress(recipientEmail, {

@@ -34,6 +34,6 @@
       },
       "package": "com.zapapp.android",
       "googleServicesFile": "./android/google-services.json"
-    },
+    }
   }
 }

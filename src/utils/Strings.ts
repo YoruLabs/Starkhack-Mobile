@@ -12,4 +12,5 @@ export default {
   COMING_SOON: 'Coming soon',
   ERROR_SOMETHING_WENT_WRONG: 'Something went wrong',
   TRANSACTION_FAILED: 'Transaction failed',
+  USER_VERIFICATION_FAILED: 'User Verification Failed!',
 }

@@ -20,7 +20,7 @@ import { AuthArgs, User } from 'types/user'
 import { isEmpty } from '@utils/util'
 import { useToast } from '@components/Toast'
 import { showError } from '@utils/ErrorUtil'
-import * as LocalAuthentication from 'expo-local-authentication'
+import { verifyBiometric } from '@utils/Biometrics'
 
 export default function WelcomeScreen(): ReactElement {
   const { addToast } = useToast()
@@ -54,30 +54,23 @@ export default function WelcomeScreen(): ReactElement {
       googleAuthToken: googleAuthToken,
     }
 
+    const isAutheticated = await verifyBiometric()
+    if (!isAutheticated) {
+      showError({ message: Strings.USER_VERIFICATION_FAILED })
+      return
+    }
+
     mutateAuth(authArgs, {
-      onSuccess: async (data) => {
+      onSuccess: (data) => {
         console.log('🪐', 'Auth Success', data)
-        const isAutheticated = await verifyBiometric()
-        if (isAutheticated) {
-          loginUser(user, googleAuthToken, data.token, data.blockchain_address)
-          navigateToHome()
-        } else {
-          showError({ message: 'Verification Failed!' })
-        }
+        loginUser(user, googleAuthToken, data.token, data.blockchain_address)
+        navigateToHome()
       },
       onError: (error) => {
         showError(error, Strings.ERROR_SOMETHING_WENT_WRONG)
         console.log('Error authenticating user:', error.message)
       },
     })
-  }
-
-  async function verifyBiometric(): Promise<boolean> {
-    const response = await LocalAuthentication.authenticateAsync({
-      promptMessage: 'Touch ID or enter password',
-      fallbackLabel: 'Enter Password',
-    })
-    return response.success
   }
 
   function navigateToHome(): void {
