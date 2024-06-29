@@ -20,6 +20,7 @@ import { AuthArgs, User } from 'types/user'
 import { isEmpty } from '@utils/util'
 import { useToast } from '@components/Toast'
 import { showError } from '@utils/ErrorUtil'
+import { verifyBiometric } from '@utils/Biometrics'
 
 export default function WelcomeScreen(): ReactElement {
   const { addToast } = useToast()
@@ -53,17 +54,26 @@ export default function WelcomeScreen(): ReactElement {
       googleAuthToken: googleAuthToken,
     }
 
+    const isAutheticated = await verifyBiometric()
+    if (!isAutheticated) {
+      showError({ message: Strings.USER_VERIFICATION_FAILED })
+      return
+    }
+
     mutateAuth(authArgs, {
       onSuccess: (data) => {
         console.log('🪐', 'Auth Success', data)
         loginUser(user, googleAuthToken, data.token, data.blockchain_address)
+        navigateToHome()
       },
       onError: (error) => {
         showError(error, Strings.ERROR_SOMETHING_WENT_WRONG)
         console.log('Error authenticating user:', error.message)
       },
     })
+  }
 
+  function navigateToHome(): void {
     // Navigate to Home and reset stack
     mainNavigation.reset({
       index: 0,
@@ -127,15 +137,6 @@ export default function WelcomeScreen(): ReactElement {
           {Strings.WELCOME}
         </AppText>
         <View style={styles.buttonContainer}>
-          <AppButton
-            label="Experiment"
-            onPress={() =>
-              mainNavigation.navigate('ProfileStack', { screen: 'Experiment' })
-            }
-            borderRadius={24}
-            labelSize="normal"
-          />
-          <Spacer vertical={16} />
           <AppButton
             label={Strings.SIGN_IN_WITH_GOOGLE}
             labelWeight="bold"

@@ -11,6 +11,7 @@ import { Provider as JotaiProvider, useAtomValue } from 'jotai'
 import { RootSiblingParent } from 'react-native-root-siblings'
 import { Atoms } from '@state/Atoms'
 import { setHeaders } from '@config/ZapAPI'
+import Toast from 'react-native-toast-message'
 
 let appState = AppState.currentState
 AppState.addEventListener('change', (newAppState) => {
@@ -66,6 +67,7 @@ function App(): ReactElement {
                   <MainNavigator />
                 </NetworkProvider>
               </NavigationContainer>
+              <Toast />
             </ToastProvider>
           </RootSiblingParent>
         </JotaiProvider>
