@@ -1,7 +1,7 @@
 import type { NavigatorScreenParams } from '@react-navigation/native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import type { RouteProp as NRouteProp } from '@react-navigation/native'
-import { SendDetails, Transaction } from 'types/transaction'
+import { Currency, SendDetails, Transaction } from 'types/transaction'
 
 export type MainStack = {
   OnboardingStack: NavigatorScreenParams<OnboardingStack>
@@ -29,12 +29,18 @@ export type HomeStack = {
   TransactionDetails: {
     transaction: Transaction
   }
-  AddMoney: undefined
   DataProofs: undefined
+  AddMoney: undefined
+  Exchange: undefined
 }
 
 export type BottomSheetStack = {
-  AccountListBT: undefined
+  AccountListBT: {
+    title: string
+    showAmount: boolean
+    excludeCurrency?: Currency
+    onCallback: (currency?: Currency) => void
+  }
 }
 
 export type AllScreens =

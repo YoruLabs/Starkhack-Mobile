@@ -51,7 +51,7 @@ export default function SendScreen({ navigation }: ScreenProps<'Send'>): ReactEl
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Send Money" />
+      <Header title="Send Money" backType="close" />
       <DismissKeyboardView style={styles.content}>
         <AppText size="small">Recepient email</AppText>
         <Spacer vertical={8} />
