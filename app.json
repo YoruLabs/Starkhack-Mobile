@@ -25,7 +25,10 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.zapapp.ios",
-      "googleServicesFile": "./ios/GoogleService-Info.plist"
+      "googleServicesFile": "./ios/GoogleService-Info.plist",
+      "config": {
+        "associatedDomains": ["applinks:zapapp.com"]
+      }
     },
     "android": {
       "adaptiveIcon": {

@@ -1,6 +1,6 @@
 import { AppText } from '@components/text/AppText'
 import { Atoms } from '@state/Atoms'
-import { Currency, currencies } from 'types/transaction'
+import { Currency, currencies, currenciesCrypto, currenciesFiat } from 'types/transaction'
 import { useAtomValue } from 'jotai'
 import React, { ReactElement } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
@@ -16,11 +16,23 @@ export default function AccountListBT({
   route,
   navigation,
 }: ScreenProps<'AccountListBT'>): ReactElement {
-  const balance = useAtomValue(Atoms.Balance)
-  const currencyList = Object.values(currencies)
-  const snapPoints = React.useMemo(() => [640, 640], [])
+  const {
+    title,
+    showAmount = false,
+    type = 'crypto',
+    excludeCurrency,
+    onCallback,
+  } = route.params
 
-  const { title, showAmount, excludeCurrency, onCallback } = route.params
+  const balance = useAtomValue(Atoms.Balance)
+  const currencyList =
+    type === 'crypto'
+      ? Object.values(currenciesCrypto)
+      : type === 'fiat'
+      ? Object.values(currenciesFiat)
+      : Object.values(currencies)
+
+  const snapPoints = React.useMemo(() => [540, 540], [])
 
   function onClose(item?: Currency): void {
     onCallback(item)

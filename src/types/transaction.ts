@@ -37,10 +37,11 @@ export type SendDetails = {
   currency: Currency
 }
 
-export type CurrencyCode = 'BTC' | 'ETH' | 'USDT' | 'USDC' | 'STRK'
+export type CurrencyCodeCrypto = 'BTC' | 'ETH' | 'USDT' | 'USDC' | 'STRK'
+export type CurrencyCodeFiat = 'EUR' | 'BRL'
+export type CurrencyCode = CurrencyCodeCrypto | CurrencyCodeFiat
 
-// This data is temporary and will be fetched from backend
-export const currencies: Record<CurrencyCode, Currency> = {
+export const currenciesCrypto: Record<CurrencyCodeCrypto, Currency> = {
   BTC: {
     name: 'Bitcoin',
     code: 'BTC',
@@ -73,94 +74,34 @@ export const currencies: Record<CurrencyCode, Currency> = {
   },
 }
 
-// Iterate through the currencies and make a list of code
-export const currencyCodes: CurrencyCode[] = Object.keys(currencies) as CurrencyCode[]
+export const currenciesFiat: Record<CurrencyCodeFiat, Currency> = {
+  EUR: {
+    name: 'Euro',
+    code: 'EUR',
+    symbol: 'https://assets.coingecko.com/coins/images/27922/large/euro.png',
+    address: '',
+  },
+  BRL: {
+    name: 'Brazillian Real',
+    code: 'BRL',
+    symbol: 'https://assets.coingecko.com/coins/images/27923/large/brazilian-real.png',
+    address: '',
+  },
+}
 
-// Sample Data
-// export const transactions: Transaction[] = [
-//   {
-//     id: '1',
-//     date: new Date('2022-01-01'),
-//     mode: 'send',
-//     toCurrency: currencies.BTC,
-//     sender: {
-//       id: '1',
-//       name: 'John Doe',
-//       email: 'john@gmail.com',
-//     },
-//     receiver: {
-//       id: '3',
-//       name: 'Mike Doe',
-//       email: 'mike@yahoo.com',
-//     },
-//     toAmount: 0.38,
-//   },
-//   {
-//     id: '2',
-//     date: new Date('2022-01-02'),
-//     mode: 'send',
-//     toCurrency: currencies.USDT,
-//     sender: {
-//       id: '1',
-//       name: 'John Doe',
-//       email: 'john@gmail.com',
-//     },
-//     receiver: {
-//       id: '4',
-//       name: 'Lovish Jain',
-//       email: 'lovish@gmail.com',
-//     },
-//     toAmount: 100,
-//   },
-//   {
-//     id: '3',
-//     date: new Date('2022-01-05'),
-//     mode: 'send',
-//     toCurrency: currencies.USDC,
-//     sender: {
-//       id: '1',
-//       name: 'John Doe',
-//       email: 'john@gmail.com',
-//     },
-//     receiver: {
-//       id: '6',
-//       name: 'Tom',
-//       email: 'tom@gmail.com',
-//     },
-//     toAmount: 120,
-//   },
-//   {
-//     id: '4',
-//     date: new Date('2022-01-06'),
-//     mode: 'send',
-//     toCurrency: currencies.ETH,
-//     sender: {
-//       id: '1',
-//       name: 'John Doe',
-//       email: 'john@gmail.com',
-//     },
-//     receiver: {
-//       id: '5',
-//       name: 'John Kim',
-//       email: 'john@gmail.com',
-//     },
-//     toAmount: 120,
-//   },
-//   {
-//     id: '5',
-//     date: new Date('2022-01-08'),
-//     mode: 'send',
-//     toCurrency: currencies.STRK,
-//     sender: {
-//       id: '1',
-//       name: 'John Doe',
-//       email: 'john@gmail.com',
-//     },
-//     receiver: {
-//       id: '6',
-//       name: 'Tom',
-//       email: 'tom@gmail.com',
-//     },
-//     toAmount: 800,
-//   },
-// ]
+export const currencies: Record<CurrencyCode, Currency> = {
+  ...currenciesCrypto,
+  ...currenciesFiat,
+}
+
+// Iterate through the currencies and make a list of code
+export const currencyCodesCrypto: CurrencyCodeCrypto[] = Object.keys(
+  currenciesCrypto,
+) as CurrencyCodeCrypto[]
+export const currencyCodesFiat: CurrencyCodeFiat[] = Object.keys(
+  currenciesFiat,
+) as CurrencyCodeFiat[]
+export const currencyCodes: CurrencyCode[] = [
+  ...currencyCodesCrypto,
+  ...currencyCodesFiat,
+]

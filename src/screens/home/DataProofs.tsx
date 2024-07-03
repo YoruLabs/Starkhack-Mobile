@@ -24,7 +24,7 @@ import { AppImage } from '@components/AppImage'
 import { Spacer } from '@components/Spacer'
 import IonIcons from '@expo/vector-icons/Ionicons'
 import { isEmpty } from '@utils/util'
-import { REDIRECT_URI, STRAVA_AUTH_URL } from '@utils/Credentials'
+import { STRAVA_REDIRECT_URI, STRAVA_AUTH_URL } from '@utils/Credentials'
 import * as RNWebBrowser from 'expo-web-browser'
 
 type ProofProp = {
@@ -37,7 +37,7 @@ function ListItem({ proofItem }: ProofProp): ReactElement {
   const onPress = async (): Promise<void> => {
     const result = (await RNWebBrowser.openAuthSessionAsync(
       STRAVA_AUTH_URL,
-      REDIRECT_URI,
+      STRAVA_REDIRECT_URI,
     )) as ProofResult
 
     if (result.type === 'cancel') return
