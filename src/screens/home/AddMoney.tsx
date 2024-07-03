@@ -42,7 +42,7 @@ export default function AddMoneyScreen(): ReactElement {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Add Money" />
+      <Header title="Add Money" backType="close" />
       <DismissKeyboardView style={styles.content}>
         <AppText size="small">Select Platform</AppText>
         <Spacer vertical={8} />

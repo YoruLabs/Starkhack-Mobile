@@ -4,7 +4,7 @@ import { AppText } from '@components/text/AppText'
 import { useNavigation } from '@react-navigation/native'
 import { Atoms } from '@state/Atoms'
 import { AppColors } from '@utils/Colors'
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import React, { ReactElement } from 'react'
 import { StyleSheet, View } from 'react-native'
 import AppButton from '@components/AppButton'
@@ -14,11 +14,12 @@ import { PressableOpacity } from 'react-native-pressable-opacity'
 import { SCREEN_HEIGHT } from '@utils/constants/Constants'
 import ViewFiller from '@components/ViewFiller'
 import TransactionList from '@screens/components/TransactionList'
+import { isEmpty } from '@utils/util'
 
 export default function HomeScreen(): ReactElement {
   const mainNavigation = useNavigation()
   const user = useAtomValue(Atoms.User)
-  const currentAccount = useAtomValue(Atoms.CurrentAccount)
+  const [currentAccount, setCurrentAccount] = useAtom(Atoms.CurrentAccount)
   const balance = useAtomValue(Atoms.Balance)
 
   const options = [
@@ -31,7 +32,10 @@ export default function HomeScreen(): ReactElement {
     },
     {
       icon: 'swap-horiz',
-      name: 'Exchange',
+      name: 'Swap',
+      onPress: () => {
+        mainNavigation.navigate('HomeStack', { screen: 'Exchange' })
+      },
     },
     {
       icon: 'call-made',
@@ -93,7 +97,15 @@ export default function HomeScreen(): ReactElement {
             <Spacer vertical={12} />
             <PressableOpacity
               style={styles.accountsButton}
-              onPress={() => mainNavigation.navigate('AccountListBT')}>
+              onPress={() =>
+                mainNavigation.navigate('AccountListBT', {
+                  title: 'Select Account',
+                  showAmount: true,
+                  onCallback: function (currency) {
+                    if (!isEmpty(currency)) setCurrentAccount(currency)
+                  },
+                })
+              }>
               <AppText size="small" color={AppColors.white}>
                 Accounts
               </AppText>
