@@ -5,7 +5,7 @@ import { Spacer } from '@components/Spacer'
 import { AppText } from '@components/text/AppText'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { AppColors } from '@utils/Colors'
-import React, { ReactElement, useEffect } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import GoogleIcon from '@assets/icons/google'
@@ -19,6 +19,8 @@ import { createKeyPair, fetchPublicKey } from '../../../modules/expo-enclave'
 export default function WelcomeScreen(): ReactElement {
   const loginUser = useSetAtom(login)
   const setAccountAddress = useSetAtom(Atoms.AccountAddress)
+  // Create a isLoading useState to handle the loading state of the button
+  let [isLoading, setLoading] = useState(false)
 
   const mainNavigation = useNavigation()
 
@@ -30,11 +32,13 @@ export default function WelcomeScreen(): ReactElement {
     try {
       GoogleSignin.hasPlayServices()
       const currentUser = await GoogleSignin.signIn()
-      const tokens = await GoogleSignin.getTokens();
+      const tokens = await GoogleSignin.getTokens()
 
-      console.log('Tokens - ', tokens);
+      setLoading(true)
 
-      const accessToken = tokens.accessToken as string;
+      console.log('Tokens - ', tokens)
+
+      const accessToken = tokens.accessToken as string
 
       console.log('Tokens - ', tokens)
       console.log('UserInfo - ', currentUser)
@@ -65,7 +69,7 @@ export default function WelcomeScreen(): ReactElement {
         user.name || '',
         user.email,
         publicKeyHex,
-        accessToken
+        accessToken,
       )
       console.log('Server Response', signupOrSigninResponse)
 
@@ -73,10 +77,14 @@ export default function WelcomeScreen(): ReactElement {
       if (signupOrSigninResponse) {
         const accountAddress = signupOrSigninResponse.blockchain_address
 
-        console.log("Server Response", signupOrSigninResponse)
+        console.log('Server Response', signupOrSigninResponse)
 
-
-        await loginAndUpdateAccountAddress(user, token, accountAddress, signupOrSigninResponse.token)
+        await loginAndUpdateAccountAddress(
+          user,
+          token,
+          accountAddress,
+          signupOrSigninResponse.token,
+        )
 
         // Navigate to Home inside HomeStack
         mainNavigation.reset({
@@ -88,10 +96,12 @@ export default function WelcomeScreen(): ReactElement {
             },
           ],
         })
+        setLoading(false)
       } else {
         console.log('Account address not found. Signin aborted.')
         // Handle the case when there is no account address
         // You can show an error message or take appropriate action
+        setLoading(false)
       }
     } catch (e) {
       console.log('Error - ', e)
@@ -144,6 +154,7 @@ export default function WelcomeScreen(): ReactElement {
             borderRadius={24}
             labelColor={AppColors.white}
             onPress={signIn}
+            isLoading={isLoading}
           />
         </View>
       </View>

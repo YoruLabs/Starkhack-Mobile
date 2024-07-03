@@ -26,3 +26,13 @@ export const SAFE_TOP = IS_IOS ? StaticSafeAreaInsets.safeAreaInsetsTop : 0
 export const SAFE_LEFT = StaticSafeAreaInsets.safeAreaInsetsLeft
 export const SAFE_RIGHT = StaticSafeAreaInsets.safeAreaInsetsRight
 export const SAFE_BOTTOM = IS_IOS ? StaticSafeAreaInsets.safeAreaInsetsBottom : 0
+
+export const IS_TESTNET = true
+
+export const ERC20_ADDRESS: string = IS_TESTNET
+  ? '0x0592e877b1bd580c408849a29f0469ea8efa872f6accd2689048210ac5697a3f'
+  : '0x0592e877b1bd580c408849a29f0469ea8efa872f6accd2689048210ac5697a3f'
+
+export const RPC_ENDPOINT = IS_TESTNET
+  ? 'https://starknet-sepolia.public.blastapi.io/rpc/v0_7'
+  : 'https://0e01-189-120-76-5.ngrok-free.app'

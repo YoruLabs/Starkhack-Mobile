@@ -1,4 +1,4 @@
-import { sign, PromptCopy, fetchPublicKey } from '../../../modules/expo-enclave'
+import { sign, PromptCopy, fetchPublicKey } from '../../modules/expo-enclave'
 
 import {
   Call,
@@ -22,7 +22,7 @@ import {
   cairo,
 } from 'starknet'
 import { Buffer } from 'buffer'
-import { derPublicKeyToXandY, parseSignature } from './utils'
+import { derPublicKeyToXandY, parseSignature } from '../utils/crypto/utils'
 
 // TEST VALUES
 const promptCopy: PromptCopy = {

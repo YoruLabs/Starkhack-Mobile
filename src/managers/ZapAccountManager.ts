@@ -1,7 +1,7 @@
 import { Account, CallData, Contract, RpcProvider, ec, hash, cairo } from 'starknet'
 import zapAccountAbi from '../utils/abis/ZapAccount.json'
 import { derPublicKeyToXandY } from '../utils/crypto/utils'
-import { RPC_ENDPOINT } from '../utils/constants/SignerConstants'
+import { RPC_ENDPOINT } from '../utils/constants/Constants'
 
 class ZapAccountManager {
   private provider: RpcProvider
