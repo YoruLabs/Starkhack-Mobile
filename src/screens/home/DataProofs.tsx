@@ -13,7 +13,7 @@ import { AppText } from '@components/text/AppText'
 import {
   DataProofItem,
   ProofCategory,
-  ProofResult,
+  RedirectResult,
   proofCategories,
   proofList,
 } from 'types/data-proof'
@@ -38,7 +38,7 @@ function ListItem({ proofItem }: ProofProp): ReactElement {
     const result = (await RNWebBrowser.openAuthSessionAsync(
       STRAVA_AUTH_URL,
       STRAVA_REDIRECT_URI,
-    )) as ProofResult
+    )) as RedirectResult
 
     if (result.type === 'cancel') return
 

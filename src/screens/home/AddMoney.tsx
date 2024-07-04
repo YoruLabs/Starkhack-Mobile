@@ -9,8 +9,8 @@ import { platforms } from 'types/money'
 import { currenciesFiat } from 'types/transaction'
 import { AppColors } from '@utils/Colors'
 import Strings from '@utils/Strings'
-import React, { ReactElement, useEffect, useState } from 'react'
-import { Linking, StyleSheet, View } from 'react-native'
+import React, { ReactElement, useState } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import SegmentedPicker, { PickerOptions } from 'react-native-segmented-picker'
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -20,14 +20,8 @@ import SelectCurrency from '@screens/components/SelectCurrency'
 import { useNavigation } from '@react-navigation/native'
 import { isEmpty } from '@utils/util'
 import * as RNWebBrowser from 'expo-web-browser'
-import {
-  MONERIUM_AUTH_URL,
-  MONERIUM_CLIENT_ID,
-  MONERIUM_CODE_CHALLENGE,
-  MONERIUM_REDIRECT_URI,
-} from '@utils/Credentials'
-import { ProofResult } from '@types/data-proof'
-import axios from 'axios'
+import { MONERIUM_AUTH_URL, MONERIUM_REDIRECT_URI } from '@utils/Credentials'
+import { RedirectResult } from 'types/data-proof'
 
 export default function AddMoneyScreen(): ReactElement {
   const [platform, setPlatform] = React.useState(platforms.Revolut)
@@ -71,13 +65,10 @@ export default function AddMoneyScreen(): ReactElement {
       return
     }
 
-    Linking.openURL('https://zapapp.com/callback?code=123&type=success')
-    return
-
     const result = (await RNWebBrowser.openAuthSessionAsync(
       MONERIUM_AUTH_URL,
       MONERIUM_REDIRECT_URI,
-    )) as ProofResult
+    )) as RedirectResult
 
     console.log(result)
 
@@ -85,42 +76,12 @@ export default function AddMoneyScreen(): ReactElement {
 
     const { url } = result
     // Extract authorization code
-    const authCode = url.substring(
+    const code = url.substring(
       url.indexOf('code=') + 5,
       url.indexOf('&', url.indexOf('code=')),
     )
-    setAuthCode(authCode)
+    setAuthCode(code)
   }
-
-  useEffect(() => {
-    const handleRedirect = (event: { url: string }): void => {
-      if (event.url !== '') {
-        const url = event.url
-        console.log('URL:',url)
-        const [, queryString] = url.match(/\?(.*)/)
-        const params = new URLSearchParams(queryString)
-        const code = params.get('code')
-        const type = params.get('type')
-
-        // Handle code and type as needed
-        console.log('Received code:', code)
-        console.log('Received type:', type)
-
-        // Navigate or perform actions based on code and type
-        // For example, navigate to a specific screen in your app
-        // You can use navigation libraries like React Navigation for this
-
-        // For demonstration, I'm just logging the values
-      }
-    }
-
-    Linking.addEventListener('url', handleRedirect)
-
-    // Clean up the event listener
-    return () => {
-      Linking.removeAllListeners('url')
-    }
-  }, [])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -165,7 +126,8 @@ export default function AddMoneyScreen(): ReactElement {
         <Spacer vertical={44} />
         <View style={styles.footer}>
           <AppButton label="Add Money" onPress={addMoneyPress} />
-          <AppText>{authCode}</AppText>
+          <Spacer vertical={16} />
+          {!isEmpty(authCode) && <AppText>Auth code - {authCode}</AppText>}
         </View>
       </DismissKeyboardView>
       <SegmentedPicker
