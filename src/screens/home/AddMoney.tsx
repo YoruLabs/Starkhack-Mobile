@@ -65,6 +65,8 @@ export default function AddMoneyScreen(): ReactElement {
       return
     }
 
+    // Open web browser to get monerium auth code
+    // Run python_scripts/redirection.py before clicking add money button
     const result = (await RNWebBrowser.openAuthSessionAsync(
       MONERIUM_AUTH_URL,
       MONERIUM_REDIRECT_URI,

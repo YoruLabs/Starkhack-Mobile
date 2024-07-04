@@ -78,13 +78,13 @@ export const currenciesFiat: Record<CurrencyCodeFiat, Currency> = {
   EUR: {
     name: 'Euro',
     code: 'EUR',
-    symbol: 'https://assets.coingecko.com/coins/images/27922/large/euro.png',
+    symbol: 'https://cdn-icons-png.flaticon.com/512/16168/16168005.png',
     address: '',
   },
   BRL: {
     name: 'Brazillian Real',
     code: 'BRL',
-    symbol: 'https://assets.coingecko.com/coins/images/27923/large/brazilian-real.png',
+    symbol: 'https://cdn-icons-png.flaticon.com/512/14563/14563644.png',
     address: '',
   },
 }
