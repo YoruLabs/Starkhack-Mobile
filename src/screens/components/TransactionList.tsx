@@ -1,7 +1,7 @@
 import { AppColors } from '@utils/Colors'
 import React, { useEffect } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
-import { Transaction, currencies } from 'types/transaction'
+import { Transaction, currenciesCrypto } from 'types/transaction'
 import { AppText } from '@components/text/AppText'
 import { Card } from '@components/Card'
 import { EmptyList } from '@components/EmptyList'
@@ -78,7 +78,7 @@ type TransactionListProps = {
 export default function TransactionList({ limit }: TransactionListProps): JSX.Element {
   const user = useAtomValue(Atoms.User)
 
-  const { data, isPending } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ['transaction-list'],
     queryFn: async () => {
       const publicKeyHex = await fetchPublicKey(user?.email ?? '')
@@ -94,15 +94,15 @@ export default function TransactionList({ limit }: TransactionListProps): JSX.El
       transaction.type = 'send'
       transaction.mode = 'send'
       transaction.toCurrency =
-        Object.values(currencies).find(
+        Object.values(currenciesCrypto).find(
           (currency) => currency.address === transaction.tokenAddress,
-        ) ?? currencies.BTC
+        ) ?? currenciesCrypto.BTC
     })
   }, [data])
 
   return (
     <>
-      {isPending ? <Loader /> : null}
+      {isFetching ? <Loader /> : null}
       <FlatList
         data={limit === undefined ? data : data?.slice(0, limit)}
         nestedScrollEnabled={true}

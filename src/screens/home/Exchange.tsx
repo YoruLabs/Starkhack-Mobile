@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { DismissKeyboardView } from '@components/DismissKeyboardView'
 import { Spacer } from '@components/Spacer'
 import { AppTextInput } from '@components/text/AppTextInput'
-import { Currency, currencies } from 'types/transaction'
+import { Currency, currenciesCrypto } from 'types/transaction'
 import { useToast } from '@components/Toast'
 import AppButton from '@components/AppButton'
 import IonIcons from '@expo/vector-icons/Ionicons'
@@ -19,7 +19,7 @@ import Strings from '@utils/Strings'
 import { isEmpty } from '@utils/util'
 
 export default function ExchangeScreen(): ReactElement {
-  const currencyList = currencies
+  const currencyList = currenciesCrypto
   const [fromCurrency, setFromCurrency] = useState<Currency>(currencyList.BTC)
   const [fromAmount, setFromAmount] = useState('')
   const [toCurrency, setToCurrency] = useState<Currency>(currencyList.ETH)

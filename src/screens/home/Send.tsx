@@ -7,7 +7,7 @@ import { AppTextInput } from '@components/text/AppTextInput'
 import { Spacer } from '@components/Spacer'
 import { AppText } from '@components/text/AppText'
 import DropdownPicker from '@components/DropdownPicker'
-import { Currency, currencies, currencyCodes } from 'types/transaction'
+import { Currency, currenciesCrypto, currencyCodesCrypto } from 'types/transaction'
 import AppButton from '@components/AppButton'
 import { ScreenProps } from '@navigation/Router'
 import { DismissKeyboardView } from '@components/DismissKeyboardView'
@@ -18,7 +18,7 @@ import Strings from '@utils/Strings'
 export default function SendScreen({ navigation }: ScreenProps<'Send'>): ReactElement {
   const [email, setEmail] = useState('')
   const [amount, setAmount] = useState('')
-  const currencyList = currencies
+  const currencyList = currenciesCrypto
   const [selectedCurrency, setSelectedCurrency] = useState<Currency>(currencyList.BTC)
   const { addToast } = useToast()
 
@@ -69,12 +69,12 @@ export default function SendScreen({ navigation }: ScreenProps<'Send'>): ReactEl
         <View style={styles.amountContainer}>
           <DropdownPicker
             dropdownWidth={80}
-            options={currencyCodes}
+            options={currencyCodesCrypto}
             onToggle={(index) => {
               setSelectedCurrency(
-                Object.values(currencies).find(
-                  (currency) => currency.code === currencyCodes[index],
-                ) ?? currencies.BTC,
+                Object.values(currenciesCrypto).find(
+                  (currency) => currency.code === currencyCodesCrypto[index],
+                ) ?? currenciesCrypto.BTC,
               )
             }}
           />

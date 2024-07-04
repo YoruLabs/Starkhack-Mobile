@@ -4,7 +4,7 @@ import type { AuthTokens, User } from 'types/user'
 
 import { storageForBoolean, storageForObject, storageForString } from './Storage'
 import { isEmpty } from '@utils/util'
-import { Balance, currencies, Currency } from 'types/transaction'
+import { Balance, currenciesCrypto, Currency } from 'types/transaction'
 import { setHeaders } from '@config/ZapAPI'
 
 export const Atoms = {
@@ -34,7 +34,7 @@ export const Atoms = {
 
   CurrentAccount: atomWithStorage<Currency>(
     'currentAccount',
-    currencies.USDT,
+    currenciesCrypto.USDT,
     // @ts-ignore
     storageForObject,
   ),

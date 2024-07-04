@@ -21,7 +21,7 @@ export const proofList: DataProofItem[] = [
   },
 ]
 
-export type ProofResult = {
+export type RedirectResult = {
   type: 'success' | 'cancel'
   url: string
 }

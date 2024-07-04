@@ -37,7 +37,8 @@ export type HomeStack = {
 export type BottomSheetStack = {
   AccountListBT: {
     title: string
-    showAmount: boolean
+    showAmount?: boolean
+    type?: 'crypto' | 'fiat' | 'all'
     excludeCurrency?: Currency
     onCallback: (currency?: Currency) => void
   }

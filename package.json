@@ -6,7 +6,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "lint:ts": "tsc --noEmit",
     "prebuild": "npx expo prebuild",
-    "start": "npx expo start",
+    "start": "expo start --dev-client",
     "android": "npx expo run:android",
     "ios": "npx expo run:ios",
     "iosd": "npx expo run:ios --device"
@@ -29,7 +29,7 @@
     "jotai": "^2.8.2",
     "moment": "^2.30.1",
     "react": "18.2.0",
-    "react-native": "0.74.1",
+    "react-native": "0.74.3",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-haptic-feedback": "^2.2.0",
     "react-native-mmkv": "^2.12.2",
