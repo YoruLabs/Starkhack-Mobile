@@ -1,7 +1,7 @@
 import { Account, CallData, Contract, RpcProvider, ec, hash, cairo } from 'starknet'
 import zapAccountAbi from '../utils/abis/ZapAccount.json'
 import { derPublicKeyToXandY } from '../utils/crypto/utils'
-import { RPC_ENDPOINT } from '../utils/constants/SignerConstants'
+import { RPC_ENDPOINT, ZAP_ACCOUNT_CLASS_HASH } from '../utils/constants/Constants'
 
 class ZapAccountManager {
   private provider: RpcProvider
@@ -14,8 +14,7 @@ class ZapAccountManager {
       nodeUrl: RPC_ENDPOINT,
     })
     this.privateKey = privateKey
-    this.ZAPaccountClassHash =
-      '0x06bc1432bbc860dc2f930290c204495e1e76af7b1ce9d1d61d94d01479fbaffa'
+    this.ZAPaccountClassHash = ZAP_ACCOUNT_CLASS_HASH
   }
 
   public async deployAndInitialize(enclaveDerPublicKey: string): Promise<{

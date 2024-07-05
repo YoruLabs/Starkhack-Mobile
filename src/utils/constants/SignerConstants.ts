@@ -6,10 +6,6 @@ export const PROMPT_COPY: PromptCopy = {
   usageMessage: 'Please authenticate to continue.',
   androidTitle: 'Authentication Required',
 }
-export const ERC20_ADDRESS: string =
-  '0x0592e877b1bd580c408849a29f0469ea8efa872f6accd2689048210ac5697a3f'
-
-export const RPC_ENDPOINT = 'https://0e01-189-120-76-5.ngrok-free.app'
 
 export const ABI = [
   {
