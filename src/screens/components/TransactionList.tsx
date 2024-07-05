@@ -47,7 +47,7 @@ function ListItem({ transaction }: TransactionProps): JSX.Element {
         <AppText size="small" type="bold">
           {transaction.mode === 'exchange'
             ? transaction.fromCurrency?.code + ' -> ' + transaction?.toCurrency?.code
-            : transaction.receiver.name}
+            : transaction?.receiver?.name}
         </AppText>
         <Spacer vertical={2} />
         <AppText size="very-small" color={AppColors.darkGrey}>
@@ -86,6 +86,8 @@ export default function TransactionList({ limit }: TransactionListProps): JSX.El
     },
     enabled: !isEmpty(user),
   })
+
+  console.log('🪐', 'TransactionList', data)
 
   useEffect(() => {
     // TODO: Update this code later
