@@ -46,7 +46,7 @@ export const currenciesCrypto: Record<CurrencyCodeCrypto, Currency> = {
     name: 'Bitcoin',
     code: 'BTC',
     symbol: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png',
-    address: '0x7e219e3a16ea835ce0ea2c92963eab1234ab954ea3f4052ccb46896d5e41458',
+    address: '0x07e219e3a16ea835ce0ea2c92963eab1234ab954ea3f4052ccb46896d5e41458',
   },
   ETH: {
     name: 'Ethereum',
@@ -64,13 +64,13 @@ export const currenciesCrypto: Record<CurrencyCodeCrypto, Currency> = {
     name: 'USD Coin',
     code: 'USDC',
     symbol: 'https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png',
-    address: '0x3132835d7641b22315a468675af1606bb447c940985003365d81ae31c7e2142',
+    address: '0x03132835d7641b22315a468675af1606bb447c940985003365d81ae31c7e2142',
   },
   STRK: {
     name: 'Starknet',
     code: 'STRK',
     symbol: 'https://assets.coingecko.com/coins/images/26433/large/starknet.png',
-    address: '0x15f6e43f328943b0c5eb2b34f44a0ca6859ee6ff244b12619f2b3b23d2167f6',
+    address: '0x015f6e43f328943b0c5eb2b34f44a0ca6859ee6ff244b12619f2b3b23d2167f6',
   },
   EUR: {
     name: 'Euro',

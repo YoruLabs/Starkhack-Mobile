@@ -105,7 +105,6 @@ export default function TransactionList({ limit }: TransactionListProps): JSX.El
             (currency) => currency.address === transaction.tokenAddress,
           ) ?? currenciesCrypto.BTC
 
-        console.log('🪐', 'Transaction', transaction)
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

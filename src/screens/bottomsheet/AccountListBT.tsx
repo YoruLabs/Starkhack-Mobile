@@ -1,8 +1,8 @@
 import { AppText } from '@components/text/AppText'
-import { Atoms } from '@state/Atoms'
-import { Currency, currencies, currenciesCrypto, currenciesFiat } from 'types/transaction'
-import { useAtomValue } from 'jotai'
-import React, { ReactElement } from 'react'
+import { Atoms, updateBalance } from '@state/Atoms'
+import { Balance, Currency, currencies, currenciesCrypto, currenciesFiat } from 'types/transaction'
+import { useAtomValue, useSetAtom } from 'jotai'
+import React, { ReactElement, useEffect } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { BottomSheetContainer } from '@components/BottomSheetContainer'
 import Header from '@components/Header'
@@ -24,7 +24,13 @@ export default function AccountListBT({
     onCallback,
   } = route.params
 
-  const balance = useAtomValue(Atoms.Balance)
+  const balances: Balance[] = [{ currencyCode: 'EUR', amount: 0}, { currencyCode: 'BTC', amount: 0}, { currencyCode: 'ETH', amount: 0}, { currencyCode: 'USDT', amount: 0}, { currencyCode: 'USDC', amount: 0}, { currencyCode: 'STRK', amount: 0}]
+
+
+  const balance = useAtomValue(Atoms.Balance);
+  const AccountAddress = useAtomValue(Atoms.AccountAddress);
+  const user = useAtomValue(Atoms.User);
+  const setBalance = useSetAtom(updateBalance);
   const currencyList =
     type === 'crypto'
       ? Object.values(currenciesCrypto)
@@ -38,6 +44,11 @@ export default function AccountListBT({
     onCallback(item)
     navigation.goBack()
   }
+
+  useEffect(() => {
+    setBalance(balances, AccountAddress, user);
+  }, [balance, user, AccountAddress]);
+
 
   return (
     <BottomSheetContainer

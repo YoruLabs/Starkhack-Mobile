@@ -4,8 +4,9 @@ import type { AuthTokens, User } from 'types/user'
 
 import { storageForBoolean, storageForObject, storageForString } from './Storage'
 import { isEmpty } from '@utils/util'
-import { Balance, currenciesCrypto, Currency } from 'types/transaction'
+import { Balance, currenciesCrypto, Currency, CurrencyCodeCrypto } from 'types/transaction'
 import { setHeaders } from '@config/ZapAPI'
+import ERC20Manager from 'managers/ERC20Manager'
 
 export const Atoms = {
   LoggedIn: atomWithStorage<boolean>('isLoggedIn', false, storageForBoolean),
@@ -27,7 +28,7 @@ export const Atoms = {
 
   Balance: atomWithStorage<Balance[]>(
     'balance',
-    [],
+    [{ currencyCode: 'EUR', amount: 0}, { currencyCode: 'BTC', amount: 0}, { currencyCode: 'ETH', amount: 0}, { currencyCode: 'USDT', amount: 0}, { currencyCode: 'USDC', amount: 0}, { currencyCode: 'STRK', amount: 0}],
     // @ts-ignore
     storageForObject,
   ),
@@ -71,4 +72,28 @@ export const logout = atom(null, (_get, set) => {
   set(Atoms.AccountAddress, RESET)
   set(Atoms.Balance, RESET)
   set(Atoms.CurrentAccount, RESET)
+})
+
+
+export const updateBalance = atom(null, async (_get, set, balances: Balance[], accountAddress: string, user: User | null) => {
+  console.log('🪐', 'Update Balance', balances, accountAddress, user);
+  if (isEmpty(user)) return;
+  const newBalance: Promise<Balance[]> = Promise.all(
+    balances.map(async (b) => {
+      const code = b.currencyCode as CurrencyCodeCrypto;
+
+      const tokenAddress = currenciesCrypto[code].address;
+
+      const erc20Manager = new ERC20Manager(accountAddress, tokenAddress, user.email);
+
+      const newBalance = await erc20Manager.getBalance(accountAddress);
+
+      return {
+        currencyCode: code,
+        amount: Number((Number(newBalance.balance)/(10**18)).toFixed(6)),
+      };
+    }),
+  );
+
+  set(Atoms.Balance, newBalance);
 })
