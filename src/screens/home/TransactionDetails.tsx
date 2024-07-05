@@ -35,9 +35,7 @@ export default function TransactionDetailsScreen({
               Date
             </AppText>
             <ViewFiller />
-            <AppText size="small">
-              {getFormattedDate(new Date(transaction.date))}
-            </AppText>
+            <AppText size="small">{getFormattedDate(new Date(transaction.date))}</AppText>
           </View>
         </Card>
 

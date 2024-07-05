@@ -1,9 +1,9 @@
 import { User } from './user'
 
 export type Transaction = {
-  id: string
+  id: number
   date: number // Timestamp
-  type?: TransactionType // Determined locally based on sender and receiver ids
+  type?: TransactionType // Determined locally based on sender and receiver email
   mode: TransactionMode // TODO: Backend
   fromAddress?: string
   toAddress?: string
@@ -11,10 +11,31 @@ export type Transaction = {
   sender: User // TODO: Backend
   receiver: User // TODO: Backend
   fromCurrency?: Currency // undefined for 'send' transactions
-  toCurrency: Currency // TODO: Backend
+  toCurrency?: Currency // TODO: Backend
   fromAmount?: number // undefined for 'send' transactions
   toAmount: number
 }
+
+export const transactions: Transaction[] = [
+  {
+    date: 1720126205,
+    fromAddress: '0x0000000000000000000000000000000000000000000000000000000000',
+    id: 32849565,
+    mode: 'send',
+    receiver: {
+      email: 'whale.finance.blockchain@gmail.com',
+      name: 'Whale Finance',
+    },
+    sender: {
+      email: 'whale.finance.blockchain@gmail.com',
+      id: '0x0000000000000000000000000000000000000000000000000000000000',
+      name: 'Whale Finance',
+    },
+    toAddress: '0x3fa7118690969ed49db388a3a2a290e7e27885ccfc7c9c4fe1d24eb6939b9f1',
+    tokenAddress: '0x02cea124210d515b81d470a4a4b385f0f4a516172ecc726e02b578b2378c2408',
+    toAmount: 100,
+  },
+]
 
 export type TransactionType = 'send' | 'receive'
 export type TransactionMode = 'exchange' | 'send'

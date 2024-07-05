@@ -1,5 +1,5 @@
 export type User = {
-  id: string
+  id?: string
   email: string
   name?: string
   photo?: string
@@ -25,4 +25,3 @@ export type AuthResponse = {
 export type AddressResponse = {
   blockchain_address: string
 }
-
