@@ -9,7 +9,8 @@ import {
   sign,
   verify,
 } from '../../../modules/expo-enclave'
-import { HEX_MESSAGE, PROMPT_COPY, ERC20_ADDRESS } from '@utils/constants/SignerConstants'
+import { HEX_MESSAGE, PROMPT_COPY } from '@utils/constants/SignerConstants'
+import { USDC_ADDRESS } from '@utils/constants/Constants'
 import Header from '@components/Header'
 import AppButton from '@components/AppButton'
 import { Spacer } from '@components/Spacer'
@@ -26,7 +27,7 @@ export default function ExperimentScreen(): ReactElement {
   const accountAddress = useAtomValue(Atoms.AccountAddress)
 
   const accountEmail = String(useAtomValue(Atoms.User)?.email)
-  const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS, accountEmail)
+  const erc20Manager = new ERC20Manager(accountAddress, USDC_ADDRESS, accountEmail)
 
   async function handleCreateKeyPair(): Promise<void> {
     const publicKey = await createKeyPair(accountEmail)

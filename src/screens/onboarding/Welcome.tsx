@@ -45,6 +45,7 @@ export default function WelcomeScreen(): ReactElement {
 
     // Get public key
     const publicKeyHex = await getPublicKey(user.email)
+    console.log('🪐', 'publicKeyHex', publicKeyHex)
 
     // Authenticate user
     const authArgs: AuthArgs = {
@@ -59,6 +60,7 @@ export default function WelcomeScreen(): ReactElement {
       showError({ message: Strings.USER_VERIFICATION_FAILED })
       return
     }
+    console.log('🪐', 'Authenticating user', authArgs)
 
     mutateAuth(authArgs, {
       onSuccess: (data) => {

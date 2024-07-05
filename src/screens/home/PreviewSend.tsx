@@ -11,7 +11,7 @@ import Strings from '@utils/Strings'
 import { Spacer } from '@components/Spacer'
 import { Card } from '@components/Card'
 import ViewFiller from '@components/ViewFiller'
-import { ERC20_ADDRESS } from '@utils/constants/SignerConstants'
+import { USDC_ADDRESS } from '@utils/constants/Constants'
 import { useAtomValue } from 'jotai'
 import { Atoms } from '@state/Atoms'
 import ERC20Manager from 'managers/ERC20Manager'
@@ -31,7 +31,7 @@ export default function PreviewSendScreen({
 
   const [isLoading, setLoading] = useState(false)
 
-  const erc20Manager = new ERC20Manager(accountAddress, ERC20_ADDRESS, accountEmail)
+  const erc20Manager = new ERC20Manager(accountAddress, USDC_ADDRESS, accountEmail)
 
   const { mutate: mutateAddress, isPending } = useMutation({
     mutationKey: ['getAddress'],
