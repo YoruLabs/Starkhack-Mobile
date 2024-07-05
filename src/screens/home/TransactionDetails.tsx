@@ -26,7 +26,7 @@ export default function TransactionDetailsScreen({
             </AppText>
             <ViewFiller />
             <AppText size="small" type="bold">
-              {transaction.receiver.email}
+              {transaction?.receiver?.email}
             </AppText>
           </View>
           <Spacer vertical={12} />
