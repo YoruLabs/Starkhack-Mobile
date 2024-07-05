@@ -13,29 +13,8 @@ export type Transaction = {
   fromCurrency?: Currency // undefined for 'send' transactions
   toCurrency?: Currency // TODO: Backend
   fromAmount?: number // undefined for 'send' transactions
-  toAmount: number
+  toAmount: string
 }
-
-export const transactions: Transaction[] = [
-  {
-    date: 1720126205,
-    fromAddress: '0x0000000000000000000000000000000000000000000000000000000000',
-    id: 32849565,
-    mode: 'send',
-    receiver: {
-      email: 'whale.finance.blockchain@gmail.com',
-      name: 'Whale Finance',
-    },
-    sender: {
-      email: 'whale.finance.blockchain@gmail.com',
-      id: '0x0000000000000000000000000000000000000000000000000000000000',
-      name: 'Whale Finance',
-    },
-    toAddress: '0x3fa7118690969ed49db388a3a2a290e7e27885ccfc7c9c4fe1d24eb6939b9f1',
-    tokenAddress: '0x02cea124210d515b81d470a4a4b385f0f4a516172ecc726e02b578b2378c2408',
-    toAmount: 100,
-  },
-]
 
 export type TransactionType = 'send' | 'receive'
 export type TransactionMode = 'exchange' | 'send'
@@ -132,3 +111,45 @@ export const currencyCodes: CurrencyCode[] = [
   ...currencyCodesCrypto,
   ...currencyCodesFiat,
 ]
+
+// For Testing
+// export const transactions: Transaction[] = [
+//   {
+//     id: 968919,
+//     date: 1720126205,
+//     fromAddress: '0x0000000000000000000000000000000000000000000000000000000000',
+//     toAddress: '0x3fa7118690969ed49db388a3a2a290e7e27885ccfc7c9c4fe1d24eb6939b9f1',
+//     tokenAddress: '0x02cea124210d515b81d470a4a4b385f0f4a516172ecc726e02b578b2378c2408',
+//     mode: 'send',
+//     sender: {
+//       id: '0x0000000000000000000000000000000000000000000000000000000000',
+//       name: '0x0000000000000000000000000000000000000000000000000000000000',
+//       email: '0x0000000000000000000000000000000000000000000000000000000000',
+//     },
+//     receiver: {
+//       id: 4,
+//       name: 'Whale Finance',
+//       email: 'whale.finance.blockchain@gmail.com',
+//     },
+//     toAmount: '0.0000000000000001',
+//   },
+//   {
+//     id: 968920,
+//     date: 1720126205,
+//     fromAddress: '0x3fa7118690969ed49db388a3a2a290e7e27885ccfc7c9c4fe1d24eb6939b9f1',
+//     toAddress: '0x00116e06db86369754558258ddfc10570c00612d5d43facdbf1d9a3556494f6b',
+//     tokenAddress: '0x02cea124210d515b81d470a4a4b385f0f4a516172ecc726e02b578b2378c2408',
+//     mode: 'send',
+//     sender: {
+//       id: 4,
+//       name: 'Whale Finance',
+//       email: 'whale.finance.blockchain@gmail.com',
+//     },
+//     receiver: {
+//       id: 3,
+//       name: 'Whale Finance 2',
+//       email: 'whale.finance.blockchain2@gmail.com',
+//     },
+//     toAmount: '50',
+//   },
+// ]
