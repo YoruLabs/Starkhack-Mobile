@@ -1,7 +1,7 @@
 import { AppColors } from '@utils/Colors'
 import React, { useEffect } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
-import { Transaction, currenciesCrypto, transactions } from 'types/transaction'
+import { Transaction, currenciesCrypto } from 'types/transaction'
 import { AppText } from '@components/text/AppText'
 import { Card } from '@components/Card'
 import { EmptyList } from '@components/EmptyList'
@@ -16,6 +16,7 @@ import { Atoms } from '@state/Atoms'
 import { isEmpty } from '@utils/util'
 import { fetchPublicKey } from '../../../modules/expo-enclave'
 import { Loader } from '@components/Loader'
+import { SCREEN_WIDTH } from '@utils/constants/Constants'
 
 type TransactionProps = {
   transaction: Transaction
@@ -32,6 +33,16 @@ function ListItem({ transaction }: TransactionProps): JSX.Element {
     })
   }
 
+  const senderReceiver =
+    transaction.mode === 'exchange'
+      ? transaction.fromCurrency?.code + ' -> ' + transaction.toCurrency?.code
+      : transaction.type === 'send'
+      ? transaction.receiver.name
+      : transaction.sender.name?.startsWith('0x0000000000000000')
+      ? 'Add Money'
+      : transaction.sender.name
+  const date = new Date(transaction.date * 1000).getTime()
+
   return (
     <Card
       flexDirection="row"
@@ -40,31 +51,28 @@ function ListItem({ transaction }: TransactionProps): JSX.Element {
       customStyle={styles.cardContainer}
       onPress={navigateToTransactionDetails}>
       <View style={styles.transactionImage}>
-        <AppImage source={transaction?.toCurrency?.symbol} />
+        <AppImage source={transaction.toCurrency?.symbol} />
       </View>
       <Spacer horizontal={12} />
       <View>
-        <AppText size="small" type="bold">
-          {transaction.mode === 'exchange'
-            ? transaction.fromCurrency?.code + ' -> ' + transaction?.toCurrency?.code
-            : transaction?.receiver?.name}
+        <AppText
+          size="small"
+          type="bold"
+          ellipsizeMode="tail"
+          numberOfLines={1}
+          style={{ maxWidth: SCREEN_WIDTH * 0.4 }}>
+          {senderReceiver}
         </AppText>
         <Spacer vertical={2} />
         <AppText size="very-small" color={AppColors.darkGrey}>
-          {getFormattedDate(new Date(transaction.date))}
+          {getFormattedDate(new Date(date))}
         </AppText>
       </View>
       <Spacer horizontal={12} />
       <View style={styles.amountContainer}>
-        <AppText size="small" type="medium">
-          {transaction.mode === 'exchange' ? '+' : '-'} {transaction?.toCurrency?.code}{' '}
+        <AppText size="small" type="medium" ellipsizeMode="tail" numberOfLines={1}>
+          {transaction.type === 'send' ? '-' : '+'} {transaction.toCurrency?.code}{' '}
           {transaction.toAmount}
-        </AppText>
-        <Spacer vertical={2} />
-        <AppText size="very-small" color={AppColors.darkGrey}>
-          {transaction.mode === 'exchange'
-            ? '- ' + transaction.fromCurrency?.code + ' ' + transaction.fromAmount
-            : ''}
         </AppText>
       </View>
     </Card>
@@ -87,23 +95,20 @@ export default function TransactionList({ limit }: TransactionListProps): JSX.El
     enabled: !isEmpty(user),
   })
 
-  //const data: Transaction[] = transactions
-  //const isFetching = false
-
-
-  console.log('🪐', 'TransactionList', data)
-
   useEffect(() => {
     // TODO: Update this code later
-    data?.map((transaction) => {
-      transaction.date = new Date(transaction.date * 1000).getTime()
-      transaction.toCurrency =
-        Object.values(currenciesCrypto).find(
-          (currency) => currency.address === transaction.tokenAddress,
-        ) ?? currenciesCrypto.BTC
+    if (!isEmpty(data) && !isFetching) {
+      data.map((transaction) => {
+        transaction.type = transaction.sender.email === user?.email ? 'send' : 'receive'
+        transaction.toCurrency =
+          Object.values(currenciesCrypto).find(
+            (currency) => currency.address === transaction.tokenAddress,
+          ) ?? currenciesCrypto.BTC
 
-      console.log('🪐', 'Transaction', transaction)
-    })
+        console.log('🪐', 'Transaction', transaction)
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   return (
@@ -114,7 +119,7 @@ export default function TransactionList({ limit }: TransactionListProps): JSX.El
         nestedScrollEnabled={true}
         contentContainerStyle={styles.list}
         renderItem={({ item }) => <ListItem transaction={item} />}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={<EmptyList text="No Transactions" />}
       />
     </>
@@ -138,6 +143,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   amountContainer: {
+    maxWidth: SCREEN_WIDTH * 0.3,
     position: 'absolute',
     right: 12,
     alignItems: 'flex-end',

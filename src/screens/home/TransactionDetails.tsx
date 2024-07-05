@@ -9,11 +9,13 @@ import { Spacer } from '@components/Spacer'
 import { Card } from '@components/Card'
 import ViewFiller from '@components/ViewFiller'
 import { getFormattedDate } from '@utils/DateTime'
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet'
 
 export default function TransactionDetailsScreen({
   route,
 }: ScreenProps<'TransactionDetails'>): ReactElement {
   const { transaction } = route.params
+  const date = new Date(transaction.date * 1000).getTime()
 
   return (
     <SafeAreaView style={styles.container}>
@@ -22,11 +24,31 @@ export default function TransactionDetailsScreen({
         <Card flexDirection="column">
           <View style={{ flexDirection: 'row' }}>
             <AppText size="small" type="medium" color={AppColors.darkGrey}>
-              Sent to
+              From
             </AppText>
             <ViewFiller />
-            <AppText size="small" type="bold">
-              {transaction?.receiver?.email}
+            <AppText
+              size="small"
+              type="bold"
+              ellipsizeMode="tail"
+              numberOfLines={1}
+              style={{ maxWidth: SCREEN_WIDTH * 0.7 }}>
+              {transaction.sender.email}
+            </AppText>
+          </View>
+          <Spacer vertical={12} />
+          <View style={{ flexDirection: 'row' }}>
+            <AppText size="small" type="medium" color={AppColors.darkGrey}>
+              To
+            </AppText>
+            <ViewFiller />
+            <AppText
+              size="small"
+              type="bold"
+              ellipsizeMode="tail"
+              numberOfLines={1}
+              style={{ maxWidth: SCREEN_WIDTH * 0.7 }}>
+              {transaction.receiver.email}
             </AppText>
           </View>
           <Spacer vertical={12} />
@@ -35,7 +57,7 @@ export default function TransactionDetailsScreen({
               Date
             </AppText>
             <ViewFiller />
-            <AppText size="small">{getFormattedDate(new Date(transaction.date/1000))}</AppText>
+            <AppText size="small">{getFormattedDate(new Date(date))}</AppText>
           </View>
         </Card>
 
@@ -44,11 +66,16 @@ export default function TransactionDetailsScreen({
         <Card flexDirection="column">
           <View style={{ flexDirection: 'row' }}>
             <AppText size="small" type="medium" color={AppColors.darkGrey}>
-              Recipient gets
+              Amount
             </AppText>
             <ViewFiller />
-            <AppText size="small" type="medium">
-              {transaction?.toCurrency?.code} {transaction.toAmount}
+            <AppText
+              size="small"
+              type="medium"
+              ellipsizeMode="tail"
+              numberOfLines={1}
+              style={{ maxWidth: SCREEN_WIDTH * 0.6 }}>
+              {transaction.toCurrency?.code} {transaction.toAmount}
             </AppText>
           </View>
 
@@ -71,8 +98,13 @@ export default function TransactionDetailsScreen({
               Your total
             </AppText>
             <ViewFiller />
-            <AppText size="small" type="medium">
-              {transaction?.toCurrency?.code} {transaction.toAmount}
+            <AppText
+              size="small"
+              type="medium"
+              ellipsizeMode="tail"
+              numberOfLines={1}
+              style={{ maxWidth: SCREEN_WIDTH * 0.6 }}>
+              {transaction.toCurrency?.code} {transaction.toAmount}
             </AppText>
           </View>
         </Card>
