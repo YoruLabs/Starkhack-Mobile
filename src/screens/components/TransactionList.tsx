@@ -104,7 +104,7 @@ export default function TransactionList({ limit }: TransactionListProps): JSX.El
     <>
       {isFetching ? <Loader /> : null}
       <FlatList
-        data={limit === undefined ? data : data?.slice(0, limit)}
+        data={data === undefined ? [] : limit === undefined ? data : data.slice(0, limit)}
         nestedScrollEnabled={true}
         contentContainerStyle={styles.list}
         renderItem={({ item }) => <ListItem transaction={item} />}

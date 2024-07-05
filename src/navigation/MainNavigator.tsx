@@ -2,11 +2,12 @@ import {
   NativeStackNavigationOptions,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack'
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { BottomSheetStack, MainStack } from './Router'
 import { getScreenBuilder } from './ScreenRegistry'
 import { useAtomValue } from 'jotai'
 import { Atoms } from '@state/Atoms'
+import { View } from 'react-native'
 
 const Stack = createNativeStackNavigator<MainStack & BottomSheetStack>()
 
@@ -28,6 +29,12 @@ export const BottomSheets = ['AccountListBT'] as const
 export const MainNavigator = (): ReactElement => {
   const isLoggedIn = useAtomValue(Atoms.LoggedIn)
 
+  const [appIsReady, setAppIsReady] = useState(false)
+
+  setTimeout(() => {
+    setAppIsReady(true)
+  }, 100)
+
   const getInitialScreen = (): keyof MainStack => {
     if (isLoggedIn) {
       return 'HomeStack'
@@ -36,7 +43,7 @@ export const MainNavigator = (): ReactElement => {
     }
   }
 
-  console.log('isLoggedIn: ', isLoggedIn)
+  if (!appIsReady) return <View />
 
   return (
     <Stack.Navigator
