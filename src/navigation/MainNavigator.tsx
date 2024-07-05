@@ -2,7 +2,7 @@ import {
   NativeStackNavigationOptions,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack'
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { ReactElement, useState } from 'react'
 import { BottomSheetStack, MainStack } from './Router'
 import { getScreenBuilder } from './ScreenRegistry'
 import { useAtomValue } from 'jotai'
