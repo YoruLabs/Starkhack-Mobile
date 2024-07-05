@@ -78,17 +78,17 @@ type TransactionListProps = {
 export default function TransactionList({ limit }: TransactionListProps): JSX.Element {
   const user = useAtomValue(Atoms.User)
 
-  // const { data, isFetching } = useQuery({
-  //   queryKey: ['transaction-list'],
-  //   queryFn: async () => {
-  //     const publicKeyHex = await fetchPublicKey(user?.email ?? '')
-  //     return getTransactions(publicKeyHex ?? '')
-  //   },
-  //   enabled: !isEmpty(user),
-  // })
+  const { data, isFetching } = useQuery({
+    queryKey: ['transaction-list'],
+    queryFn: async () => {
+      const publicKeyHex = await fetchPublicKey(user?.email ?? '')
+      return getTransactions(publicKeyHex ?? '')
+    },
+    enabled: !isEmpty(user),
+  })
 
-  const data: Transaction[] = transactions
-  const isFetching = false
+  //const data: Transaction[] = transactions
+  //const isFetching = false
 
 
   console.log('🪐', 'TransactionList', data)
