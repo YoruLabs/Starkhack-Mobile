@@ -1,7 +1,7 @@
 import { AppColors } from '@utils/Colors'
 import React, { useEffect } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
-import { Transaction, currenciesCrypto } from 'types/transaction'
+import { Transaction, currenciesCrypto, transactions } from 'types/transaction'
 import { AppText } from '@components/text/AppText'
 import { Card } from '@components/Card'
 import { EmptyList } from '@components/EmptyList'
@@ -51,7 +51,7 @@ function ListItem({ transaction }: TransactionProps): JSX.Element {
         </AppText>
         <Spacer vertical={2} />
         <AppText size="very-small" color={AppColors.darkGrey}>
-          {getFormattedDate(new Date(transaction.date ))}
+          {getFormattedDate(new Date(transaction.date))}
         </AppText>
       </View>
       <Spacer horizontal={12} />
@@ -78,14 +78,18 @@ type TransactionListProps = {
 export default function TransactionList({ limit }: TransactionListProps): JSX.Element {
   const user = useAtomValue(Atoms.User)
 
-  const { data, isFetching } = useQuery({
-    queryKey: ['transaction-list'],
-    queryFn: async () => {
-      const publicKeyHex = await fetchPublicKey(user?.email ?? '')
-      return getTransactions(publicKeyHex ?? '')
-    },
-    enabled: !isEmpty(user),
-  })
+  // const { data, isFetching } = useQuery({
+  //   queryKey: ['transaction-list'],
+  //   queryFn: async () => {
+  //     const publicKeyHex = await fetchPublicKey(user?.email ?? '')
+  //     return getTransactions(publicKeyHex ?? '')
+  //   },
+  //   enabled: !isEmpty(user),
+  // })
+
+  const data: Transaction[] = transactions
+  const isFetching = false
+
 
   useEffect(() => {
     // TODO: Update this code later
@@ -96,10 +100,8 @@ export default function TransactionList({ limit }: TransactionListProps): JSX.El
           (currency) => currency.address === transaction.tokenAddress,
         ) ?? currenciesCrypto.BTC
 
-        console.log('🪐', 'Transaction', transaction)
-        
+      console.log('🪐', 'Transaction', transaction)
     })
-
   }, [data])
 
   return (
