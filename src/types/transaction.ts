@@ -37,7 +37,7 @@ export type SendDetails = {
   currency: Currency
 }
 
-export type CurrencyCodeCrypto = 'BTC' | 'ETH' | 'USDT' | 'USDC' | 'STRK'
+export type CurrencyCodeCrypto = 'BTC' | 'ETH' | 'USDT' | 'USDC' | 'STRK' | 'EUR'
 export type CurrencyCodeFiat = 'EUR' | 'BRL'
 export type CurrencyCode = CurrencyCodeCrypto | CurrencyCodeFiat
 
@@ -71,6 +71,12 @@ export const currenciesCrypto: Record<CurrencyCodeCrypto, Currency> = {
     code: 'STRK',
     symbol: 'https://assets.coingecko.com/coins/images/26433/large/starknet.png',
     address: '',
+  },
+  EUR: {
+    name: 'Euro',
+    code: 'EUR',
+    symbol: 'https://assets.coingecko.com/coins/images/23354/standard/eur.png',
+    address: '0x02cea124210d515b81d470a4a4b385f0f4a516172ecc726e02b578b2378c2408',
   },
 }
 

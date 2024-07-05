@@ -72,7 +72,7 @@ export default function AddMoneyScreen(): ReactElement {
       MONERIUM_REDIRECT_URI,
     )) as RedirectResult
 
-    console.log(result)
+    console.log("result", result)
 
     if (result.type === 'cancel') return
 
@@ -127,9 +127,10 @@ export default function AddMoneyScreen(): ReactElement {
 
         <Spacer vertical={44} />
         <View style={styles.footer}>
-          <AppButton label="Add Money" onPress={addMoneyPress} />
+          <AppButton label="Authorize Zap on Monerium" onPress={addMoneyPress} />
           <Spacer vertical={16} />
-          {!isEmpty(authCode) && <AppText>Auth code - {authCode}</AppText>}
+          {/* {!isEmpty(authCode) && <AppText>Auth code - {authCode}</AppText>} */}
+          {!isEmpty(authCode) && <AppText>Now deposit to this IBAN Account: FI98 8068 0458 2309 43</AppText>}
         </View>
       </DismissKeyboardView>
       <SegmentedPicker

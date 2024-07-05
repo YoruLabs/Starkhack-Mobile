@@ -40,24 +40,24 @@ function ListItem({ transaction }: TransactionProps): JSX.Element {
       customStyle={styles.cardContainer}
       onPress={navigateToTransactionDetails}>
       <View style={styles.transactionImage}>
-        <AppImage source={transaction.toCurrency.symbol} />
+        <AppImage source={transaction?.toCurrency?.symbol} />
       </View>
       <Spacer horizontal={12} />
       <View>
         <AppText size="small" type="bold">
           {transaction.mode === 'exchange'
-            ? transaction.fromCurrency?.code + ' -> ' + transaction.toCurrency.code
+            ? transaction.fromCurrency?.code + ' -> ' + transaction?.toCurrency?.code
             : transaction.receiver.name}
         </AppText>
         <Spacer vertical={2} />
         <AppText size="very-small" color={AppColors.darkGrey}>
-          {getFormattedDate(new Date(transaction.date * 1000))}
+          {getFormattedDate(new Date(transaction.date ))}
         </AppText>
       </View>
       <Spacer horizontal={12} />
       <View style={styles.amountContainer}>
         <AppText size="small" type="medium">
-          {transaction.mode === 'exchange' ? '+' : '-'} {transaction.toCurrency.code}{' '}
+          {transaction.mode === 'exchange' ? '+' : '-'} {transaction?.toCurrency?.code}{' '}
           {transaction.toAmount}
         </AppText>
         <Spacer vertical={2} />
@@ -91,13 +91,15 @@ export default function TransactionList({ limit }: TransactionListProps): JSX.El
     // TODO: Update this code later
     data?.map((transaction) => {
       transaction.date = new Date(transaction.date * 1000).getTime()
-      transaction.type = 'send'
-      transaction.mode = 'send'
       transaction.toCurrency =
         Object.values(currenciesCrypto).find(
           (currency) => currency.address === transaction.tokenAddress,
         ) ?? currenciesCrypto.BTC
+
+        console.log('🪐', 'Transaction', transaction)
+        
     })
+
   }, [data])
 
   return (

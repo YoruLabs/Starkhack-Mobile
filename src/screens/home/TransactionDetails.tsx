@@ -36,7 +36,7 @@ export default function TransactionDetailsScreen({
             </AppText>
             <ViewFiller />
             <AppText size="small">
-              {getFormattedDate(new Date(transaction.date * 1000))}
+              {getFormattedDate(new Date(transaction.date))}
             </AppText>
           </View>
         </Card>
@@ -50,7 +50,7 @@ export default function TransactionDetailsScreen({
             </AppText>
             <ViewFiller />
             <AppText size="small" type="medium">
-              {transaction.toCurrency.code} {transaction.toAmount}
+              {transaction?.toCurrency?.code} {transaction.toAmount}
             </AppText>
           </View>
 
@@ -74,7 +74,7 @@ export default function TransactionDetailsScreen({
             </AppText>
             <ViewFiller />
             <AppText size="small" type="medium">
-              {transaction.toCurrency.code} {transaction.toAmount}
+              {transaction?.toCurrency?.code} {transaction.toAmount}
             </AppText>
           </View>
         </Card>

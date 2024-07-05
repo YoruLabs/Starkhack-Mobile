@@ -25,3 +25,4 @@ export type AuthResponse = {
 export type AddressResponse = {
   blockchain_address: string
 }
+
