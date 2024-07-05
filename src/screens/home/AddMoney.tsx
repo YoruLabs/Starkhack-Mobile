@@ -20,8 +20,12 @@ import SelectCurrency from '@screens/components/SelectCurrency'
 import { useNavigation } from '@react-navigation/native'
 import { isEmpty } from '@utils/util'
 import * as RNWebBrowser from 'expo-web-browser'
-import { MONERIUM_AUTH_URL, MONERIUM_REDIRECT_URI } from '@utils/Credentials'
+import { MONERIUM_AUTH_TOKEN_URL, MONERIUM_AUTH_URL, MONERIUM_CLIENT_ID, MONERIUM_CODE_VERIFIER, MONERIUM_REDIRECT_URI } from '@utils/Credentials'
 import { RedirectResult } from 'types/data-proof'
+import axios from 'axios'
+import { COM_ZAP_API } from '@config/api-urls'
+import { useAtomValue } from 'jotai'
+import { Atoms } from '@state/Atoms'
 
 export default function AddMoneyScreen(): ReactElement {
   const [platform, setPlatform] = React.useState(platforms.Revolut)
@@ -30,6 +34,8 @@ export default function AddMoneyScreen(): ReactElement {
   const [isDropdownVisible, setDropdownVisible] = useState(false)
   const [amount, setAmount] = React.useState('')
   const [authCode, setAuthCode] = useState('')
+
+  const user = useAtomValue(Atoms.User)
 
   const mainNavigation = useNavigation()
   const { addToast } = useToast()
@@ -72,17 +78,50 @@ export default function AddMoneyScreen(): ReactElement {
       MONERIUM_REDIRECT_URI,
     )) as RedirectResult
 
-    console.log("result", result)
+    
 
     if (result.type === 'cancel') return
 
-    const { url } = result
+    const { url } = result as RedirectResult
     // Extract authorization code
     const code = url.substring(
       url.indexOf('code=') + 5,
       url.indexOf('&', url.indexOf('code=')),
     )
     setAuthCode(code)
+
+    
+    const response = await axios.post(MONERIUM_AUTH_TOKEN_URL, new URLSearchParams({
+      client_id: MONERIUM_CLIENT_ID,
+      grant_type: 'authorization_code',
+      code: code,
+      redirect_uri: MONERIUM_REDIRECT_URI,
+      code_verifier: MONERIUM_CODE_VERIFIER
+    }));
+    // }), {headers}).then((response) => {
+    //   console.log('🪐', 'addMoneyPress', response.data)
+    //   const profile = response.data.profile
+    // }).catch((error) => {
+    //   console.log('🪐', 'addMoneyPress', error)
+    // });
+
+    console.log('🪐', 'addMoneyPress', response.data)
+
+    const profileId = response.data.profile;
+
+    const urlEvmCreate = `${COM_ZAP_API}user/evm/address`;
+
+    const body = {
+      profileId: profileId,
+      email: user?.email,
+    }
+
+    const responseEvmCreate = await axios.post(urlEvmCreate, body);
+
+    console.log('🪐', 'addMoneyPress', responseEvmCreate.data)
+
+
+
   }
 
   return (
@@ -130,7 +169,7 @@ export default function AddMoneyScreen(): ReactElement {
           <AppButton label="Authorize Zap on Monerium" onPress={addMoneyPress} />
           <Spacer vertical={16} />
           {/* {!isEmpty(authCode) && <AppText>Auth code - {authCode}</AppText>} */}
-          {!isEmpty(authCode) && <AppText>Now deposit to this IBAN Account: FI98 8068 0458 2309 43</AppText>}
+          {!isEmpty(authCode) && <AppText>You are to deposit on your Monerium!</AppText>}
         </View>
       </DismissKeyboardView>
       <SegmentedPicker
