@@ -1,5 +1,5 @@
 import { AppText } from '@components/text/AppText'
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { AppColors } from '@utils/Colors'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { StyleSheet, View } from 'react-native'
@@ -20,6 +20,8 @@ import ERC20Manager from 'managers/ERC20Manager'
 import { useAtomValue } from 'jotai'
 import { Atoms } from '@state/Atoms'
 import { isEmpty } from '@utils/util'
+import { COM_ZAP_API } from '@config/api-urls'
+import axios from 'axios'
 
 export default function ExperimentScreen(): ReactElement {
   const [message, setMessage] = useState('')
@@ -28,6 +30,65 @@ export default function ExperimentScreen(): ReactElement {
 
   const accountEmail = String(useAtomValue(Atoms.User)?.email)
   const erc20Manager = new ERC20Manager(accountAddress, USDC_ADDRESS, accountEmail)
+
+  type Signature = {
+    id: number,
+    uuid: string,
+    message: string,
+    signature: string | null,
+    status: string
+  }
+
+  const [signatures, setSignatures] = useState<Signature[]>([]);
+
+  async function getMobilePendingSignatures(){
+    try{
+
+      const url = `${COM_ZAP_API}mobile/pending/signatures`;
+
+      const response = await axios.get(url);
+      console.log('response', response.data);
+
+      setSignatures([...response.data] as Signature[]);
+
+
+    } catch(Err){
+      console.log('Error', Err)
+      
+    }
+  }
+
+  async function signMessageByUuid(uuid: string): Promise<void>{
+
+      const pedingSignature = signatures.find((signature) => signature.uuid === uuid) as Signature;
+
+      console.log('pedingSignature', pedingSignature);
+
+      const message = pedingSignature.message;
+
+      console.log('Message', message);
+
+      console.log('Message', message);
+
+      const messageBuffer = Buffer.from(message.slice(2), 'hex').toString('hex')
+
+      const signedMessage = await sign(accountEmail, messageBuffer, PROMPT_COPY);
+
+      console.log('Signature', signedMessage);
+
+
+      const url = `${COM_ZAP_API}mobile/update/${uuid}/signature`;
+
+      const response = await axios.post(url, {
+        signature: signedMessage,
+      });
+
+      // console.log('response', response.data);
+  }
+
+  useEffect(() => {
+    getMobilePendingSignatures();
+  },[]);
 
   async function handleCreateKeyPair(): Promise<void> {
     const publicKey = await createKeyPair(accountEmail)
@@ -46,6 +107,7 @@ export default function ExperimentScreen(): ReactElement {
 
   async function handleSign(): Promise<void> {
     const signature = await sign(accountEmail, HEX_MESSAGE, PROMPT_COPY)
+    console.log('Signature', signature)
     setSignature(signature)
   }
 
@@ -122,13 +184,26 @@ export default function ExperimentScreen(): ReactElement {
     <SafeAreaView style={styles.container}>
       <Header title="Experiment" />
       <View style={styles.content}>
-        <AppButton label="Create Key Pair" onPress={handleCreateKeyPair} />
+        {/* <AppButton label="Create Key Pair" onPress={handleCreateKeyPair} />
         <Spacer vertical={12} />
         <AppButton label="Fetch Public Key" onPress={handleFetchPublicKey} />
+        <Spacer vertical={12} /> */}
+        <AppButton label="Sign Message" key={11} onPress={handleSign} />
         <Spacer vertical={12} />
-        <AppButton label="Sign Message" onPress={handleSign} />
-        <Spacer vertical={12} />
-        <AppButton label="Verify Signature" onPress={handleVerify} />
+
+         {signatures.map((signature: any, index) => {
+          return (
+            <>
+            <AppButton label={signature.uuid} key={signature.uuid} onPress={() => signMessageByUuid(signature.uuid)} />
+            <Spacer vertical={12} />
+            </>
+          )
+        })} 
+
+
+
+
+        {/* <AppButton label="Verify Signature" onPress={handleVerify} />
         <Spacer vertical={12} />
 
         <Spacer vertical={12} />
@@ -141,8 +216,8 @@ export default function ExperimentScreen(): ReactElement {
         <AppButton label="Allowance to Account" onPress={handleAllowance} />
         <Spacer vertical={12} />
         <AppButton label="Send Transaction1" onPress={handleSendTransaction} />
-        <Spacer vertical={12} />
-        <AppText>{message}</AppText>
+        <Spacer vertical={12} /> */}
+        {/* <AppText>{message}</AppText> */}
       </View>
     </SafeAreaView>
   )

@@ -64,12 +64,12 @@ export default function AddMoneyScreen(): ReactElement {
   }
 
   async function addMoneyPress(): Promise<void> {
-    if (isEmpty(amount) || parseInt(amount, 10) <= 0) {
-      addToast({
-        message: Strings.ENTER_AMOUNT,
-      })
-      return
-    }
+    // if (isEmpty(amount) || parseInt(amount, 10) <= 0) {
+    //   addToast({
+    //     message: Strings.ENTER_AMOUNT,
+    //   })
+    //   return
+    // }
 
     // Open web browser to get monerium auth code
     // Run python_scripts/redirection.py before clicking add money button
@@ -142,7 +142,7 @@ export default function AddMoneyScreen(): ReactElement {
           />
         </TouchableOpacity>
         <Spacer vertical={16} /> */}
-        <AppText size="small">Amount</AppText>
+        {/* <AppText size="small">Amount</AppText>
         <Spacer vertical={8} />
         <View style={styles.amountContainer}>
           <SelectCurrency
@@ -162,14 +162,19 @@ export default function AddMoneyScreen(): ReactElement {
               customTextStyles={{ fontWeight: 'bold' }}
             />
           </View>
-        </View>
+        </View> */}
 
         <Spacer vertical={44} />
         <View style={styles.footer}>
           <AppButton label="Authorize Zap on Monerium" onPress={addMoneyPress} />
           <Spacer vertical={16} />
           {/* {!isEmpty(authCode) && <AppText>Auth code - {authCode}</AppText>} */}
-          {!isEmpty(authCode) && <AppText>You are to deposit on your Monerium!</AppText>}
+          {!isEmpty(authCode) && (
+            <>
+              <AppText style={styles.label}>Deposit to this IBAN Account:</AppText>
+              <AppText style={styles.iban}>FI79 7531 7154 9458 29</AppText>
+            </>
+          )}
         </View>
       </DismissKeyboardView>
       <SegmentedPicker
@@ -219,5 +224,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: AppColors.white,
     height: 44,
+  },
+  label: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  iban: {
+    fontSize: 16,
+    color: '#333',
+    letterSpacing: 1.5,
+    backgroundColor: '#f1f1f1',
+    padding: 10,
+    borderRadius: 5,
   },
 })

@@ -1,4 +1,4 @@
-import { sign, PromptCopy, fetchPublicKey } from '../../modules/expo-enclave'
+// import { PromptCopy } from '../../modules/expo-enclave'
 
 import {
   Call,
@@ -22,13 +22,17 @@ import {
   cairo,
 } from 'starknet'
 import { Buffer } from 'buffer'
-import { derPublicKeyToXandY, parseSignature } from '../utils/crypto/utils'
+//import { derPublicKeyToXandY, parseSignature } from '../utils/crypto/utils'
+//import { COM_ZAP_API } from '@config/api-urls'
+import axios from 'axios'
 
-// TEST VALUES
-const promptCopy: PromptCopy = {
-  usageMessage: 'Please authenticate to continue.',
-  androidTitle: 'Authentication Required',
-}
+const COM_ZAP_API = "http://localhost:4001/"
+
+// // TEST VALUES
+// const promptCopy: PromptCopy = {
+//   usageMessage: 'Please authenticate to continue.',
+//   androidTitle: 'Authentication Required',
+// }
 
 /**
  * Old Transaction Versions
@@ -50,6 +54,30 @@ enum ETransactionVersion3 {
   F3 = '0x100000000000000000000000000000003',
 }
 
+export function parseSignature(signature: any): { r: bigint; s: bigint } {
+  const signatureBuffer = Buffer.from(signature, 'hex')
+  const signatureBytes = new Uint8Array(signatureBuffer)
+
+  // Assume the signature is in the DER format (0x30 || length || 0x02 || r_length || r || 0x02 || s_length || s)
+  if (signatureBytes.length < 4) {
+    throw new Error('Invalid signature format')
+  }
+
+  const rLength: any = signatureBytes[3]
+  const r = signatureBytes
+    .slice(4, 4 + rLength)
+    .reduce((acc, val) => (acc << 8n) + BigInt(val), 0n)
+
+  const sLength = signatureBytes[4 + rLength + 1]
+  const sStart = 4 + rLength + 2
+  const sEnd = sStart + sLength
+  const s = signatureBytes
+    .slice(sStart, sEnd)
+    .reduce((acc, val) => (acc << 8n) + BigInt(val), 0n)
+
+  return { r: r, s: s }
+}
+
 export class EnclaveSigner implements SignerInterface {
   private accountName: string
 
@@ -57,7 +85,7 @@ export class EnclaveSigner implements SignerInterface {
     this.accountName = accountName
   }
   public async getPubKey(): Promise<string> {
-    return String(await fetchPublicKey(this.accountName))
+    return String(this.accountName)
   }
 
   public async signMessage(
@@ -163,19 +191,79 @@ export class EnclaveSigner implements SignerInterface {
     return this.signRaw(msgHash as string)
   }
 
+  protected async createNewPendingSignature(msgHash: string): Promise<string | null>{
+    try{
+      const url = `${COM_ZAP_API}mobile/new/signature`
+      const response = await axios.post(url, {
+        message: msgHash,
+      })
+      return response.data.uuid
+    } catch(Err){
+      console.log('Error', Err)
+      return null
+    }
+  }
+
+  protected async tryGetSignedMessage(uuid: string): Promise<{signature: string, status: string} | null> {
+    try {
+
+      const url = `${COM_ZAP_API}mobile/signature/${uuid}`
+
+      const response = await axios.get(url);
+
+      const status = response.data.status;
+
+      const signature = response.data.signature;
+
+      return {
+        signature,
+        status
+      }
+      
+    } catch (e) {
+      return null
+    }
+  }
+
+
+  protected async getSignatureFromUser(msgHash: string){
+
+    const uuid = await this.createNewPendingSignature(msgHash)
+
+    const MAXIMUM_ATTEMPTS = 10
+
+    let amounts = 0
+
+    while(amounts < MAXIMUM_ATTEMPTS){
+      const signedMessage = await this.tryGetSignedMessage(uuid as string) 
+
+      const signature = signedMessage?.signature
+      const status = signedMessage?.status
+
+      amounts += 1;
+      if(status === 'signed'){
+        return signature
+      } else {
+
+        setTimeout(() => {}, 3000);
+      }
+    }
+
+
+  }
+
   // This is returning a hard coded signature
   protected async signRaw(msgHash: string): Promise<Signature> {
-    console.log('Signer AccountName', this.accountName)
-    const pubKey = await fetchPublicKey(this.accountName)
-    console.log('Signer PubKey', pubKey)
-    const [x, y] = derPublicKeyToXandY(pubKey)
-    console.log('Signer x', x, 'y', y)
+    //console.log('Signer AccountName', this.accountName)
+    //const pubKey = await fetchPublicKey(this.accountName)
+    // console.log('Signer PubKey', pubKey)
+    // const [x, y] = derPublicKeyToXandY(pubKey)
+    // console.log('Signer x', x, 'y', y)
 
-    const messageBuffer = Buffer.from(msgHash.slice(2), 'hex').toString('hex')
+    //const messageBuffer = Buffer.from(msgHash.slice(2), 'hex').toString('hex')
 
-    const signature = await sign(this.accountName, messageBuffer, promptCopy)
+    const signature = await this.getSignatureFromUser(msgHash);
 
-    
     const { r, s } = parseSignature(signature)
 
     // Convert hex string to Uint8Array
