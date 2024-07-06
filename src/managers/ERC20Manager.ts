@@ -49,7 +49,9 @@ class ERC20Manager {
 
   public async approve(spender: string, amount: number): Promise<string> {
     try {
-      const approve_tx = await this.contract.approve(spender, cairo.uint256(amount))
+      const approve_tx = await this.contract.approve(spender, cairo.uint256(amount), {
+        maxFee: 215972501918000,
+      })
       await this.provider.waitForTransaction(approve_tx.transaction_hash)
       return approve_tx.transaction_hash
     } catch (error) {
@@ -60,7 +62,9 @@ class ERC20Manager {
 
   public async mint(address: string, amount: number): Promise<string> {
     try {
-      const mint_tx = await this.contract.mint(address, amount)
+      const mint_tx = await this.contract.mint(address, amount, {
+        maxFee: 215972501918000,
+      })
       await this.provider.waitForTransaction(mint_tx.transaction_hash)
       return mint_tx.transaction_hash
     } catch (error) {
@@ -73,7 +77,9 @@ class ERC20Manager {
     try {
       console.log('CONTRACT ADDRESS: ', this.accountAddress)
       console.log('ZAP ACCOUNT: ', this.account)
-      const transfer_tx = await this.contract.transfer(to, amount)
+      const transfer_tx = await this.contract.transfer(to, amount, {
+        maxFee: 215972501918000,
+      })
       await this.provider.waitForTransaction(transfer_tx.transaction_hash)
       return transfer_tx.transaction_hash
     } catch (error) {
