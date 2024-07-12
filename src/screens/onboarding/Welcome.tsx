@@ -139,6 +139,8 @@ export default function WelcomeScreen(): ReactElement {
           {Strings.WELCOME}
         </AppText>
         <View style={styles.buttonContainer}>
+         
+          <Spacer vertical={16} />
           <AppButton
             label={Strings.SIGN_IN_WITH_GOOGLE}
             labelWeight="bold"
