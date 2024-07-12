@@ -8374,7 +8374,7 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-"zap-wallet-sdk@file:../zap-wallet-sdk":
+zap-wallet-sdk@/Users/lovish888/Work/freelance/zap-wallet-sdk:
   version "1.0.0"
   dependencies:
     "@types/node" "^20.14.10"
