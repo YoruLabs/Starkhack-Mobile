@@ -47,7 +47,8 @@
     "react-native-svg": "15.2.0",
     "react-native-toast-message": "^2.2.0",
     "react-native-webview": "13.8.6",
-    "starknet": "^6.8.0"
+    "starknet": "^6.8.0",
+    "zap-wallet-sdk": "/Users/lovish888/Work/freelance/zap-wallet-sdk"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

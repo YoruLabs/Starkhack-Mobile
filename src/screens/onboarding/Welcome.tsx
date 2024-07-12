@@ -21,6 +21,7 @@ import { isEmpty } from '@utils/util'
 import { useToast } from '@components/Toast'
 import { showError } from '@utils/ErrorUtil'
 import { verifyBiometric } from '@utils/Biometrics'
+import { signUp } from 'zap-wallet-sdk'
 
 export default function WelcomeScreen(): ReactElement {
   const { addToast } = useToast()
@@ -129,6 +130,12 @@ export default function WelcomeScreen(): ReactElement {
     }
   }
 
+  async function createWallet(): Promise<void> {
+    const res = await signUp()
+    console.log(res)
+    
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -139,7 +146,15 @@ export default function WelcomeScreen(): ReactElement {
           {Strings.WELCOME}
         </AppText>
         <View style={styles.buttonContainer}>
-         
+          <AppButton
+            label="Create Wallet"
+            labelWeight="bold"
+            labelSize="normal"
+            backgroundColor={AppColors.black}
+            borderRadius={24}
+            labelColor={AppColors.white}
+            onPress={createWallet}
+          />
           <Spacer vertical={16} />
           <AppButton
             label={Strings.SIGN_IN_WITH_GOOGLE}
