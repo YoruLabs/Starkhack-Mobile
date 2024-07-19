@@ -21,7 +21,7 @@ import { isEmpty } from '@utils/util'
 import { useToast } from '@components/Toast'
 import { showError } from '@utils/ErrorUtil'
 import { verifyBiometric } from '@utils/Biometrics'
-import { signUp } from 'zap-wallet-sdk'
+import * as WebBrowser from 'expo-web-browser'
 
 export default function WelcomeScreen(): ReactElement {
   const { addToast } = useToast()
@@ -130,10 +130,18 @@ export default function WelcomeScreen(): ReactElement {
     }
   }
 
-  async function createWallet(): Promise<void> {
-    const res = await signUp()
-    console.log(res)
-    
+  const handleCreateWallet = async (): Promise<void> => {
+    const result = await WebBrowser.openBrowserAsync(
+      'https://zap-web-demo.vercel.app/create-wallet',
+    )
+    console.log(result)
+  }
+
+  const handleImportWallet = async (): Promise<void> => {
+    const result = await WebBrowser.openBrowserAsync(
+      'https://zap-web-demo.vercel.app/import-wallet',
+    )
+    console.log(result)
   }
 
   return (
@@ -153,7 +161,17 @@ export default function WelcomeScreen(): ReactElement {
             backgroundColor={AppColors.black}
             borderRadius={24}
             labelColor={AppColors.white}
-            onPress={createWallet}
+            onPress={handleCreateWallet}
+          />
+          <Spacer vertical={16} />
+          <AppButton
+            label="Import Wallet"
+            labelWeight="bold"
+            labelSize="normal"
+            backgroundColor={AppColors.black}
+            borderRadius={24}
+            labelColor={AppColors.white}
+            onPress={handleImportWallet}
           />
           <Spacer vertical={16} />
           <AppButton
