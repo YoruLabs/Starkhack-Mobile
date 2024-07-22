@@ -21,7 +21,8 @@ import { isEmpty } from '@utils/util'
 import { useToast } from '@components/Toast'
 import { showError } from '@utils/ErrorUtil'
 import { verifyBiometric } from '@utils/Biometrics'
-import * as WebBrowser from 'expo-web-browser'
+import * as RNWebBrowser from 'expo-web-browser'
+import { RedirectResult } from 'types/data-proof'
 
 export default function WelcomeScreen(): ReactElement {
   const { addToast } = useToast()
@@ -131,17 +132,33 @@ export default function WelcomeScreen(): ReactElement {
   }
 
   const handleCreateWallet = async (): Promise<void> => {
-    const result = await WebBrowser.openBrowserAsync(
+    const result = (await RNWebBrowser.openAuthSessionAsync(
       'https://zap-web-demo.vercel.app/create-wallet',
-    )
-    console.log(result)
+      'zap-mobile://wallet',
+    )) as RedirectResult
+
+    if (result.type === 'cancel') return
+
+    const { url } = result
+    addToast({
+      message: 'Wallet imported successfully',
+    })
+    console.log(url)
   }
 
   const handleImportWallet = async (): Promise<void> => {
-    const result = await WebBrowser.openBrowserAsync(
+    const result = (await RNWebBrowser.openAuthSessionAsync(
       'https://zap-web-demo.vercel.app/import-wallet',
-    )
-    console.log(result)
+      'zap-mobile://wallet',
+    )) as RedirectResult
+
+    if (result.type === 'cancel') return
+
+    const { url } = result
+    addToast({
+      message: 'Wallet imported successfully',
+    })
+    console.log(url)
   }
 
   return (
